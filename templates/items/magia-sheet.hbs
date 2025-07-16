@@ -82,6 +82,11 @@
               <option value="social" {{#if (eq system.resistencia "social")}}selected{{/if}}>Social</option>
             </select>
           </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-fire"></i> Dano:</label>
+            <input type="text" name="system.dano" value="{{system.dano}}" placeholder="2d6 + Mental"/>
+          </div>
         </div>
       </div>
 

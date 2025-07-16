@@ -884,6 +884,7 @@ export class ClubeActorSheet extends ActorSheet {
           duracao: "Instantâneo",
           area: "Alvo único",
           resistencia: "nenhuma",
+          dano: "",
           componentes: {
             verbal: true,
             somatico: true,
