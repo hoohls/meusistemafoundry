@@ -26,7 +26,8 @@ export class ClubeRollerDialog extends Dialog {
 
   /** @override */
   get template() {
-    return "systems/clube-dos-taberneiros/templates/apps/roller-dialog.hbs";
+    // TODO: Criar template específico para o roller dialog
+    return "templates/apps/dialog.html";
   }
 
   /** @override */
@@ -110,7 +111,7 @@ export class ClubeRollerDialog extends Dialog {
   static async show(options = {}) {
     const dialog = new ClubeRollerDialog({
       title: "Rolagem de Dados - Sistema Clube dos Taberneiros",
-      content: await renderTemplate("systems/clube-dos-taberneiros/templates/apps/roller-dialog.hbs", options),
+      content: `<p>Dialog de rolagem em desenvolvimento...</p>`, // TODO: Usar template próprio
       buttons: {
         cancel: {
           icon: '<i class="fas fa-times"></i>',

@@ -15,8 +15,9 @@ export class ClubeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    const path = "systems/clube-dos-taberneiros/templates/item";
-    return `${path}/${this.item.type}-sheet.hbs`;
+    // Por enquanto, usar um template genérico já que templates específicos não existem
+    // TODO: Criar templates específicos para cada tipo de item
+    return "templates/sheets/items/item-sheet.html";
   }
 
   /** @override */
