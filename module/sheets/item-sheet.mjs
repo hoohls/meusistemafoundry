@@ -6,7 +6,7 @@ export class ClubeItemSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["clube-dos-taberneiros", "sheet", "item"],
+      classes: ["clube-dos-taberneiros-foundry", "sheet", "item"],
       width: 520,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "detalhes" }]

@@ -18,7 +18,7 @@
 }
 
 /* === Ficha Base === */
-.clube-dos-taberneiros.sheet {
+.clube-dos-taberneiros-foundry.sheet {
   background: var(--cor-fundo);
   border: 2px solid var(--cor-borda);
   border-radius: 8px;
@@ -27,7 +27,7 @@
   color: var(--cor-texto);
 }
 
-.clube-dos-taberneiros.sheet .window-content {
+.clube-dos-taberneiros-foundry.sheet .window-content {
   padding: 0;
   background: var(--cor-fundo);
 }

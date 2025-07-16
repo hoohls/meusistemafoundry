@@ -17,7 +17,7 @@ export class ClubeRollerDialog extends Dialog {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["clube-dos-taberneiros", "dialog", "roller"],
+      classes: ["clube-dos-taberneiros-foundry", "dialog", "roller"],
       width: 400,
       height: 320,
       title: "Rolagem de Dados"

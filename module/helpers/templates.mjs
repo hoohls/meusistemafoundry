@@ -5,11 +5,11 @@
 export const preloadHandlebarsTemplates = async function() {
   return loadTemplates([
     // Templates de Actor (apenas os que existem)
-    "systems/clube-dos-taberneiros/templates/actor/personagem-sheet.hbs",
+    "systems/clube-dos-taberneiros-foundry/templates/actor/personagem-sheet.hbs",
 
     // Templates de Chat (apenas os que existem)
-    "systems/clube-dos-taberneiros/templates/chat/teste-resultado.hbs",
-    "systems/clube-dos-taberneiros/templates/chat/ataque-resultado.hbs"
+    "systems/clube-dos-taberneiros-foundry/templates/chat/teste-resultado.hbs",
+    "systems/clube-dos-taberneiros-foundry/templates/chat/ataque-resultado.hbs"
 
     // TODO: Adicionar mais templates conforme forem criados:
     // - Templates de NPC e criaturas

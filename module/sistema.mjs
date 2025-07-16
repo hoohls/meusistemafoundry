@@ -25,7 +25,7 @@ Hooks.once('init', function() {
 
   // Registrar tipos de Actor
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("clube-dos-taberneiros", ClubeActorSheet, {
+  Actors.registerSheet("clube-dos-taberneiros-foundry", ClubeActorSheet, {
     types: ["personagem", "npc", "criatura"],
     makeDefault: true,
     label: "FICHA.PERSONAGEM"
@@ -33,7 +33,7 @@ Hooks.once('init', function() {
 
   // Registrar tipos de Item
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("clube-dos-taberneiros", ClubeItemSheet, {
+  Items.registerSheet("clube-dos-taberneiros-foundry", ClubeItemSheet, {
     types: ["arma", "armadura", "escudo", "equipamento", "consumivel", "magia", "habilidade"],
     makeDefault: true,
     label: "EQUIPAMENTOS.EQUIPAMENTO"
@@ -141,7 +141,7 @@ async function executarTeste({
     user: game.user.id,
     speaker: ChatMessage.getSpeaker({actor: ator}),
     roll: roll,
-    content: await renderTemplate("systems/clube-dos-taberneiros/templates/chat/teste-resultado.hbs", {
+    content: await renderTemplate("systems/clube-dos-taberneiros-foundry/templates/chat/teste-resultado.hbs", {
       nome: nome,
       atributo: game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`),
       valor: valor,
@@ -239,7 +239,7 @@ async function executarAtaque({
   const chatData = {
     user: game.user.id,
     speaker: ChatMessage.getSpeaker({actor: atacante}),
-    content: await renderTemplate("systems/clube-dos-taberneiros/templates/chat/ataque-resultado.hbs", {
+    content: await renderTemplate("systems/clube-dos-taberneiros-foundry/templates/chat/ataque-resultado.hbs", {
       atacante: atacante.name,
       alvo: alvo?.name || "Alvo",
       arma: arma?.name || "Ataque Desarmado",

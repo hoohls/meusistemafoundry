@@ -6,7 +6,7 @@ export class ClubeActorSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["clube-dos-taberneiros", "sheet", "actor"],
+      classes: ["clube-dos-taberneiros-foundry", "sheet", "actor"],
       width: 720,
       height: 680,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }],
@@ -16,7 +16,7 @@ export class ClubeActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    const path = "systems/clube-dos-taberneiros/templates/actor";
+    const path = "systems/clube-dos-taberneiros-foundry/templates/actor";
     
     // Usar o mesmo template para todos os tipos de ator por enquanto
     // TODO: Criar templates específicos para NPC e criaturas no futuro
