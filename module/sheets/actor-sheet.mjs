@@ -91,6 +91,25 @@ export class ClubeActorSheet extends ActorSheet {
       context.system.nivel = 1;
     }
 
+    // Inicializar estrutura de equipamentos
+    if (!context.system.equipamentos) {
+      context.system.equipamentos = {
+        equipados: {
+          arma_principal: null,
+          armadura: null,
+          escudo: null
+        },
+        itens: [],
+        dinheiro: {
+          ouro: 0,
+          prata: 0,
+          cobre: 0
+        },
+        peso_total: 0,
+        capacidade_carga: 50
+      };
+    }
+
     // Configurações do sistema
     context.config = CONFIG.clube || {};
     
@@ -208,6 +227,13 @@ export class ClubeActorSheet extends ActorSheet {
 
     // Tooltips para itens
     html.find("[data-tooltip]").hover(this._onShowTooltip.bind(this), this._onHideTooltip.bind(this));
+
+    // Eventos de equipamentos
+    html.find(".adicionar-item").click(this._onAdicionarItem.bind(this));
+    html.find(".remover-item").click(this._onRemoverItem.bind(this));
+    html.find(".equipar-item").click(this._onEquiparItemInventario.bind(this));
+    html.find(".desequipar-item").click(this._onDesequiparItemInventario.bind(this));
+    html.find(".desequipar").click(this._onDesequiparSlot.bind(this));
   }
 
   /**
@@ -628,5 +654,156 @@ export class ClubeActorSheet extends ActorSheet {
     if (confirm) {
       await item.delete();
     }
+  }
+
+  /**
+   * Adiciona um novo item ao inventário
+   * @param {Event} event - Evento de clique
+   */
+  async _onAdicionarItem(event) {
+    event.preventDefault();
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const itens = equipamentos.itens || [];
+    
+    const novoItem = {
+      nome: "Novo Item",
+      tipo: "equipamento",
+      quantidade: 1,
+      peso: 0,
+      equipado: false
+    };
+    
+    itens.push(novoItem);
+    
+    await this.actor.update({
+      "system.equipamentos.itens": itens
+    });
+  }
+
+  /**
+   * Remove um item do inventário
+   * @param {Event} event - Evento de clique
+   */
+  async _onRemoverItem(event) {
+    event.preventDefault();
+    const index = parseInt(event.currentTarget.dataset.index);
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const itens = equipamentos.itens || [];
+    
+    itens.splice(index, 1);
+    
+    await this.actor.update({
+      "system.equipamentos.itens": itens
+    });
+  }
+
+  /**
+   * Equipa um item do inventário
+   * @param {Event} event - Evento de clique
+   */
+  async _onEquiparItemInventario(event) {
+    event.preventDefault();
+    const index = parseInt(event.currentTarget.dataset.index);
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const itens = equipamentos.itens || [];
+    const item = itens[index];
+    
+    if (!item) return;
+    
+    // Marcar como equipado
+    item.equipado = true;
+    
+    // Se for arma, armadura ou escudo, equipar no slot apropriado
+    const equipados = equipamentos.equipados || {};
+    
+    if (item.tipo === "arma" && !equipados.arma_principal) {
+      equipados.arma_principal = {
+        nome: item.nome,
+        index: index
+      };
+    } else if (item.tipo === "armadura" && !equipados.armadura) {
+      equipados.armadura = {
+        nome: item.nome,
+        index: index
+      };
+    } else if (item.tipo === "escudo" && !equipados.escudo) {
+      equipados.escudo = {
+        nome: item.nome,
+        index: index
+      };
+    }
+    
+    await this.actor.update({
+      "system.equipamentos.itens": itens,
+      "system.equipamentos.equipados": equipados
+    });
+  }
+
+  /**
+   * Desequipa um item do inventário
+   * @param {Event} event - Evento de clique
+   */
+  async _onDesequiparItemInventario(event) {
+    event.preventDefault();
+    const index = parseInt(event.currentTarget.dataset.index);
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const itens = equipamentos.itens || [];
+    const item = itens[index];
+    
+    if (!item) return;
+    
+    // Marcar como não equipado
+    item.equipado = false;
+    
+    // Remover dos slots equipados
+    const equipados = equipamentos.equipados || {};
+    
+    if (equipados.arma_principal && equipados.arma_principal.index === index) {
+      equipados.arma_principal = null;
+    }
+    if (equipados.armadura && equipados.armadura.index === index) {
+      equipados.armadura = null;
+    }
+    if (equipados.escudo && equipados.escudo.index === index) {
+      equipados.escudo = null;
+    }
+    
+    await this.actor.update({
+      "system.equipamentos.itens": itens,
+      "system.equipamentos.equipados": equipados
+    });
+  }
+
+  /**
+   * Desequipa um item de um slot específico
+   * @param {Event} event - Evento de clique
+   */
+  async _onDesequiparSlot(event) {
+    event.preventDefault();
+    const slot = event.currentTarget.dataset.slot;
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const equipados = equipamentos.equipados || {};
+    const itens = equipamentos.itens || [];
+    
+    // Encontrar o item no inventário e desmarcar como equipado
+    if (equipados[slot] && equipados[slot].index !== undefined) {
+      const item = itens[equipados[slot].index];
+      if (item) {
+        item.equipado = false;
+      }
+    }
+    
+    // Limpar o slot
+    equipados[slot] = null;
+    
+    await this.actor.update({
+      "system.equipamentos.itens": itens,
+      "system.equipamentos.equipados": equipados
+    });
   }
 } 

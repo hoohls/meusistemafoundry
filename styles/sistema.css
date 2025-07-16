@@ -713,4 +713,199 @@
 
 .rolar-atributo:active {
   animation: pulse 0.2s ease;
+}
+
+/* === Seção de Equipamentos === */
+.equipamentos-content {
+  padding: 15px;
+}
+
+.equipados-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--cor-borda);
+}
+
+.equipados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.slot {
+  padding: 10px;
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+}
+
+.slot label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.slot-vazio {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.item.equipado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 4px;
+}
+
+.inventario-section {
+  margin-bottom: 20px;
+}
+
+.inventario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.peso-info .peso {
+  font-weight: bold;
+  color: var(--cor-primaria);
+}
+
+.item-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.item-create, .adicionar-item {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.item-create:hover, .adicionar-item:hover {
+  background: var(--cor-secundaria);
+}
+
+.items-list {
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  gap: 10px;
+}
+
+.item-entry:last-child {
+  border-bottom: none;
+}
+
+.item-info {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+}
+
+.item-info input, .item-info select {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 4px;
+}
+
+.item-info input[type="text"] {
+  flex: 1;
+  min-width: 120px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.item-actions button {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.item-actions button:hover {
+  background: var(--cor-secundaria);
+}
+
+.item-actions .desequipar-item, .item-actions .remover-item {
+  background: var(--cor-erro);
+}
+
+.item-actions .desequipar-item:hover, .item-actions .remover-item:hover {
+  background: #B22222;
+}
+
+.empty-inventory {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 20px;
+}
+
+.dinheiro-section {
+  background: rgba(255, 215, 0, 0.1);
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-acento);
+}
+
+.moedas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.moeda {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.moeda label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+}
+
+.moeda input {
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  padding: 6px;
+  text-align: center;
 } 

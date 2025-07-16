@@ -170,13 +170,128 @@
       </div>
     </div>
 
-    {{!-- Aba Equipamentos --}}
-    <div class="tab" data-group="primary" data-tab="equipamentos">
-      <div class="equipamentos-content">
-        <h3>Equipamentos</h3>
-        <p>Seção de equipamentos em desenvolvimento...</p>
+      {{!-- Aba Equipamentos --}}
+  <div class="tab" data-group="primary" data-tab="equipamentos">
+    <div class="equipamentos-content">
+      
+      {{!-- Equipamentos Equipados --}}
+      <div class="equipados-section">
+        <h3>Equipamentos Equipados</h3>
+        <div class="equipados-grid">
+          <div class="slot arma-principal">
+            <label>Arma Principal:</label>
+            {{#if system.equipamentos.equipados.arma_principal}}
+            <div class="item equipado">
+              <span>{{system.equipamentos.equipados.arma_principal.nome}}</span>
+              <button type="button" class="desequipar" data-slot="arma_principal">Desequipar</button>
+            </div>
+            {{else}}
+            <div class="slot-vazio">Vazio</div>
+            {{/if}}
+          </div>
+
+          <div class="slot armadura">
+            <label>Armadura:</label>
+            {{#if system.equipamentos.equipados.armadura}}
+            <div class="item equipado">
+              <span>{{system.equipamentos.equipados.armadura.nome}}</span>
+              <button type="button" class="desequipar" data-slot="armadura">Desequipar</button>
+            </div>
+            {{else}}
+            <div class="slot-vazio">Vazio</div>
+            {{/if}}
+          </div>
+
+          <div class="slot escudo">
+            <label>Escudo:</label>
+            {{#if system.equipamentos.equipados.escudo}}
+            <div class="item equipado">
+              <span>{{system.equipamentos.equipados.escudo.nome}}</span>
+              <button type="button" class="desequipar" data-slot="escudo">Desequipar</button>
+            </div>
+            {{else}}
+            <div class="slot-vazio">Vazio</div>
+            {{/if}}
+          </div>
+        </div>
       </div>
+
+      {{!-- Inventário --}}
+      <div class="inventario-section">
+        <div class="inventario-header">
+          <h3>Inventário</h3>
+          <div class="peso-info">
+            <span class="peso">
+              {{#if system.equipamentos.peso_total}}{{system.equipamentos.peso_total}}{{else}}0{{/if}}kg / 
+              {{#if system.equipamentos.capacidade_carga}}{{system.equipamentos.capacidade_carga}}{{else}}50{{/if}}kg
+            </span>
+          </div>
+        </div>
+
+        {{!-- Controles de Criação de Itens --}}
+        <div class="item-controls">
+          <button type="button" class="item-create" data-type="arma">+ Arma</button>
+          <button type="button" class="item-create" data-type="armadura">+ Armadura</button>
+          <button type="button" class="item-create" data-type="equipamento">+ Equipamento</button>
+          <button type="button" class="item-create" data-type="consumivel">+ Consumível</button>
+        </div>
+
+        {{!-- Lista Básica de Itens --}}
+        <div class="items-list">
+          {{#if system.equipamentos.itens}}
+          {{#each system.equipamentos.itens}}
+          <div class="item-entry">
+            <div class="item-info">
+              <input type="text" name="system.equipamentos.itens.{{@index}}.nome" value="{{nome}}" placeholder="Nome do item"/>
+              <select name="system.equipamentos.itens.{{@index}}.tipo">
+                <option value="arma" {{#if (eq tipo "arma")}}selected{{/if}}>Arma</option>
+                <option value="armadura" {{#if (eq tipo "armadura")}}selected{{/if}}>Armadura</option>
+                <option value="escudo" {{#if (eq tipo "escudo")}}selected{{/if}}>Escudo</option>
+                <option value="equipamento" {{#if (eq tipo "equipamento")}}selected{{/if}}>Equipamento</option>
+                <option value="consumivel" {{#if (eq tipo "consumivel")}}selected{{/if}}>Consumível</option>
+              </select>
+              <input type="number" name="system.equipamentos.itens.{{@index}}.quantidade" value="{{#if quantidade}}{{quantidade}}{{else}}1{{/if}}" min="1" max="99" style="width: 60px"/>
+              <input type="number" name="system.equipamentos.itens.{{@index}}.peso" value="{{peso}}" min="0" step="0.1" placeholder="0" style="width: 60px"/>
+            </div>
+            <div class="item-actions">
+              {{#if equipado}}
+              <button type="button" class="desequipar-item" data-index="{{@index}}">Desequipar</button>
+              {{else}}
+              <button type="button" class="equipar-item" data-index="{{@index}}">Equipar</button>
+              {{/if}}
+              <button type="button" class="remover-item" data-index="{{@index}}">Remover</button>
+            </div>
+          </div>
+          {{/each}}
+          {{else}}
+          <p class="empty-inventory">Nenhum item no inventário</p>
+          {{/if}}
+        </div>
+
+        <button type="button" class="adicionar-item">+ Adicionar Item</button>
+      </div>
+
+      {{!-- Dinheiro --}}
+      <div class="dinheiro-section">
+        <h3>Dinheiro</h3>
+        <div class="moedas-grid">
+          <div class="moeda">
+            <label>Ouro:</label>
+            <input type="number" name="system.equipamentos.dinheiro.ouro" value="{{#if system.equipamentos.dinheiro.ouro}}{{system.equipamentos.dinheiro.ouro}}{{else}}0{{/if}}" min="0"/>
+          </div>
+          <div class="moeda">
+            <label>Prata:</label>
+            <input type="number" name="system.equipamentos.dinheiro.prata" value="{{#if system.equipamentos.dinheiro.prata}}{{system.equipamentos.dinheiro.prata}}{{else}}0{{/if}}" min="0"/>
+          </div>
+          <div class="moeda">
+            <label>Cobre:</label>
+            <input type="number" name="system.equipamentos.dinheiro.cobre" value="{{#if system.equipamentos.dinheiro.cobre}}{{system.equipamentos.dinheiro.cobre}}{{else}}0{{/if}}" min="0"/>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 
     {{!-- Aba Detalhes --}}
     <div class="tab" data-group="primary" data-tab="detalhes">
