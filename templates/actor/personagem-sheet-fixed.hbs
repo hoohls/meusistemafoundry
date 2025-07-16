@@ -1,0 +1,209 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Header da Ficha --}}
+  <header class="sheet-header">
+    <div class="header-content">
+      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+      
+      <div class="header-fields">
+        <div class="name-group">
+          <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"/>
+          <div class="level-xp">
+            <label>Nível: <span class="nivel">{{system.nivel}}</span></label>
+            <div class="xp-bar">
+              <div class="xp-progress" style="width: 0%"></div>
+              <span class="xp-text">{{system.experiencia.atual}} / 10 XP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="identity-group">
+          <div class="form-group">
+            <label>Raça:</label>
+            <select name="system.raca.nome">
+              <option value="">Selecione...</option>
+              <option value="humano" {{#if (eq system.raca.nome "humano")}}selected{{/if}}>Humano</option>
+              <option value="elfo" {{#if (eq system.raca.nome "elfo")}}selected{{/if}}>Elfo</option>
+              <option value="anao" {{#if (eq system.raca.nome "anao")}}selected{{/if}}>Anão</option>
+              <option value="halfling" {{#if (eq system.raca.nome "halfling")}}selected{{/if}}>Halfling</option>
+              <option value="tiefling" {{#if (eq system.raca.nome "tiefling")}}selected{{/if}}>Tiefling</option>
+              <option value="goblin" {{#if (eq system.raca.nome "goblin")}}selected{{/if}}>Goblin</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Classe:</label>
+            <select name="system.classe.nome">
+              <option value="">Selecione...</option>
+              <option value="guerreiro" {{#if (eq system.classe.nome "guerreiro")}}selected{{/if}}>Guerreiro</option>
+              <option value="mago" {{#if (eq system.classe.nome "mago")}}selected{{/if}}>Mago</option>
+              <option value="ladino" {{#if (eq system.classe.nome "ladino")}}selected{{/if}}>Ladino</option>
+              <option value="diplomata" {{#if (eq system.classe.nome "diplomata")}}selected{{/if}}>Diplomata</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Abas de Navegação --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="principal">Principal</a>
+    <a class="item" data-tab="equipamentos">Equipamentos</a>
+    <a class="item" data-tab="detalhes">Detalhes</a>
+  </nav>
+
+  {{!-- Conteúdo das Abas --}}
+  <section class="sheet-body">
+    
+    {{!-- Aba Principal --}}
+    <div class="tab" data-group="primary" data-tab="principal">
+      <div class="principal-content">
+        
+        {{!-- Atributos --}}
+        <div class="atributos-section">
+          <h3>Atributos</h3>
+          <div class="atributos-grid">
+            <div class="atributo">
+              <label>Físico</label>
+              <div class="atributo-value">
+                <input type="number" name="system.atributos.fisico.valor" value="{{system.atributos.fisico.valor}}" min="3" max="18"/>
+                <button type="button" class="rolar-atributo" data-atributo="fisico" data-nd="9" title="Rolar teste">
+                  <i class="fas fa-dice-d6"></i>
+                </button>
+              </div>
+            </div>
+            <div class="atributo">
+              <label>Ação</label>
+              <div class="atributo-value">
+                <input type="number" name="system.atributos.acao.valor" value="{{system.atributos.acao.valor}}" min="3" max="18"/>
+                <button type="button" class="rolar-atributo" data-atributo="acao" data-nd="9" title="Rolar teste">
+                  <i class="fas fa-dice-d6"></i>
+                </button>
+              </div>
+            </div>
+            <div class="atributo">
+              <label>Mental</label>
+              <div class="atributo-value">
+                <input type="number" name="system.atributos.mental.valor" value="{{system.atributos.mental.valor}}" min="3" max="18"/>
+                <button type="button" class="rolar-atributo" data-atributo="mental" data-nd="9" title="Rolar teste">
+                  <i class="fas fa-dice-d6"></i>
+                </button>
+              </div>
+            </div>
+            <div class="atributo">
+              <label>Social</label>
+              <div class="atributo-value">
+                <input type="number" name="system.atributos.social.valor" value="{{system.atributos.social.valor}}" min="3" max="18"/>
+                <button type="button" class="rolar-atributo" data-atributo="social" data-nd="9" title="Rolar teste">
+                  <i class="fas fa-dice-d6"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Recursos --}}
+        <div class="recursos-section">
+          <h3>Recursos</h3>
+          <div class="recursos-grid">
+            
+            {{!-- Pontos de Vida --}}
+            <div class="recurso pv">
+              <label>Pontos de Vida</label>
+              <div class="recurso-bar">
+                <div class="bar-background">
+                  <div class="bar-fill pv-fill" style="width: {{#if system.recursos.pv.max}}{{math system.recursos.pv.valor '/' system.recursos.pv.max '*' 100}}{{else}}0{{/if}}%"></div>
+                  <span class="bar-text">{{system.recursos.pv.valor}} / {{system.recursos.pv.max}}</span>
+                </div>
+                <div class="recurso-controls">
+                  <button type="button" class="ajustar-pv" data-operacao="remover" title="Reduzir PV">-</button>
+                  <button type="button" class="ajustar-pv" data-operacao="adicionar" title="Aumentar PV">+</button>
+                </div>
+              </div>
+            </div>
+
+            {{!-- Pontos de Magia --}}
+            <div class="recurso pm">
+              <label>Pontos de Magia</label>
+              <div class="recurso-bar">
+                <div class="bar-background">
+                  <div class="bar-fill pm-fill" style="width: {{#if system.recursos.pm.max}}{{math system.recursos.pm.valor '/' system.recursos.pm.max '*' 100}}{{else}}0{{/if}}%"></div>
+                  <span class="bar-text">{{system.recursos.pm.valor}} / {{system.recursos.pm.max}}</span>
+                </div>
+                <div class="recurso-controls">
+                  <button type="button" class="ajustar-pm" data-operacao="remover" title="Reduzir PM">-</button>
+                  <button type="button" class="ajustar-pm" data-operacao="adicionar" title="Aumentar PM">+</button>
+                </div>
+              </div>
+            </div>
+
+            {{!-- Defesa --}}
+            <div class="recurso defesa">
+              <label>Defesa</label>
+              <div class="defesa-value">
+                <span class="defesa-total">{{system.recursos.defesa.valor}}</span>
+                <small class="defesa-breakdown">(10 + {{system.atributos.acao.valor}} + modificadores)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Condições Básicas --}}
+        <div class="condicoes-section">
+          <h3>Condições</h3>
+          <div class="condicoes-grid">
+            <div class="condicao">
+              <input type="checkbox" name="system.condicoes.ferido" {{#if system.condicoes.ferido}}checked{{/if}}/>
+              <label>Ferido</label>
+            </div>
+            <div class="condicao">
+              <input type="checkbox" name="system.condicoes.gravemente_ferido" {{#if system.condicoes.gravemente_ferido}}checked{{/if}}/>
+              <label>Gravemente Ferido</label>
+            </div>
+            <div class="condicao">
+              <input type="checkbox" name="system.condicoes.inconsciente" {{#if system.condicoes.inconsciente}}checked{{/if}}/>
+              <label>Inconsciente</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{!-- Aba Equipamentos --}}
+    <div class="tab" data-group="primary" data-tab="equipamentos">
+      <div class="equipamentos-content">
+        <h3>Equipamentos</h3>
+        <p>Seção de equipamentos em desenvolvimento...</p>
+      </div>
+    </div>
+
+    {{!-- Aba Detalhes --}}
+    <div class="tab" data-group="primary" data-tab="detalhes">
+      <div class="detalhes-content">
+        
+        <div class="form-group">
+          <label>Biografia:</label>
+          <textarea name="system.detalhes.biografia" rows="4">{{system.detalhes.biografia}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Aparência:</label>
+          <textarea name="system.detalhes.aparencia" rows="3">{{system.detalhes.aparencia}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Personalidade:</label>
+          <textarea name="system.detalhes.personalidade" rows="3">{{system.detalhes.personalidade}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>História:</label>
+          <textarea name="system.detalhes.historia" rows="5">{{system.detalhes.historia}}</textarea>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+</form> 

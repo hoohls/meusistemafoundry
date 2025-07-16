@@ -18,8 +18,8 @@ export class ClubeActorSheet extends ActorSheet {
   get template() {
     const path = "systems/clube-dos-taberneiros-foundry/templates/actor";
     
-    // Usar template simples temporariamente para debug
-    return `${path}/personagem-sheet-simple.hbs`;
+    // Usar template corrigido 
+    return `${path}/personagem-sheet-fixed.hbs`;
   }
 
   /** @override */
@@ -27,7 +27,7 @@ export class ClubeActorSheet extends ActorSheet {
     const context = super.getData();
     const actorData = this.actor.toObject(false);
     
-    // Adicionar dados básicos do sistema (versão simplificada para debug)
+    // Adicionar dados do sistema
     context.system = actorData.system;
     context.flags = actorData.flags;
     
@@ -49,10 +49,50 @@ export class ClubeActorSheet extends ActorSheet {
       };
     }
 
+    if (!context.system.condicoes) {
+      context.system.condicoes = {
+        ferido: false,
+        gravemente_ferido: false,
+        inconsciente: false,
+        caido: false,
+        atordoado: false,
+        cego: false,
+        surdo: false
+      };
+    }
+
+    if (!context.system.detalhes) {
+      context.system.detalhes = {
+        biografia: "",
+        aparencia: "",
+        personalidade: "",
+        historia: "",
+        motivacoes: "",
+        notas: ""
+      };
+    }
+
+    if (!context.system.experiencia) {
+      context.system.experiencia = {
+        atual: 0,
+        necessaria: 10
+      };
+    }
+
+    if (!context.system.raca) {
+      context.system.raca = { nome: "" };
+    }
+
+    if (!context.system.classe) {
+      context.system.classe = { nome: "" };
+    }
+
+    if (!context.system.nivel) {
+      context.system.nivel = 1;
+    }
+
     // Configurações do sistema
     context.config = CONFIG.clube || {};
-    
-    console.log("Actor Sheet getData - context:", context);
     
     return context;
   }
