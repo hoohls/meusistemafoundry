@@ -110,6 +110,13 @@ export class ClubeActorSheet extends ActorSheet {
       };
     }
 
+    // Preparar dados de itens para o template
+    context.items = this._organizarItens();
+    context.equipados = this._obterEquipados();
+    context.pesoTotal = this._calcularPesoTotal();
+    context.capacidadeCarga = this._calcularCapacidadeCarga();
+    context.sobrecarregado = context.pesoTotal > context.capacidadeCarga;
+
     // Configurações do sistema
     context.config = CONFIG.clube || {};
     
@@ -179,6 +186,143 @@ export class ClubeActorSheet extends ActorSheet {
     }
 
     return modificadores;
+  }
+
+  /**
+   * Organiza os itens do ator por categoria
+   * @returns {Object} Objeto com itens organizados por categoria
+   */
+  _organizarItens() {
+    const itens = {
+      armas: [],
+      armaduras: [],
+      escudos: [],
+      equipamentos: [],
+      consumiveis: [],
+      magias: [],
+      habilidades: []
+    };
+
+    // Organizar itens do Foundry
+    for (let item of this.actor.items) {
+      const tipo = item.type || 'equipamentos';
+      if (tipo === 'arma') itens.armas.push(item);
+      else if (tipo === 'armadura') itens.armaduras.push(item);
+      else if (tipo === 'escudo') itens.escudos.push(item);
+      else if (tipo === 'consumivel') itens.consumiveis.push(item);
+      else if (tipo === 'magia') itens.magias.push(item);
+      else if (tipo === 'habilidade') itens.habilidades.push(item);
+      else itens.equipamentos.push(item);
+    }
+
+    // Adicionar itens simples do sistema (fallback)
+    const itensSimples = this.actor.system.equipamentos?.itens || [];
+    itensSimples.forEach((item, index) => {
+      const itemObj = {
+        _id: `simple-${index}`,
+        name: item.nome || "Item sem nome",
+        img: "icons/svg/item-bag.svg",
+        system: {
+          quantidade: item.quantidade || 1,
+          peso: item.peso || 0,
+          equipado: item.equipado || false,
+          tipo: item.tipo || 'equipamento'
+        },
+        isSimple: true,
+        simpleIndex: index
+      };
+
+      const tipo = item.tipo || 'equipamento';
+      if (tipo === 'arma') itens.armas.push(itemObj);
+      else if (tipo === 'armadura') itens.armaduras.push(itemObj);
+      else if (tipo === 'escudo') itens.escudos.push(itemObj);
+      else if (tipo === 'consumivel') itens.consumiveis.push(itemObj);
+      else itens.equipamentos.push(itemObj);
+    });
+
+    return itens;
+  }
+
+  /**
+   * Obtém itens atualmente equipados
+   * @returns {Object} Objeto com itens equipados por slot
+   */
+  _obterEquipados() {
+    const equipados = {
+      arma_principal: null,
+      armadura: null,
+      escudo: null
+    };
+
+    // Verificar itens do Foundry
+    for (let item of this.actor.items) {
+      if (item.system.equipado) {
+        if (item.type === 'arma' && !equipados.arma_principal) {
+          equipados.arma_principal = item;
+        } else if (item.type === 'armadura' && !equipados.armadura) {
+          equipados.armadura = item;
+        } else if (item.type === 'escudo' && !equipados.escudo) {
+          equipados.escudo = item;
+        }
+      }
+    }
+
+    // Verificar equipados do sistema simples
+    const equipadosSimples = this.actor.system.equipamentos?.equipados || {};
+    if (equipadosSimples.arma_principal && !equipados.arma_principal) {
+      equipados.arma_principal = {
+        name: equipadosSimples.arma_principal.nome,
+        img: "icons/svg/sword.svg"
+      };
+    }
+    if (equipadosSimples.armadura && !equipados.armadura) {
+      equipados.armadura = {
+        name: equipadosSimples.armadura.nome,
+        img: "icons/svg/armor.svg"
+      };
+    }
+    if (equipadosSimples.escudo && !equipados.escudo) {
+      equipados.escudo = {
+        name: equipadosSimples.escudo.nome,
+        img: "icons/svg/shield.svg"
+      };
+    }
+
+    return equipados;
+  }
+
+  /**
+   * Calcula o peso total dos itens
+   * @returns {number} Peso total em kg
+   */
+  _calcularPesoTotal() {
+    let pesoTotal = 0;
+
+    // Peso dos itens do Foundry
+    for (let item of this.actor.items) {
+      const peso = item.system.peso || 0;
+      const quantidade = item.system.quantidade || 1;
+      pesoTotal += peso * quantidade;
+    }
+
+    // Peso dos itens simples
+    const itensSimples = this.actor.system.equipamentos?.itens || [];
+    itensSimples.forEach(item => {
+      const peso = item.peso || 0;
+      const quantidade = item.quantidade || 1;
+      pesoTotal += peso * quantidade;
+    });
+
+    return Math.round(pesoTotal * 10) / 10; // Arredondar para 1 casa decimal
+  }
+
+  /**
+   * Calcula a capacidade de carga baseada no atributo Físico
+   * @returns {number} Capacidade de carga em kg
+   */
+  _calcularCapacidadeCarga() {
+    const fisico = this.actor.system.atributos?.fisico?.valor || 10;
+    return fisico * 5; // 5kg por ponto de Físico
   }
 
   /** @override */
@@ -370,9 +514,21 @@ export class ClubeActorSheet extends ActorSheet {
     event.preventDefault();
     const element = event.currentTarget;
     const itemId = element.closest(".item").dataset.itemId;
+    
+    // Verificar se é um item simples
+    if (itemId.startsWith('simple-')) {
+      const index = parseInt(itemId.replace('simple-', ''));
+      return this._onEquiparItemInventario({ preventDefault: () => {}, currentTarget: { dataset: { index } } });
+    }
+    
+    // Item do Foundry
     const item = this.actor.items.get(itemId);
-
-    await this.actor.equiparItem(item);
+    if (item && this.actor.equiparItem) {
+      await this.actor.equiparItem(item);
+    } else {
+      // Fallback para equipar manualmente
+      await item.update({ "system.equipado": true });
+    }
   }
 
   /**
@@ -383,9 +539,21 @@ export class ClubeActorSheet extends ActorSheet {
     event.preventDefault();
     const element = event.currentTarget;
     const itemId = element.closest(".item").dataset.itemId;
+    
+    // Verificar se é um item simples
+    if (itemId.startsWith('simple-')) {
+      const index = parseInt(itemId.replace('simple-', ''));
+      return this._onDesequiparItemInventario({ preventDefault: () => {}, currentTarget: { dataset: { index } } });
+    }
+    
+    // Item do Foundry
     const item = this.actor.items.get(itemId);
-
-    await this.actor.desequiparItem(item);
+    if (item && this.actor.desequiparItem) {
+      await this.actor.desequiparItem(item);
+    } else {
+      // Fallback para desequipar manualmente
+      await item.update({ "system.equipado": false });
+    }
   }
 
   /**
