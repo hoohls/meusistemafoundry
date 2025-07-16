@@ -6,6 +6,7 @@ export const preloadHandlebarsTemplates = async function() {
   return loadTemplates([
     // Templates de Actor (apenas os que existem)
     "systems/clube-dos-taberneiros-foundry/templates/actor/personagem-sheet.hbs",
+    "systems/clube-dos-taberneiros-foundry/templates/actor/personagem-sheet-simple.hbs",
 
     // Templates de Chat (apenas os que existem)
     "systems/clube-dos-taberneiros-foundry/templates/chat/teste-resultado.hbs",

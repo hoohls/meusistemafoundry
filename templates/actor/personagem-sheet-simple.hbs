@@ -1,0 +1,66 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <div class="header-content">
+      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+      <div class="header-fields">
+        <div class="name-group">
+          <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"/>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="principal">Principal</a>
+  </nav>
+
+  <section class="sheet-body">
+    <div class="tab" data-group="primary" data-tab="principal">
+      <div class="principal-content">
+        
+        {{!-- Atributos Simples --}}
+        <div class="atributos-section">
+          <h3>Atributos</h3>
+          <div class="atributos-grid">
+            <div class="atributo">
+              <label>Físico</label>
+              <input type="number" name="system.atributos.fisico.valor" value="{{system.atributos.fisico.valor}}" min="3" max="18"/>
+            </div>
+            <div class="atributo">
+              <label>Ação</label>
+              <input type="number" name="system.atributos.acao.valor" value="{{system.atributos.acao.valor}}" min="3" max="18"/>
+            </div>
+            <div class="atributo">
+              <label>Mental</label>
+              <input type="number" name="system.atributos.mental.valor" value="{{system.atributos.mental.valor}}" min="3" max="18"/>
+            </div>
+            <div class="atributo">
+              <label>Social</label>
+              <input type="number" name="system.atributos.social.valor" value="{{system.atributos.social.valor}}" min="3" max="18"/>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Recursos Simples --}}
+        <div class="recursos-section">
+          <h3>Recursos</h3>
+          <div class="recursos-grid">
+            <div class="recurso pv">
+              <label>PV</label>
+              <span>{{system.recursos.pv.valor}} / {{system.recursos.pv.max}}</span>
+            </div>
+            <div class="recurso pm">
+              <label>PM</label>
+              <span>{{system.recursos.pm.valor}} / {{system.recursos.pm.max}}</span>
+            </div>
+            <div class="recurso defesa">
+              <label>Defesa</label>
+              <span>{{system.recursos.defesa.valor}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</form> 

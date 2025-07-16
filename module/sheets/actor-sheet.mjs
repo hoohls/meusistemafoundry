@@ -18,9 +18,8 @@ export class ClubeActorSheet extends ActorSheet {
   get template() {
     const path = "systems/clube-dos-taberneiros-foundry/templates/actor";
     
-    // Usar o mesmo template para todos os tipos de ator por enquanto
-    // TODO: Criar templates específicos para NPC e criaturas no futuro
-    return `${path}/personagem-sheet.hbs`;
+    // Usar template simples temporariamente para debug
+    return `${path}/personagem-sheet-simple.hbs`;
   }
 
   /** @override */
@@ -28,61 +27,33 @@ export class ClubeActorSheet extends ActorSheet {
     const context = super.getData();
     const actorData = this.actor.toObject(false);
     
-    // Adicionar dados do sistema
+    // Adicionar dados básicos do sistema (versão simplificada para debug)
     context.system = actorData.system;
     context.flags = actorData.flags;
     
-    // Organizar itens por tipo
-    context.items = {
-      armas: this.actor.items.filter(i => i.type === "arma"),
-      armaduras: this.actor.items.filter(i => i.type === "armadura"),
-      escudos: this.actor.items.filter(i => i.type === "escudo"),
-      equipamentos: this.actor.items.filter(i => i.type === "equipamento"),
-      consumiveis: this.actor.items.filter(i => i.type === "consumivel"),
-      magias: this.actor.items.filter(i => i.type === "magia"),
-      habilidades: this.actor.items.filter(i => i.type === "habilidade")
-    };
-
-    // Separar habilidades por categoria
-    context.habilidadesPorCategoria = {
-      classe: context.items.habilidades.filter(h => h.system.categoria === "classe"),
-      raca: context.items.habilidades.filter(h => h.system.categoria === "raca"),
-      gerais: context.items.habilidades.filter(h => h.system.categoria === "geral"),
-      customizadas: context.items.habilidades.filter(h => h.system.categoria === "customizada")
-    };
-
-    // Separar magias por escola
-    context.magiasPorEscola = {};
-    const escolas = ["evocacao", "abjuracao", "transmutacao", "ilusao", "divinacao", "necromancia"];
-    escolas.forEach(escola => {
-      context.magiasPorEscola[escola] = context.items.magias.filter(m => m.system.escola === escola);
-    });
-
-    // Itens equipados
-    context.equipados = {
-      arma_principal: this.actor.items.find(i => i.type === "arma" && i.system.equipado && i.system.categoria !== "secundaria"),
-      arma_secundaria: this.actor.items.find(i => i.type === "arma" && i.system.equipado && i.system.categoria === "secundaria"),
-      armadura: this.actor.items.find(i => i.type === "armadura" && i.system.equipado),
-      escudo: this.actor.items.find(i => i.type === "escudo" && i.system.equipado)
-    };
-
-    // Calcular peso total do inventário
-    context.pesoTotal = this.actor.items.reduce((total, item) => {
-      return total + (item.system.peso || 0) * (item.system.quantidade || 1);
-    }, 0);
-
-    // Capacidade de carga
-    context.capacidadeCarga = actorData.system.atributos.fisico.valor * 5;
-    context.sobrecarregado = context.pesoTotal > context.capacidadeCarga;
-
-    // Configurações do sistema
-    context.config = CONFIG.clube;
+    // Garantir que estrutura básica existe para evitar erros
+    if (!context.system.atributos) {
+      context.system.atributos = {
+        fisico: { valor: 3 },
+        acao: { valor: 3 },
+        mental: { valor: 3 },
+        social: { valor: 3 }
+      };
+    }
     
-    // Dados específicos por tipo de ator
-    if (this.actor.type === "personagem") {
-      context = await this._getPersonagemData(context);
+    if (!context.system.recursos) {
+      context.system.recursos = {
+        pv: { valor: 19, max: 19 },
+        pm: { valor: 11, max: 11 },
+        defesa: { valor: 13 }
+      };
     }
 
+    // Configurações do sistema
+    context.config = CONFIG.clube || {};
+    
+    console.log("Actor Sheet getData - context:", context);
+    
     return context;
   }
 
