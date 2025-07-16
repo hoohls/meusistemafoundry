@@ -26,8 +26,10 @@
       "path": "lang/pt-BR.json"
     }
   ],
-  "gridDistance": 1.5,
-  "gridUnits": "m",
+  "grid": {
+    "distance": 1.5,
+    "units": "m"
+  },
   "primaryTokenAttribute": "recursos.pv",
   "secondaryTokenAttribute": "recursos.pm",
   "socket": true,
