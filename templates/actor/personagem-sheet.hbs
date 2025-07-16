@@ -21,9 +21,12 @@
             <label>{{localize 'RACAS.RACA'}}:</label>
             <select name="system.raca.nome">
               <option value="">Selecione...</option>
-              {{#each config.racas as |label key|}}
-              <option value="{{key}}" {{#if (eq ../system.raca.nome key)}}selected{{/if}}>{{localize label}}</option>
-              {{/each}}
+              <option value="humano" {{#if (eq system.raca.nome "humano")}}selected{{/if}}>{{localize "RACAS.HUMANO"}}</option>
+              <option value="elfo" {{#if (eq system.raca.nome "elfo")}}selected{{/if}}>{{localize "RACAS.ELFO"}}</option>
+              <option value="anao" {{#if (eq system.raca.nome "anao")}}selected{{/if}}>{{localize "RACAS.ANAO"}}</option>
+              <option value="halfling" {{#if (eq system.raca.nome "halfling")}}selected{{/if}}>{{localize "RACAS.HALFLING"}}</option>
+              <option value="tiefling" {{#if (eq system.raca.nome "tiefling")}}selected{{/if}}>{{localize "RACAS.TIEFLING"}}</option>
+              <option value="goblin" {{#if (eq system.raca.nome "goblin")}}selected{{/if}}>{{localize "RACAS.GOBLIN"}}</option>
             </select>
           </div>
 
@@ -31,9 +34,10 @@
             <label>{{localize 'CLASSES.CLASSE'}}:</label>
             <select name="system.classe.nome">
               <option value="">Selecione...</option>
-              {{#each config.classes as |label key|}}
-              <option value="{{key}}" {{#if (eq ../system.classe.nome key)}}selected{{/if}}>{{localize label}}</option>
-              {{/each}}
+              <option value="guerreiro" {{#if (eq system.classe.nome "guerreiro")}}selected{{/if}}>{{localize "CLASSES.GUERREIRO"}}</option>
+              <option value="mago" {{#if (eq system.classe.nome "mago")}}selected{{/if}}>{{localize "CLASSES.MAGO"}}</option>
+              <option value="ladino" {{#if (eq system.classe.nome "ladino")}}selected{{/if}}>{{localize "CLASSES.LADINO"}}</option>
+              <option value="diplomata" {{#if (eq system.classe.nome "diplomata")}}selected{{/if}}>{{localize "CLASSES.DIPLOMATA"}}</option>
             </select>
           </div>
         </div>
@@ -85,7 +89,7 @@
               <label>{{localize 'RECURSOS.PV'}}</label>
               <div class="recurso-bar">
                 <div class="bar-background">
-                  <div class="bar-fill pv-fill" style="width: {{math system.recursos.pv.valor '/' system.recursos.pv.max '*' 100}}%"></div>
+                  <div class="bar-fill pv-fill" style="width: {{#if system.recursos.pv.max}}{{math system.recursos.pv.valor '/' system.recursos.pv.max '*' 100}}{{else}}0{{/if}}%"></div>
                   <span class="bar-text">{{system.recursos.pv.valor}} / {{system.recursos.pv.max}}</span>
                 </div>
                 <div class="recurso-controls">
@@ -100,7 +104,7 @@
               <label>{{localize 'RECURSOS.PM'}}</label>
               <div class="recurso-bar">
                 <div class="bar-background">
-                  <div class="bar-fill pm-fill" style="width: {{math system.recursos.pm.valor '/' system.recursos.pm.max '*' 100}}%"></div>
+                  <div class="bar-fill pm-fill" style="width: {{#if system.recursos.pm.max}}{{math system.recursos.pm.valor '/' system.recursos.pm.max '*' 100}}{{else}}0{{/if}}%"></div>
                   <span class="bar-text">{{system.recursos.pm.valor}} / {{system.recursos.pm.max}}</span>
                 </div>
                 <div class="recurso-controls">

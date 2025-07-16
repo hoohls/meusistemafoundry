@@ -326,6 +326,21 @@ async function conjurarMagia({
 
 function registerHandlebarsHelpers() {
   
+  // Helper para operações matemáticas (usado nas barras de progresso)
+  Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
+    lvalue = parseFloat(lvalue);
+    rvalue = parseFloat(rvalue);
+    
+    switch (operator) {
+      case '+': return lvalue + rvalue;
+      case '-': return lvalue - rvalue;
+      case '*': return lvalue * rvalue;
+      case '/': return rvalue !== 0 ? lvalue / rvalue : 0;
+      case '%': return lvalue % rvalue;
+      default: return lvalue;
+    }
+  });
+
   // Helper para localização de atributos
   Handlebars.registerHelper('localizeAtributo', function(atributo) {
     return game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`);
@@ -369,6 +384,21 @@ function registerHandlebarsHelpers() {
   // Helper para calcular defesa
   Handlebars.registerHelper('calcularDefesa', function(acao, armadura, escudo, outros) {
     return 10 + acao + (armadura || 0) + (escudo || 0) + (outros || 0);
+  });
+
+  // Helper para comparação de igualdade
+  Handlebars.registerHelper('eq', function(a, b) {
+    return a === b;
+  });
+
+  // Helper para concatenação de strings
+  Handlebars.registerHelper('concat', function() {
+    return Array.prototype.slice.call(arguments, 0, -1).join('');
+  });
+
+  // Helper para conversão para maiúscula
+  Handlebars.registerHelper('uppercase', function(str) {
+    return str ? str.toUpperCase() : '';
   });
 }
 

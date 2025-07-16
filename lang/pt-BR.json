@@ -4,6 +4,7 @@
     "DESCRICAO": "Sistema de RPG baseado em 2d6 com quatro atributos fundamentais"
   },
   "ATRIBUTOS": {
+    "ATRIBUTOS": "Atributos",
     "FISICO": "Físico",
     "ACAO": "Ação", 
     "MENTAL": "Mental",
@@ -12,6 +13,7 @@
     "MODIFICADOR": "Modificador"
   },
   "RECURSOS": {
+    "RECURSOS": "Recursos",
     "PV": "Pontos de Vida",
     "PV_ABREV": "PV",
     "PM": "Pontos de Magia",
@@ -21,6 +23,7 @@
     "MOVIMENTO": "Movimento"
   },
   "CLASSES": {
+    "CLASSE": "Classe",
     "GUERREIRO": "Guerreiro",
     "MAGO": "Mago",
     "LADINO": "Ladino",
@@ -29,6 +32,7 @@
     "EXPERIENCIA": "Experiência"
   },
   "RACAS": {
+    "RACA": "Raça",
     "HUMANO": "Humano",
     "ELFO": "Elfo",
     "ANAO": "Anão",
@@ -47,6 +51,7 @@
     "DISTANCIA": "À Distância"
   },
   "CONDICOES": {
+    "CONDICOES": "Condições",
     "CAIDO": "Caído",
     "ATORDOADO": "Atordoado",
     "CEGO": "Cego",
@@ -175,5 +180,25 @@
     "COMBATE": "Combate",
     "MAGIA": "Magia",
     "AUTOMACAO": "Automação"
+  },
+  "FICHA": {
+    "PERSONAGEM": "Ficha de Personagem",
+    "NPC": "Ficha de NPC",
+    "CRIATURA": "Ficha de Criatura",
+    "BIOGRAFIA": "Biografia",
+    "APARENCIA": "Aparência",
+    "PERSONALIDADE": "Personalidade",
+    "HISTORIA": "História",
+    "MOTIVACOES": "Motivações",
+    "NOTAS": "Notas"
+  },
+  "EQUIPAMENTOS": {
+    "EQUIPAMENTO": "Equipamento",
+    "ARMA": "Arma",
+    "ARMADURA": "Armadura",
+    "ESCUDO": "Escudo",
+    "CONSUMIVEL": "Consumível",
+    "MAGIA": "Magia",
+    "HABILIDADE": "Habilidade"
   }
 } 
