@@ -117,6 +117,9 @@ export class ClubeActorSheet extends ActorSheet {
     context.capacidadeCarga = this._calcularCapacidadeCarga();
     context.sobrecarregado = context.pesoTotal > context.capacidadeCarga;
 
+    // Preparar dados de magias para o template
+    context.magiasPorEscola = this._organizarMagiasPorEscola();
+
     // Configurações do sistema
     context.config = CONFIG.clube || {};
     
@@ -323,6 +326,54 @@ export class ClubeActorSheet extends ActorSheet {
   _calcularCapacidadeCarga() {
     const fisico = this.actor.system.atributos?.fisico?.valor || 10;
     return fisico * 5; // 5kg por ponto de Físico
+  }
+
+  /**
+   * Organiza as magias por escola
+   * @returns {Object} Objeto com magias organizadas por escola
+   */
+  _organizarMagiasPorEscola() {
+    const escolas = {
+      'abjuracao': 'Abjuração',
+      'adivinhacao': 'Adivinhação', 
+      'conjuracao': 'Conjuração',
+      'encantamento': 'Encantamento',
+      'evocacao': 'Evocação',
+      'ilusao': 'Ilusão',
+      'necromancia': 'Necromancia',
+      'transmutacao': 'Transmutação'
+    };
+
+    const magiasPorEscola = {};
+    const pmAtual = this.actor.system.recursos?.pm?.valor || 0;
+
+    for (let item of this.actor.items) {
+      if (item.type === 'magia') {
+        const escola = item.system.escola || 'evocacao';
+        const nomeEscola = escolas[escola] || escolas['evocacao'];
+        
+        if (!magiasPorEscola[nomeEscola]) {
+          magiasPorEscola[nomeEscola] = [];
+        }
+
+        // Verificar se pode conjurar (tem PM suficiente)
+        const custoMP = item.system.custo_pm || 1;
+        item.system.pode_conjurar = pmAtual >= custoMP;
+
+        magiasPorEscola[nomeEscola].push(item);
+      }
+    }
+
+    // Ordenar magias dentro de cada escola por nível
+    Object.keys(magiasPorEscola).forEach(escola => {
+      magiasPorEscola[escola].sort((a, b) => {
+        const nivelA = a.system.nivel || 1;
+        const nivelB = b.system.nivel || 1;
+        return nivelA - nivelB;
+      });
+    });
+
+    return magiasPorEscola;
   }
 
   /** @override */
