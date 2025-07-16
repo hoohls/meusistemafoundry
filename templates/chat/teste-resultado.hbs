@@ -1,0 +1,138 @@
+<div class="clube-teste-resultado">
+  <div class="teste-header">
+    <h3>{{nome}}</h3>
+    <div class="teste-info">
+      <span class="atributo">{{atributo}}: {{valor}}</span>
+      {{#if modificador}}
+      <span class="modificador">Mod: {{#if (gt modificador 0)}}+{{/if}}{{modificador}}</span>
+      {{/if}}
+      <span class="nd">ND: {{nd}}</span>
+    </div>
+  </div>
+
+  <div class="teste-dados">
+    <div class="dados-resultado">
+      {{#each dados}}
+      <div class="dado {{#if (eq result 1)}}critico-baixo{{else if (eq result 6)}}critico-alto{{/if}}">
+        {{result}}
+      </div>
+      {{/each}}
+    </div>
+    
+    <div class="total-resultado {{#if sucesso}}sucesso{{else}}falha{{/if}} {{#if critico}}critico-{{critico}}{{/if}}">
+      <span class="total">{{total}}</span>
+      <span class="resultado-texto">
+        {{#if critico}}
+          {{#if (eq critico "sucesso")}}
+          Sucesso Crítico!
+          {{else}}
+          Falha Crítica!
+          {{/if}}
+        {{else}}
+          {{#if sucesso}}
+          Sucesso por {{margem}}
+          {{else}}
+          Falha por {{margem}}
+          {{/if}}
+        {{/if}}
+      </span>
+    </div>
+  </div>
+</div>
+
+<style>
+.clube-teste-resultado {
+  border: 2px solid #8B4513;
+  border-radius: 6px;
+  background: #F5F5DC;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.teste-header h3 {
+  margin: 0 0 8px 0;
+  color: #8B4513;
+  font-family: "Cinzel", serif;
+}
+
+.teste-info {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.teste-dados {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.dados-resultado {
+  display: flex;
+  gap: 8px;
+}
+
+.dado {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid #8B4513;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.dado.critico-baixo {
+  background: #FFB6C1;
+  border-color: #DC143C;
+  color: #DC143C;
+}
+
+.dado.critico-alto {
+  background: #90EE90;
+  border-color: #228B22;
+  color: #228B22;
+}
+
+.total-resultado {
+  text-align: center;
+}
+
+.total-resultado .total {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.total-resultado.sucesso .total {
+  color: #228B22;
+}
+
+.total-resultado.falha .total {
+  color: #DC143C;
+}
+
+.total-resultado.critico-sucesso {
+  background: #90EE90;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.total-resultado.critico-falha {
+  background: #FFB6C1;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.resultado-texto {
+  font-size: 12px;
+  font-weight: bold;
+}
+</style> 

@@ -1,0 +1,716 @@
+/* ================================== */
+/* Sistema Clube dos Taberneiros CSS */
+/* ================================== */
+
+/* === Variáveis Globais === */
+:root {
+  --cor-primaria: #8B4513;
+  --cor-secundaria: #D2691E;
+  --cor-acento: #FFD700;
+  --cor-texto: #2F2F2F;
+  --cor-fundo: #F5F5DC;
+  --cor-borda: #CD853F;
+  --cor-sucesso: #228B22;
+  --cor-erro: #DC143C;
+  --cor-aviso: #FF8C00;
+  --fonte-principal: "Roboto", sans-serif;
+  --fonte-titulo: "Cinzel", serif;
+}
+
+/* === Ficha Base === */
+.clube-dos-taberneiros.sheet {
+  background: var(--cor-fundo);
+  border: 2px solid var(--cor-borda);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-family: var(--fonte-principal);
+  color: var(--cor-texto);
+}
+
+.clube-dos-taberneiros.sheet .window-content {
+  padding: 0;
+  background: var(--cor-fundo);
+}
+
+/* === Header da Ficha === */
+.sheet-header {
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: white;
+  padding: 15px;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 3px solid var(--cor-acento);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-img {
+  border: 3px solid var(--cor-acento);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.profile-img:hover {
+  transform: scale(1.05);
+}
+
+.header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.name-group input[name="name"] {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: var(--fonte-titulo);
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  color: white;
+  padding: 8px;
+  width: 100%;
+}
+
+.name-group input[name="name"]:focus {
+  background: rgba(255,255,255,0.3);
+  outline: none;
+  border-color: var(--cor-acento);
+}
+
+.level-xp {
+  margin-top: 8px;
+}
+
+.level-xp label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.xp-bar {
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  height: 20px;
+  position: relative;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.xp-progress {
+  background: linear-gradient(90deg, var(--cor-acento), #FFA500);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.xp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+.identity-group {
+  display: flex;
+  gap: 15px;
+}
+
+.identity-group .form-group {
+  flex: 1;
+}
+
+.identity-group label {
+  color: white;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.identity-group select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+
+/* === Abas de Navegação === */
+.sheet-tabs {
+  background: var(--cor-secundaria);
+  border-bottom: 2px solid var(--cor-borda);
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.sheet-tabs .item {
+  flex: 1;
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--cor-secundaria);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-right: 1px solid var(--cor-borda);
+  transition: background-color 0.2s;
+}
+
+.sheet-tabs .item:last-child {
+  border-right: none;
+}
+
+.sheet-tabs .item:hover {
+  background: var(--cor-primaria);
+}
+
+.sheet-tabs .item.active {
+  background: var(--cor-acento);
+  color: var(--cor-texto);
+}
+
+/* === Conteúdo da Ficha === */
+.sheet-body {
+  padding: 20px;
+  height: 480px;
+  overflow-y: auto;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+/* === Seções Principais === */
+.atributos-section, .recursos-section, .condicoes-section, .descanso-section {
+  background: white;
+  border: 2px solid var(--cor-borda);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.atributos-section h3, .recursos-section h3, .condicoes-section h3, .descanso-section h3 {
+  font-family: var(--fonte-titulo);
+  color: var(--cor-primaria);
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--cor-acento);
+}
+
+/* === Atributos === */
+.atributos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.atributo {
+  background: var(--cor-fundo);
+  padding: 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.atributo label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.atributo-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.atributo-value input {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 8px;
+  border: 2px solid var(--cor-borda);
+  border-radius: 4px;
+}
+
+.rolar-atributo {
+  background: var(--cor-secundaria);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.rolar-atributo:hover {
+  background: var(--cor-primaria);
+}
+
+/* === Recursos === */
+.recursos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.recurso {
+  background: var(--cor-fundo);
+  padding: 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+}
+
+.recurso.defesa {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.recurso label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.recurso-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-background {
+  flex: 1;
+  background: #ddd;
+  border-radius: 10px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.pv-fill {
+  background: linear-gradient(90deg, var(--cor-erro), #FF6B6B);
+}
+
+.pm-fill {
+  background: linear-gradient(90deg, #4169E1, #87CEEB);
+}
+
+.bar-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+.recurso-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recurso-controls button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: var(--cor-secundaria);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.recurso-controls button:hover {
+  background: var(--cor-primaria);
+}
+
+.defesa-value {
+  text-align: center;
+}
+
+.defesa-total {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--cor-primaria);
+}
+
+.defesa-breakdown {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* === Condições === */
+.condicoes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.condicao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.condicao.ativo {
+  background: rgba(220, 20, 60, 0.2);
+  border: 1px solid var(--cor-erro);
+}
+
+.condicao input[type="checkbox"] {
+  margin: 0;
+}
+
+.condicao label {
+  font-size: 12px;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* === Botões de Descanso === */
+.descanso-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.descanso-buttons button {
+  flex: 1;
+  padding: 12px;
+  background: var(--cor-sucesso);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.descanso-buttons button:hover {
+  background: #1F5F1F;
+}
+
+/* === Listas de Itens === */
+.items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.items-list .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background: white;
+  transition: background-color 0.2s;
+}
+
+.items-list .item:hover {
+  background: var(--cor-fundo);
+}
+
+.item-image img {
+  border-radius: 4px;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.item-name h4 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--cor-primaria);
+}
+
+.item-details {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.item-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.item-control {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cor-secundaria);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.item-control:hover {
+  background: var(--cor-primaria);
+}
+
+.item-control.disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.item-control.disabled:hover {
+  background: #ccc;
+}
+
+/* === Controles de Criação === */
+.item-controls {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.item-create {
+  background: var(--cor-acento);
+  color: var(--cor-texto);
+  border: 2px solid var(--cor-borda);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 0 4px;
+  transition: all 0.2s;
+}
+
+.item-create:hover {
+  background: var(--cor-secundaria);
+  color: white;
+}
+
+/* === Equipamentos Equipados === */
+.equipados-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.slot {
+  background: var(--cor-fundo);
+  border: 2px dashed var(--cor-borda);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  margin-bottom: 8px;
+}
+
+.slot-vazio {
+  color: #999;
+  font-style: italic;
+}
+
+.item.equipado {
+  background: white;
+  border: 2px solid var(--cor-sucesso);
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === Inventário === */
+.inventario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.peso-info .peso {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--cor-sucesso);
+  color: white;
+}
+
+.peso-info .peso.sobrecarregado {
+  background: var(--cor-erro);
+}
+
+.item-properties {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.property {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  background: var(--cor-borda);
+  color: white;
+}
+
+.property.equipado {
+  background: var(--cor-sucesso);
+}
+
+/* === Dinheiro === */
+.moedas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.moeda {
+  text-align: center;
+}
+
+.moeda label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.moeda input {
+  width: 100%;
+  text-align: center;
+  padding: 6px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+}
+
+/* === Detalhes === */
+.detalhes-content .form-group {
+  margin-bottom: 15px;
+}
+
+.detalhes-content label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.detalhes-content textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 2px solid var(--cor-borda);
+  border-radius: 4px;
+  font-family: var(--fonte-principal);
+  resize: vertical;
+}
+
+.detalhes-content textarea:focus {
+  outline: none;
+  border-color: var(--cor-acento);
+}
+
+/* === Tooltips === */
+.clube-tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.9);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  z-index: 1000;
+  max-width: 300px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.clube-tooltip h3 {
+  margin: 0 0 8px 0;
+  color: var(--cor-acento);
+}
+
+.clube-tooltip p {
+  margin: 4px 0;
+}
+
+/* === Responsividade === */
+@media (max-width: 768px) {
+  .atributos-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recursos-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .equipados-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .moedas-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .condicoes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* === Animações === */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.item-control:active {
+  animation: pulse 0.2s ease;
+}
+
+.rolar-atributo:active {
+  animation: pulse 0.2s ease;
+} 

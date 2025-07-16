@@ -1,0 +1,270 @@
+{
+  "Actor": {
+    "types": ["personagem", "npc", "criatura"],
+    "templates": {
+      "base": {
+        "nivel": 1,
+        "experiencia": {
+          "atual": 0,
+          "necessaria": 10
+        },
+        "atributos": {
+          "fisico": {
+            "valor": 3,
+            "mod": 0
+          },
+          "acao": {
+            "valor": 3,
+            "mod": 0
+          },
+          "mental": {
+            "valor": 3,
+            "mod": 0
+          },
+          "social": {
+            "valor": 3,
+            "mod": 0
+          }
+        },
+        "recursos": {
+          "pv": {
+            "valor": 19,
+            "max": 19
+          },
+          "pm": {
+            "valor": 11,
+            "max": 11
+          },
+          "defesa": {
+            "valor": 13,
+            "base": 10,
+            "armadura": 0,
+            "escudo": 0,
+            "outros": 0
+          }
+        },
+        "detalhes": {
+          "biografia": "",
+          "aparencia": "",
+          "personalidade": "",
+          "historia": "",
+          "motivacoes": "",
+          "notas": ""
+        }
+      },
+      "combatente": {
+        "iniciativa": {
+          "valor": 0,
+          "bonus": 0
+        },
+        "movimento": {
+          "base": 9,
+          "atual": 9
+        },
+        "condicoes": {
+          "caido": false,
+          "atordoado": false,
+          "cego": false,
+          "surdo": false,
+          "ferido": false,
+          "gravemente_ferido": false,
+          "inconsciente": false
+        }
+      }
+    },
+    "personagem": {
+      "templates": ["base", "combatente"],
+      "raca": {
+        "nome": "",
+        "modificadores": {},
+        "habilidades": []
+      },
+      "classe": {
+        "nome": "",
+        "nivel": 1,
+        "habilidades": []
+      },
+      "habilidades": {
+        "classe": [],
+        "raca": [],
+        "gerais": [],
+        "customizadas": []
+      },
+      "equipamentos": {
+        "dinheiro": {
+          "moedas_prata": 100,
+          "moedas_cobre": 0,
+          "moedas_ouro": 0
+        },
+        "arma_principal": "",
+        "arma_secundaria": "",
+        "armadura": "",
+        "escudo": "",
+        "itens": []
+      },
+      "magias": {
+        "conhecidas": [],
+        "escolas": []
+      },
+      "progressao": {
+        "pontos_atributo": 0,
+        "habilidades_disponiveis": 0
+      }
+    },
+    "npc": {
+      "templates": ["base", "combatente"],
+      "tipo": "humanoid",
+      "nd": 1,
+      "comportamento": {
+        "hostil": false,
+        "neutro": true,
+        "amigavel": false
+      },
+      "tesouro": {
+        "individual": "",
+        "grupo": ""
+      }
+    },
+    "criatura": {
+      "templates": ["base", "combatente"],
+      "tipo": "beast",
+      "nd": 1,
+      "habitat": "",
+      "comportamento": "neutral",
+      "habilidades_especiais": []
+    }
+  },
+  "Item": {
+    "types": ["arma", "armadura", "escudo", "equipamento", "consumivel", "magia", "habilidade"],
+    "templates": {
+      "base": {
+        "descricao": "",
+        "peso": 0,
+        "preco": {
+          "valor": 0,
+          "moeda": "mp"
+        },
+        "quantidade": 1,
+        "equipado": false
+      },
+      "fisico": {
+        "peso": 0,
+        "material": "",
+        "qualidade": "comum",
+        "durabilidade": {
+          "atual": 100,
+          "max": 100
+        }
+      }
+    },
+    "arma": {
+      "templates": ["base", "fisico"],
+      "tipo": "corpo_a_corpo",
+      "categoria": "leve",
+      "dano": {
+        "base": "1d6",
+        "tipo": "perfurante"
+      },
+      "atributo": "fisico",
+      "alcance": {
+        "curto": 1.5,
+        "medio": 0,
+        "longo": 0
+      },
+      "propriedades": {
+        "arremessavel": false,
+        "oculta": false,
+        "duas_maos": false,
+        "versatil": false,
+        "finesse": false,
+        "alcance": false,
+        "penetrante": false
+      },
+      "criticos": {
+        "margem": 12,
+        "multiplicador": 2
+      },
+      "nivel_minimo": 1
+    },
+    "armadura": {
+      "templates": ["base", "fisico"],
+      "tipo": "leve",
+      "protecao": 1,
+      "mod_defesa": 1,
+      "penalidades": {
+        "furtividade": 0,
+        "acao": 0
+      },
+      "resistencias": [],
+      "nivel_minimo": 1
+    },
+    "escudo": {
+      "templates": ["base", "fisico"],
+      "protecao": 1,
+      "mod_defesa": 1,
+      "propriedades": {
+        "arremessavel": false,
+        "magico": false
+      },
+      "nivel_minimo": 1
+    },
+    "equipamento": {
+      "templates": ["base", "fisico"],
+      "categoria": "geral",
+      "uso": "ferramentas",
+      "efeitos": []
+    },
+    "consumivel": {
+      "templates": ["base"],
+      "tipo": "pocao",
+      "efeito": "",
+      "usos": {
+        "atual": 1,
+        "max": 1
+      },
+      "limitacao": {
+        "por_dia": 0,
+        "por_combate": 0
+      }
+    },
+    "magia": {
+      "templates": ["base"],
+      "escola": "evocacao",
+      "nivel": 1,
+      "custo_pm": 1,
+      "alcance": "30m",
+      "duracao": "instantaneo",
+      "componentes": {
+        "verbal": true,
+        "somatico": true,
+        "material": false,
+        "material_desc": ""
+      },
+      "alvo": "individual",
+      "area_efeito": "",
+      "teste_resistencia": "",
+      "efeito": "",
+      "nivel_minimo": 1
+    },
+    "habilidade": {
+      "templates": ["base"],
+      "categoria": "classe",
+      "nivel_minimo": 1,
+      "prerequisitos": {
+        "atributos": {},
+        "habilidades": [],
+        "classe": "",
+        "raca": ""
+      },
+      "efeito": "",
+      "passiva": true,
+      "ativacao": "livre",
+      "usos": {
+        "limitado": false,
+        "por_dia": 0,
+        "por_combate": 0,
+        "atual": 0
+      }
+    }
+  }
+} 

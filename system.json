@@ -1,0 +1,42 @@
+{
+  "id": "clube-dos-taberneiros",
+  "title": "Sistema Clube dos Taberneiros",
+  "description": "Sistema de RPG baseado em 2d6 com quatro atributos fundamentais (Físico, Ação, Mental, Social). Um sistema elegante que combina simplicidade mecânica com profundidade tática.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Clube dos Taberneiros",
+      "discord": "clube-dos-taberneiros"
+    }
+  ],
+  "esmodules": [
+    "module/sistema.mjs"
+  ],
+  "styles": [
+    "styles/sistema.css"
+  ],
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "gridDistance": 1.5,
+  "gridUnits": "m",
+  "primaryTokenAttribute": "recursos.pv",
+  "secondaryTokenAttribute": "recursos.pm",
+  "socket": true,
+  "initiative": "1d20 + @atributos.acao.valor",
+  "url": "https://github.com/hoohls/meusistemafoundry",
+  "manifest": "https://raw.githubusercontent.com/hoohls/meusistemafoundry/main/system.json",
+  "download": "https://github.com/hoohls/meusistemafoundry/archive/main.zip",
+  "license": "LICENSE.txt",
+  "readme": "README.md",
+  "bugs": "https://github.com/hoohls/meusistemafoundry/issues",
+  "changelog": "https://github.com/hoohls/meusistemafoundry/releases"
+} 

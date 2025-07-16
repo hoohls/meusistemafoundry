@@ -1,0 +1,155 @@
+<div class="clube-ataque-resultado">
+  <div class="ataque-header">
+    <h3>⚔️ {{atacante}} ataca!</h3>
+    <div class="arma-info">
+      <strong>{{arma}}</strong>
+      {{#if propriedades.length}}
+      <span class="propriedades">({{join propriedades ", "}})</span>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="ataque-dados">
+    <div class="rolagem-ataque">
+      <h4>Rolagem de Ataque</h4>
+      <div class="resultado {{#if acertou}}sucesso{{else}}falha{{/if}}">
+        <span class="total">{{ataqueRoll.total}}</span>
+        <span class="vs">vs</span>
+        <span class="defesa">Defesa {{defesa}}</span>
+      </div>
+    </div>
+
+    {{#if acertou}}
+    <div class="rolagem-dano">
+      <h4>Dano</h4>
+      <div class="dano-resultado">
+        <span class="dano-total">{{danoRoll.total}}</span>
+        <span class="dano-tipo">pontos de dano</span>
+      </div>
+      {{#if alvo}}
+      <div class="alvo-info">
+        <small>{{alvo}} recebeu {{danoRoll.total}} de dano</small>
+      </div>
+      {{/if}}
+    </div>
+    {{else}}
+    <div class="ataque-errou">
+      <h4>❌ Errou!</h4>
+      <p>O ataque não conseguiu atravessar as defesas do alvo.</p>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<style>
+.clube-ataque-resultado {
+  border: 2px solid #8B4513;
+  border-radius: 6px;
+  background: #F5F5DC;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.ataque-header h3 {
+  margin: 0 0 6px 0;
+  color: #8B4513;
+  font-family: "Cinzel", serif;
+}
+
+.arma-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.propriedades {
+  font-style: italic;
+  color: #999;
+}
+
+.ataque-dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.rolagem-ataque, .rolagem-dano, .ataque-errou {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #CD853F;
+  border-radius: 4px;
+  background: white;
+}
+
+.ataque-errou {
+  grid-column: 1 / -1;
+  background: #FFE4E1;
+  border-color: #DC143C;
+}
+
+.rolagem-ataque h4, .rolagem-dano h4, .ataque-errou h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  color: #8B4513;
+  text-transform: uppercase;
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.resultado .total {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.resultado.sucesso .total {
+  color: #228B22;
+}
+
+.resultado.falha .total {
+  color: #DC143C;
+}
+
+.vs {
+  font-size: 12px;
+  color: #666;
+}
+
+.defesa {
+  font-size: 14px;
+  color: #8B4513;
+}
+
+.dano-resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dano-total {
+  font-size: 24px;
+  font-weight: bold;
+  color: #DC143C;
+}
+
+.dano-tipo {
+  font-size: 12px;
+  color: #666;
+}
+
+.alvo-info {
+  margin-top: 8px;
+  padding: 4px;
+  background: #F0F0F0;
+  border-radius: 4px;
+}
+
+.alvo-info small {
+  color: #666;
+}
+</style> 

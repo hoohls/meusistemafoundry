@@ -1,0 +1,179 @@
+{
+  "SISTEMA": {
+    "NOME": "Sistema Clube dos Taberneiros",
+    "DESCRICAO": "Sistema de RPG baseado em 2d6 com quatro atributos fundamentais"
+  },
+  "ATRIBUTOS": {
+    "FISICO": "Físico",
+    "ACAO": "Ação", 
+    "MENTAL": "Mental",
+    "SOCIAL": "Social",
+    "VALOR": "Valor",
+    "MODIFICADOR": "Modificador"
+  },
+  "RECURSOS": {
+    "PV": "Pontos de Vida",
+    "PV_ABREV": "PV",
+    "PM": "Pontos de Magia",
+    "PM_ABREV": "PM",
+    "DEFESA": "Defesa",
+    "INICIATIVA": "Iniciativa",
+    "MOVIMENTO": "Movimento"
+  },
+  "CLASSES": {
+    "GUERREIRO": "Guerreiro",
+    "MAGO": "Mago",
+    "LADINO": "Ladino",
+    "DIPLOMATA": "Diplomata",
+    "NIVEL": "Nível",
+    "EXPERIENCIA": "Experiência"
+  },
+  "RACAS": {
+    "HUMANO": "Humano",
+    "ELFO": "Elfo",
+    "ANAO": "Anão",
+    "HALFLING": "Halfling",
+    "TIEFLING": "Tiefling",
+    "GOBLIN": "Goblin"
+  },
+  "COMBATE": {
+    "ATAQUE": "Ataque",
+    "DANO": "Dano",
+    "DEFESA": "Defesa",
+    "INICIATIVA": "Iniciativa",
+    "ALCANCE": "Alcance",
+    "CRITICO": "Crítico",
+    "CORPO_A_CORPO": "Corpo a Corpo",
+    "DISTANCIA": "À Distância"
+  },
+  "CONDICOES": {
+    "CAIDO": "Caído",
+    "ATORDOADO": "Atordoado",
+    "CEGO": "Cego",
+    "SURDO": "Surdo",
+    "FERIDO": "Ferido",
+    "GRAVEMENTE_FERIDO": "Gravemente Ferido",
+    "INCONSCIENTE": "Inconsciente"
+  },
+  "EQUIPAMENTOS": {
+    "ARMA": "Arma",
+    "ARMADURA": "Armadura",
+    "ESCUDO": "Escudo",
+    "EQUIPAMENTO": "Equipamento",
+    "CONSUMIVEL": "Consumível",
+    "PESO": "Peso",
+    "PRECO": "Preço",
+    "QUANTIDADE": "Quantidade",
+    "EQUIPADO": "Equipado",
+    "DINHEIRO": "Dinheiro",
+    "MOEDAS_PRATA": "Moedas de Prata",
+    "MOEDAS_COBRE": "Moedas de Cobre",
+    "MOEDAS_OURO": "Moedas de Ouro"
+  },
+  "MAGIAS": {
+    "MAGIA": "Magia",
+    "ESCOLA": "Escola",
+    "NIVEL": "Nível",
+    "CUSTO_PM": "Custo PM",
+    "ALCANCE": "Alcance",
+    "DURACAO": "Duração",
+    "COMPONENTES": "Componentes",
+    "VERBAL": "Verbal",
+    "SOMATICO": "Somático",
+    "MATERIAL": "Material",
+    "ALVO": "Alvo",
+    "AREA_EFEITO": "Área de Efeito",
+    "EFEITO": "Efeito",
+    "ESCOLAS": {
+      "EVOCACAO": "Evocação",
+      "ABJURACAO": "Abjuração",
+      "TRANSMUTACAO": "Transmutação",
+      "ILUSAO": "Ilusão",
+      "DIVINACAO": "Divinação",
+      "NECROMANCIA": "Necromancia"
+    }
+  },
+  "HABILIDADES": {
+    "HABILIDADE": "Habilidade",
+    "HABILIDADES": "Habilidades",
+    "CATEGORIA": "Categoria",
+    "PREREQUISITOS": "Pré-requisitos",
+    "NIVEL_MINIMO": "Nível Mínimo",
+    "PASSIVA": "Passiva",
+    "ATIVACAO": "Ativação",
+    "USOS": "Usos",
+    "CATEGORIAS": {
+      "CLASSE": "Classe",
+      "RACA": "Raça",
+      "GERAL": "Geral",
+      "CUSTOMIZADA": "Customizada"
+    }
+  },
+  "TESTES": {
+    "TESTE": "Teste",
+    "ND": "ND",
+    "DIFICULDADE": "Dificuldade",
+    "MODIFICADORES": "Modificadores",
+    "RESULTADO": "Resultado",
+    "SUCESSO": "Sucesso",
+    "FALHA": "Falha",
+    "CRITICO_SUCESSO": "Sucesso Crítico",
+    "CRITICO_FALHA": "Falha Crítica",
+    "DIFICULDADES": {
+      "TRIVIAL": "Trivial (ND 5)",
+      "FACIL": "Fácil (ND 7)",
+      "MODERADA": "Moderada (ND 9)",
+      "DIFICIL": "Difícil (ND 11)",
+      "MUITO_DIFICIL": "Muito Difícil (ND 13)",
+      "HEROICA": "Heroica (ND 15)"
+    }
+  },
+  "FICHA": {
+    "PERSONAGEM": "Personagem",
+    "DETALHES": "Detalhes",
+    "BIOGRAFIA": "Biografia",
+    "APARENCIA": "Aparência",
+    "PERSONALIDADE": "Personalidade",
+    "HISTORIA": "História",
+    "MOTIVACOES": "Motivações",
+    "NOTAS": "Notas",
+    "PROGRESSAO": "Progressão",
+    "INVENTARIO": "Inventário"
+  },
+  "ACOES": {
+    "ROLAR": "Rolar",
+    "ATACAR": "Atacar",
+    "CONJURAR": "Conjurar",
+    "USAR": "Usar",
+    "EQUIPAR": "Equipar",
+    "DESEQUIPAR": "Desequipar",
+    "EDITAR": "Editar",
+    "EXCLUIR": "Excluir",
+    "ADICIONAR": "Adicionar",
+    "SALVAR": "Salvar",
+    "CANCELAR": "Cancelar"
+  },
+  "DIALOGS": {
+    "CONFIRMAR": "Confirmar",
+    "CANCELAR": "Cancelar",
+    "EXCLUIR_ITEM": "Tem certeza que deseja excluir este item?",
+    "NIVEL_INSUFICIENTE": "Nível insuficiente para esta ação",
+    "PM_INSUFICIENTE": "Pontos de Magia insuficientes",
+    "ATRIBUTO_INSUFICIENTE": "Atributo insuficiente para esta ação"
+  },
+  "MENSAGENS": {
+    "ERRO": "Erro",
+    "SUCESSO": "Sucesso",
+    "AVISO": "Aviso",
+    "INFO": "Informação",
+    "SALVAMENTO_AUTOMATICO": "Dados salvos automaticamente",
+    "ERRO_SALVAMENTO": "Erro ao salvar dados"
+  },
+  "CONFIGURACOES": {
+    "CONFIGURACOES": "Configurações",
+    "GERAL": "Geral",
+    "COMBATE": "Combate",
+    "MAGIA": "Magia",
+    "AUTOMACAO": "Automação"
+  }
+} 
