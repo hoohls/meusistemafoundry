@@ -11,11 +11,13 @@ export const preloadHandlebarsTemplates = async function() {
 
     // Templates de Chat (apenas os que existem)
     "systems/clube-dos-taberneiros-foundry/templates/chat/teste-resultado.hbs",
-    "systems/clube-dos-taberneiros-foundry/templates/chat/ataque-resultado.hbs"
+    "systems/clube-dos-taberneiros-foundry/templates/chat/ataque-resultado.hbs",
+
+    // Templates de Itens
+    "systems/clube-dos-taberneiros-foundry/templates/items/item-sheet.hbs"
 
     // TODO: Adicionar mais templates conforme forem criados:
     // - Templates de NPC e criaturas
-    // - Templates de itens 
     // - Partials de actor e item
     // - Templates de apps/dialogs
     // - Templates de HUD

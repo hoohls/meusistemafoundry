@@ -780,13 +780,113 @@ export class ClubeActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const type = element.dataset.type;
     
+    // Configurar propriedades básicas por tipo
+    let systemData = {
+      descricao: "",
+      quantidade: 1,
+      peso: 0,
+      preco: 0,
+      raridade: "comum",
+      equipado: false
+    };
+
+    // Propriedades específicas por tipo
+    switch (type) {
+      case 'arma':
+        systemData = {
+          ...systemData,
+          dano: "1d6",
+          alcance: "corpo_a_corpo",
+          critico: "20/x2",
+          tipo_dano: "cortante",
+          propriedades: ""
+        };
+        break;
+      
+      case 'armadura':
+        systemData = {
+          ...systemData,
+          ca: 13,
+          max_dex: null,
+          penalidade: 0,
+          tipo_armadura: "leve"
+        };
+        break;
+      
+      case 'escudo':
+        systemData = {
+          ...systemData,
+          bonus_ca: 2,
+          penalidade_distancia: 0
+        };
+        break;
+      
+      case 'magia':
+        systemData = {
+          ...systemData,
+          nivel: 1,
+          custo_pm: 3,
+          escola: "evocacao",
+          alcance: "30m",
+          duracao: "Instantâneo",
+          area: "Alvo único",
+          efeito: ""
+        };
+        break;
+      
+      case 'consumivel':
+        systemData = {
+          ...systemData,
+          efeito: "Recupera 1d4+1 PV",
+          usos: 1
+        };
+        break;
+    }
+    
     const itemData = {
-      name: `Novo ${game.i18n.localize(`EQUIPAMENTOS.${type.toUpperCase()}`)}`,
+      name: `Nova ${this._getTipoNome(type)}`,
       type: type,
-      system: {}
+      img: this._getDefaultIcon(type),
+      system: systemData
     };
     
     await this.actor.createEmbeddedDocuments("Item", [itemData]);
+  }
+
+  /**
+   * Obtém o nome do tipo de item em português
+   * @param {string} type - Tipo do item
+   * @returns {string} Nome em português
+   */
+  _getTipoNome(type) {
+    const tipos = {
+      'arma': 'Arma',
+      'armadura': 'Armadura',
+      'escudo': 'Escudo',
+      'equipamento': 'Equipamento',
+      'consumivel': 'Poção',
+      'magia': 'Magia',
+      'habilidade': 'Habilidade'
+    };
+    return tipos[type] || 'Item';
+  }
+
+  /**
+   * Obtém o ícone padrão para o tipo de item
+   * @param {string} type - Tipo do item
+   * @returns {string} Caminho do ícone
+   */
+  _getDefaultIcon(type) {
+    const icones = {
+      'arma': 'icons/weapons/swords/sword-broad-black.webp',
+      'armadura': 'icons/equipment/chest/breastplate-metal-gray.webp',
+      'escudo': 'icons/equipment/shield/heater-metal-boss-brown.webp',
+      'equipamento': 'icons/containers/bags/pack-leather-brown.webp',
+      'consumivel': 'icons/consumables/potions/bottle-round-corked-red.webp',
+      'magia': 'icons/magic/symbols/runes-star-magenta.webp',
+      'habilidade': 'icons/skills/melee/strike-sword-steel-yellow.webp'
+    };
+    return icones[type] || 'icons/svg/item-bag.svg';
   }
 
   /**

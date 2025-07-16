@@ -15,9 +15,7 @@ export class ClubeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    // Por enquanto, usar um template genérico já que templates específicos não existem
-    // TODO: Criar templates específicos para cada tipo de item
-    return "templates/sheets/items/item-sheet.html";
+    return "systems/clube-dos-taberneiros-foundry/templates/items/item-sheet.hbs";
   }
 
   /** @override */
