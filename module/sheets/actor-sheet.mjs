@@ -18,17 +18,9 @@ export class ClubeActorSheet extends ActorSheet {
   get template() {
     const path = "systems/clube-dos-taberneiros/templates/actor";
     
-    // Usar templates específicos por tipo de ator
-    switch (this.actor.type) {
-      case "personagem":
-        return `${path}/personagem-sheet.hbs`;
-      case "npc":
-        return `${path}/npc-sheet.hbs`;
-      case "criatura":
-        return `${path}/criatura-sheet.hbs`;
-      default:
-        return `${path}/personagem-sheet.hbs`;
-    }
+    // Usar o mesmo template para todos os tipos de ator por enquanto
+    // TODO: Criar templates específicos para NPC e criaturas no futuro
+    return `${path}/personagem-sheet.hbs`;
   }
 
   /** @override */
