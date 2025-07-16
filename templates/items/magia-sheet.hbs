@@ -1,0 +1,193 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Header da Ficha de Magia --}}
+  <header class="sheet-header magia-header">
+    <div class="header-content">
+      <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+      
+      <div class="header-fields">
+        <div class="name-group">
+          <input name="name" type="text" value="{{item.name}}" placeholder="Nome da Magia"/>
+        </div>
+        
+        <div class="magia-nivel-escola">
+          <div class="nivel-group">
+            <label>Nível:</label>
+            <select name="system.nivel">
+              {{#each (range 1 10) as |nivel|}}
+              <option value="{{nivel}}" {{#if (eq ../system.nivel nivel)}}selected{{/if}}>{{nivel}}°</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="escola-group">
+            <label>Escola:</label>
+            <select name="system.escola">
+              <option value="abjuracao" {{#if (eq system.escola "abjuracao")}}selected{{/if}}>Abjuração</option>
+              <option value="adivinhacao" {{#if (eq system.escola "adivinhacao")}}selected{{/if}}>Adivinhação</option>
+              <option value="conjuracao" {{#if (eq system.escola "conjuracao")}}selected{{/if}}>Conjuração</option>
+              <option value="encantamento" {{#if (eq system.escola "encantamento")}}selected{{/if}}>Encantamento</option>
+              <option value="evocacao" {{#if (eq system.escola "evocacao")}}selected{{/if}}>Evocação</option>
+              <option value="ilusao" {{#if (eq system.escola "ilusao")}}selected{{/if}}>Ilusão</option>
+              <option value="necromancia" {{#if (eq system.escola "necromancia")}}selected{{/if}}>Necromancia</option>
+              <option value="transmutacao" {{#if (eq system.escola "transmutacao")}}selected{{/if}}>Transmutação</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Conteúdo Principal --}}
+  <section class="sheet-body magia-body">
+    
+    {{!-- Propriedades da Magia --}}
+    <div class="magia-properties">
+      
+      <div class="casting-info">
+        <h3><i class="fas fa-magic"></i> Informações de Conjuração</h3>
+        
+        <div class="properties-grid">
+          <div class="form-group">
+            <label><i class="fas fa-heart"></i> Custo de PM:</label>
+            <input type="number" name="system.custo_pm" value="{{system.custo_pm}}" min="1" max="50" placeholder="3"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-clock"></i> Tempo de Conjuração:</label>
+            <input type="text" name="system.tempo_conjuracao" value="{{system.tempo_conjuracao}}" placeholder="1 ação"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-crosshairs"></i> Alcance:</label>
+            <input type="text" name="system.alcance" value="{{system.alcance}}" placeholder="30 metros"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-hourglass-half"></i> Duração:</label>
+            <input type="text" name="system.duracao" value="{{system.duracao}}" placeholder="Instantâneo"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-bullseye"></i> Área de Efeito:</label>
+            <input type="text" name="system.area" value="{{system.area}}" placeholder="Alvo único"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-fist-raised"></i> Resistência:</label>
+            <select name="system.resistencia">
+              <option value="nenhuma" {{#if (eq system.resistencia "nenhuma")}}selected{{/if}}>Nenhuma</option>
+              <option value="fisico" {{#if (eq system.resistencia "fisico")}}selected{{/if}}>Físico</option>
+              <option value="acao" {{#if (eq system.resistencia "acao")}}selected{{/if}}>Ação</option>
+              <option value="mental" {{#if (eq system.resistencia "mental")}}selected{{/if}}>Mental</option>
+              <option value="social" {{#if (eq system.resistencia "social")}}selected{{/if}}>Social</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="componentes-section">
+        <h3><i class="fas fa-hands"></i> Componentes</h3>
+        
+        <div class="componentes-checkboxes">
+          <label class="componente-label">
+            <input type="checkbox" name="system.componentes.verbal" {{#if system.componentes.verbal}}checked{{/if}}/>
+            <span class="componente-icon"><i class="fas fa-volume-up"></i></span>
+            Verbal
+          </label>
+          
+          <label class="componente-label">
+            <input type="checkbox" name="system.componentes.somatico" {{#if system.componentes.somatico}}checked{{/if}}/>
+            <span class="componente-icon"><i class="fas fa-hand-paper"></i></span>
+            Somático
+          </label>
+          
+          <label class="componente-label">
+            <input type="checkbox" name="system.componentes.material" {{#if system.componentes.material}}checked{{/if}}/>
+            <span class="componente-icon"><i class="fas fa-gem"></i></span>
+            Material
+          </label>
+        </div>
+        
+        <div class="form-group material-details" {{#unless system.componentes.material}}style="display: none;"{{/unless}}>
+          <label>Componentes Materiais:</label>
+          <input type="text" name="system.componentes.material_descricao" value="{{system.componentes.material_descricao}}" placeholder="Descreva os componentes materiais"/>
+        </div>
+      </div>
+
+      <div class="mecanicas-section">
+        <h3><i class="fas fa-dice-d20"></i> Mecânicas</h3>
+        
+        <div class="properties-grid">
+          <div class="form-group">
+            <label><i class="fas fa-dice"></i> Teste de Conjuração:</label>
+            <select name="system.teste_atributo">
+              <option value="mental" {{#if (eq system.teste_atributo "mental")}}selected{{/if}}>Mental</option>
+              <option value="social" {{#if (eq system.teste_atributo "social")}}selected{{/if}}>Social</option>
+              <option value="acao" {{#if (eq system.teste_atributo "acao")}}selected{{/if}}>Ação</option>
+              <option value="fisico" {{#if (eq system.teste_atributo "fisico")}}selected{{/if}}>Físico</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-target"></i> ND Base:</label>
+            <input type="number" name="system.nd_base" value="{{system.nd_base}}" min="5" max="20" placeholder="9"/>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-plus-circle"></i> Melhoria por Nível:</label>
+            <input type="checkbox" name="system.melhora_nivel" {{#if system.melhora_nivel}}checked{{/if}}/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {{!-- Descrição e Efeitos --}}
+    <div class="magia-description">
+      
+      <div class="form-group">
+        <h3><i class="fas fa-scroll"></i> Descrição</h3>
+        <textarea name="system.descricao" rows="4" placeholder="Descrição geral da magia">{{system.descricao}}</textarea>
+      </div>
+
+      <div class="form-group">
+        <h3><i class="fas fa-bolt"></i> Efeito</h3>
+        <textarea name="system.efeito" rows="6" placeholder="Efeito mecânico detalhado da magia (dano, cura, condições, etc.)">{{system.efeito}}</textarea>
+      </div>
+
+      <div class="form-group">
+        <h3><i class="fas fa-arrow-up"></i> Níveis Superiores</h3>
+        <textarea name="system.niveis_superiores" rows="3" placeholder="Como a magia melhora quando conjurada em níveis superiores">{{system.niveis_superiores}}</textarea>
+      </div>
+
+      {{#if system.melhora_nivel}}
+      <div class="form-group">
+        <h3><i class="fas fa-star"></i> Efeito Crítico</h3>
+        <textarea name="system.efeito_critico" rows="2" placeholder="Efeito adicional em caso de sucesso crítico">{{system.efeito_critico}}</textarea>
+      </div>
+      {{/if}}
+
+    </div>
+
+    {{!-- Notas e Observações --}}
+    <div class="magia-notes">
+      <div class="form-group">
+        <h3><i class="fas fa-sticky-note"></i> Notas do Jogador</h3>
+        <textarea name="system.notas" rows="3" placeholder="Notas pessoais, combinações, táticas, etc.">{{system.notas}}</textarea>
+      </div>
+    </div>
+
+  </section>
+</form>
+
+<script>
+  // Mostrar/ocultar detalhes de componentes materiais
+  document.addEventListener('change', function(e) {
+    if (e.target.name === 'system.componentes.material') {
+      const materialDetails = e.target.closest('form').querySelector('.material-details');
+      if (materialDetails) {
+        materialDetails.style.display = e.target.checked ? 'block' : 'none';
+      }
+    }
+  });
+</script> 

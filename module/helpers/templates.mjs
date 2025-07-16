@@ -14,7 +14,8 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/clube-dos-taberneiros-foundry/templates/chat/ataque-resultado.hbs",
 
     // Templates de Itens
-    "systems/clube-dos-taberneiros-foundry/templates/items/item-sheet.hbs"
+    "systems/clube-dos-taberneiros-foundry/templates/items/item-sheet.hbs",
+    "systems/clube-dos-taberneiros-foundry/templates/items/magia-sheet.hbs"
 
     // TODO: Adicionar mais templates conforme forem criados:
     // - Templates de NPC e criaturas

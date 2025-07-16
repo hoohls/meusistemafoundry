@@ -400,6 +400,15 @@ function registerHandlebarsHelpers() {
   Handlebars.registerHelper('uppercase', function(str) {
     return str ? str.toUpperCase() : '';
   });
+
+  // Helper para criar range de números
+  Handlebars.registerHelper('range', function(start, end) {
+    const result = [];
+    for (let i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  });
 }
 
 /* -------------------------------------------- */

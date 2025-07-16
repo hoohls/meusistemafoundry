@@ -15,6 +15,12 @@ export class ClubeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
+    // Usar template específico para magias
+    if (this.item.type === "magia") {
+      return "systems/clube-dos-taberneiros-foundry/templates/items/magia-sheet.hbs";
+    }
+    
+    // Template genérico para outros tipos
     return "systems/clube-dos-taberneiros-foundry/templates/items/item-sheet.hbs";
   }
 

@@ -378,6 +378,7 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".equipar-item").click(this._onEquiparItemInventario.bind(this));
     html.find(".desequipar-item").click(this._onDesequiparItemInventario.bind(this));
     html.find(".desequipar").click(this._onDesequiparSlot.bind(this));
+    html.find(".editar-item-simples").click(this._onEditarItemSimples.bind(this));
   }
 
   /**
@@ -827,10 +828,24 @@ export class ClubeActorSheet extends ActorSheet {
           nivel: 1,
           custo_pm: 3,
           escola: "evocacao",
-          alcance: "30m",
+          alcance: "30 metros",
+          tempo_conjuracao: "1 ação",
           duracao: "Instantâneo",
           area: "Alvo único",
-          efeito: ""
+          resistencia: "nenhuma",
+          componentes: {
+            verbal: true,
+            somatico: true,
+            material: false,
+            material_descricao: ""
+          },
+          teste_atributo: "mental",
+          nd_base: 9,
+          melhora_nivel: false,
+          efeito: "",
+          niveis_superiores: "",
+          efeito_critico: "",
+          notas: ""
         };
         break;
       
@@ -1073,5 +1088,145 @@ export class ClubeActorSheet extends ActorSheet {
       "system.equipamentos.itens": itens,
       "system.equipamentos.equipados": equipados
     });
+  }
+
+  /**
+   * Edita um item simples via dialog
+   * @param {Event} event - Evento de clique
+   */
+  async _onEditarItemSimples(event) {
+    event.preventDefault();
+    const index = parseInt(event.currentTarget.dataset.index);
+    
+    const equipamentos = this.actor.system.equipamentos || {};
+    const itens = equipamentos.itens || [];
+    const item = itens[index];
+    
+    if (!item) return;
+
+    // Criar dialog de edição
+    const novoItem = await new Promise((resolve) => {
+      new Dialog({
+        title: `Editar: ${item.nome}`,
+        content: `
+          <form class="item-simples-edit">
+            <div class="form-group">
+              <label>Nome:</label>
+              <input type="text" name="nome" value="${item.nome}" placeholder="Nome do item"/>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tipo:</label>
+                <select name="tipo">
+                  <option value="arma" ${item.tipo === 'arma' ? 'selected' : ''}>Arma</option>
+                  <option value="armadura" ${item.tipo === 'armadura' ? 'selected' : ''}>Armadura</option>
+                  <option value="escudo" ${item.tipo === 'escudo' ? 'selected' : ''}>Escudo</option>
+                  <option value="equipamento" ${item.tipo === 'equipamento' ? 'selected' : ''}>Equipamento</option>
+                  <option value="consumivel" ${item.tipo === 'consumivel' ? 'selected' : ''}>Consumível</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label>Quantidade:</label>
+                <input type="number" name="quantidade" value="${item.quantidade || 1}" min="1" max="999"/>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Peso (kg):</label>
+                <input type="number" name="peso" value="${item.peso || 0}" min="0" step="0.1"/>
+              </div>
+              
+              <div class="form-group">
+                <label>Preço (ouro):</label>
+                <input type="number" name="preco" value="${item.preco || 0}" min="0"/>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Descrição:</label>
+              <textarea name="descricao" rows="3" placeholder="Descrição do item">${item.descricao || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="equipado" ${item.equipado ? 'checked' : ''}/>
+                Item Equipado
+              </label>
+            </div>
+          </form>
+          
+          <style>
+            .item-simples-edit .form-row {
+              display: flex;
+              gap: 15px;
+            }
+            .item-simples-edit .form-group {
+              flex: 1;
+              margin-bottom: 10px;
+            }
+            .item-simples-edit label {
+              display: block;
+              font-weight: bold;
+              margin-bottom: 5px;
+              color: #8B4513;
+            }
+            .item-simples-edit input, 
+            .item-simples-edit select, 
+            .item-simples-edit textarea {
+              width: 100%;
+              border: 1px solid #CD853F;
+              border-radius: 4px;
+              padding: 6px;
+            }
+            .item-simples-edit input[type="checkbox"] {
+              width: auto;
+              margin-right: 8px;
+            }
+          </style>
+        `,
+        buttons: {
+          save: {
+            icon: '<i class="fas fa-save"></i>',
+            label: "Salvar",
+            callback: (html) => {
+              const formData = new FormData(html[0].querySelector("form"));
+              resolve({
+                nome: formData.get("nome"),
+                tipo: formData.get("tipo"),
+                quantidade: parseInt(formData.get("quantidade")) || 1,
+                peso: parseFloat(formData.get("peso")) || 0,
+                preco: parseFloat(formData.get("preco")) || 0,
+                descricao: formData.get("descricao"),
+                equipado: formData.has("equipado")
+              });
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Cancelar",
+            callback: () => resolve(null)
+          }
+        },
+        default: "save",
+        render: (html) => {
+          // Focar no campo nome
+          html.find('input[name="nome"]').focus().select();
+        }
+      }).render(true);
+    });
+
+    if (novoItem) {
+      // Atualizar o item
+      itens[index] = { ...item, ...novoItem };
+      
+      await this.actor.update({
+        "system.equipamentos.itens": itens
+      });
+      
+      ui.notifications.info(`Item "${novoItem.nome}" atualizado!`);
+    }
   }
 } 
