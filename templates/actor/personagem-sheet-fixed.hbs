@@ -644,6 +644,148 @@
       </div>
     </div>
 
+    {{!-- Aba Inventário --}}
+    <div class="tab" data-group="primary" data-tab="inventario">
+      <div class="inventario-content">
+        
+        {{!-- Equipados --}}
+        <div class="equipados-section">
+          <h3>Equipamentos Equipados</h3>
+          <div class="equipados-grid">
+            <div class="slot arma-principal">
+              <label>Arma Principal:</label>
+              {{#if equipados.arma_principal}}
+              <div class="item equipado" data-item-id="{{equipados.arma_principal._id}}">
+                <img src="{{equipados.arma_principal.img}}" width="32" height="32"/>
+                <span>{{equipados.arma_principal.name}}</span>
+                <a class="atacar" title="Atacar"><i class="fas fa-sword"></i></a>
+              </div>
+              {{else}}
+              <div class="slot-vazio">Vazio</div>
+              {{/if}}
+            </div>
+
+            <div class="slot armadura">
+              <label>Armadura:</label>
+              {{#if equipados.armadura}}
+              <div class="item equipado" data-item-id="{{equipados.armadura._id}}">
+                <img src="{{equipados.armadura.img}}" width="32" height="32"/>
+                <span>{{equipados.armadura.name}}</span>
+              </div>
+              {{else}}
+              <div class="slot-vazio">Vazio</div>
+              {{/if}}
+            </div>
+
+            <div class="slot escudo">
+              <label>Escudo:</label>
+              {{#if equipados.escudo}}
+              <div class="item equipado" data-item-id="{{equipados.escudo._id}}">
+                <img src="{{equipados.escudo.img}}" width="32" height="32"/>
+                <span>{{equipados.escudo.name}}</span>
+              </div>
+              {{else}}
+              <div class="slot-vazio">Vazio</div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+
+        {{!-- Inventário --}}
+        <div class="inventario-section">
+          <div class="inventario-header">
+            <h3>Inventário</h3>
+            <div class="peso-info">
+              <span class="peso {{#if sobrecarregado}}sobrecarregado{{/if}}">
+                {{pesoTotal}}kg / {{capacidadeCarga}}kg
+              </span>
+            </div>
+          </div>
+
+          {{!-- Controles de Criação de Itens --}}
+          <div class="item-controls">
+            <button type="button" class="item-create" data-type="arma">+ Arma</button>
+            <button type="button" class="item-create" data-type="armadura">+ Armadura</button>
+            <button type="button" class="item-create" data-type="equipamento">+ Equipamento</button>
+            <button type="button" class="item-create" data-type="consumivel">+ Consumível</button>
+            <button type="button" class="adicionar-item">+ Item Simples</button>
+          </div>
+
+          {{!-- Lista de Itens por Categoria --}}
+          {{#each items as |lista categoria|}}
+          {{#if lista.length}}
+          <div class="items-categoria">
+            <h4>{{categoria}}</h4>
+            <ol class="items-list">
+              {{#each lista}}
+              <li class="item" data-item-id="{{_id}}" data-tooltip="true">
+                <div class="item-image">
+                  <img src="{{img}}" title="{{name}}" width="24" height="24"/>
+                </div>
+                <div class="item-name">
+                  <h4>{{name}}</h4>
+                  {{#if system.quantidade}}
+                  <span class="item-qty">x{{system.quantidade}}</span>
+                  {{/if}}
+                </div>
+                <div class="item-properties">
+                  {{#if system.equipado}}
+                  <span class="property equipado">Equipado</span>
+                  {{/if}}
+                  {{#if system.peso}}
+                  <span class="property peso">{{system.peso}}kg</span>
+                  {{/if}}
+                </div>
+                <div class="item-controls">
+                  {{#if (eq categoria "armas")}}
+                  <a class="item-control atacar" title="Atacar"><i class="fas fa-sword"></i></a>
+                  {{/if}}
+                  {{#if (eq categoria "consumiveis")}}
+                  <a class="item-control usar-item" title="Usar"><i class="fas fa-flask"></i></a>
+                  {{/if}}
+                  {{#if system.equipado}}
+                  <a class="item-control desequipar-item" title="Desequipar"><i class="fas fa-times"></i></a>
+                  {{else}}
+                  <a class="item-control equipar-item" title="Equipar"><i class="fas fa-check"></i></a>
+                  {{/if}}
+                  {{#if isSimple}}
+                  <a class="item-control editar-item-simples" data-index="{{simpleIndex}}" title="Editar"><i class="fas fa-edit"></i></a>
+                  <a class="item-control remover-item" data-index="{{simpleIndex}}" title="Remover"><i class="fas fa-trash"></i></a>
+                  {{else}}
+                  <a class="item-control item-edit" title="Editar"><i class="fas fa-edit"></i></a>
+                  <a class="item-control item-delete" title="Excluir"><i class="fas fa-trash"></i></a>
+                  {{/if}}
+                </div>
+              </li>
+              {{/each}}
+            </ol>
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+
+        {{!-- Dinheiro --}}
+        <div class="dinheiro-section">
+          <h3>Dinheiro</h3>
+          <div class="moedas-grid">
+            <div class="moeda">
+              <label>Ouro:</label>
+              <input type="number" name="system.equipamentos.dinheiro.ouro" value="{{#if system.equipamentos.dinheiro.ouro}}{{system.equipamentos.dinheiro.ouro}}{{else}}0{{/if}}" min="0"/>
+            </div>
+            <div class="moeda">
+              <label>Prata:</label>
+              <input type="number" name="system.equipamentos.dinheiro.prata" value="{{#if system.equipamentos.dinheiro.prata}}{{system.equipamentos.dinheiro.prata}}{{else}}0{{/if}}" min="0"/>
+            </div>
+            <div class="moeda">
+              <label>Cobre:</label>
+              <input type="number" name="system.equipamentos.dinheiro.cobre" value="{{#if system.equipamentos.dinheiro.cobre}}{{system.equipamentos.dinheiro.cobre}}{{else}}0{{/if}}" min="0"/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     {{!-- Aba Detalhes --}}
     <div class="tab" data-group="primary" data-tab="detalhes">
       <div class="detalhes-content">
