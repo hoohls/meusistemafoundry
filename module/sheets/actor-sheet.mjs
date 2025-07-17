@@ -234,6 +234,12 @@ export class ClubeActorSheet extends ActorSheet {
       // Preparar dados das habilidades
       await this._prepararDadosHabilidades(context);
 
+      // Preparar dados das magias
+      context.magiasPorEscola = this._organizarMagiasPorEscola();
+      context.magiasDisponiveisPorEscola = this._organizarMagiasDisponiveisPorEscola();
+      context.magiasConhecidas = this.actor.items.filter(item => item.type === 'magia').length;
+      context.escolaPrincipal = this._determinarEscolaPrincipal();
+
       console.log("Dados específicos do personagem preparados com sucesso!");
       return context;
     } catch (error) {
@@ -552,6 +558,130 @@ export class ClubeActorSheet extends ActorSheet {
     return magiasPorEscola;
   }
 
+  /**
+   * Organiza as magias disponíveis por escola (como habilidades)
+   * @returns {Object} Objeto com magias disponíveis organizadas por escola
+   */
+  _organizarMagiasDisponiveisPorEscola() {
+    const escolas = {
+      'abjuracao': 'Abjuração',
+      'adivinhacao': 'Adivinhação', 
+      'conjuracao': 'Conjuração',
+      'encantamento': 'Encantamento',
+      'evocacao': 'Evocação',
+      'ilusao': 'Ilusão',
+      'necromancia': 'Necromancia',
+      'transmutacao': 'Transmutação'
+    };
+
+    const magiasDisponiveis = {
+      'Evocação': [],
+      'Abjuração': [],
+      'Transmutação': [],
+      'Ilusão': [],
+      'Divinação': [],
+      'Necromancia': []
+    };
+
+    // Lista básica de magias disponíveis por escola
+    const magiasBasicas = {
+      'evocacao': [
+        { id: 'bola_fogo', nome: 'Bola de Fogo', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' },
+        { id: 'rajada_arcana', nome: 'Rajada Arcana', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
+        { id: 'raio_eletrico', nome: 'Raio Elétrico', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' }
+      ],
+      'abjuracao': [
+        { id: 'escudo_magico', nome: 'Escudo Mágico', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
+        { id: 'protecao_elemental', nome: 'Proteção Elemental', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
+        { id: 'dissipar_magia', nome: 'Dissipar Magia', nivel: 3, custo_pm: 5, prerequisitos: 'Mental 8' }
+      ],
+      'transmutacao': [
+        { id: 'transformar_objeto', nome: 'Transformar Objeto', nivel: 1, custo_pm: 3, prerequisitos: 'Mental 6' },
+        { id: 'polimorfar', nome: 'Polimorfar', nivel: 4, custo_pm: 8, prerequisitos: 'Mental 9' },
+        { id: 'voar', nome: 'Voo', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' }
+      ],
+      'ilusao': [
+        { id: 'invisibilidade', nome: 'Invisibilidade', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
+        { id: 'imagem_espelhada', nome: 'Imagem Espelhada', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
+        { id: 'sugestao', nome: 'Sugestão', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' }
+      ],
+      'divinacao': [
+        { id: 'detectar_magia', nome: 'Detectar Magia', nivel: 1, custo_pm: 1, prerequisitos: 'Mental 6' },
+        { id: 'adivinhar', nome: 'Adivinhar', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' },
+        { id: 'localizar_objeto', nome: 'Localizar Objeto', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' }
+      ],
+      'necromancia': [
+        { id: 'drenar_vida', nome: 'Drenar Vida', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
+        { id: 'animar_morto', nome: 'Animar Morto', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' },
+        { id: 'medo', nome: 'Medo', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' }
+      ]
+    };
+
+    // Verificar quais magias o personagem já conhece
+    const magiasConhecidas = new Set();
+    for (let item of this.actor.items) {
+      if (item.type === 'magia') {
+        magiasConhecidas.add(item.name.toLowerCase());
+      }
+    }
+
+    // Adicionar magias disponíveis que o personagem não conhece
+    Object.keys(magiasBasicas).forEach(escola => {
+      const nomeEscola = escolas[escola];
+      magiasBasicas[escola].forEach(magia => {
+        if (!magiasConhecidas.has(magia.nome.toLowerCase())) {
+          // Verificar se o personagem atende aos pré-requisitos
+          const mental = this.actor.system.atributos?.mental?.valor || 0;
+          const nivel = this.actor.system.nivel || 1;
+          
+          const prerequisitoMental = parseInt(magia.prerequisitos.match(/Mental (\d+)/)?.[1] || 0);
+          
+          if (mental >= prerequisitoMental && nivel >= magia.nivel) {
+            magiasDisponiveis[nomeEscola].push(magia);
+          }
+        }
+      });
+    });
+
+    return magiasDisponiveis;
+  }
+
+  /**
+   * Determina a escola principal do personagem baseada nas magias conhecidas
+   * @returns {string} Nome da escola principal
+   */
+  _determinarEscolaPrincipal() {
+    const escolas = {
+      'abjuracao': 'Abjuração',
+      'adivinhacao': 'Adivinhação', 
+      'conjuracao': 'Conjuração',
+      'encantamento': 'Encantamento',
+      'evocacao': 'Evocação',
+      'ilusao': 'Ilusão',
+      'necromancia': 'Necromancia',
+      'transmutacao': 'Transmutação'
+    };
+
+    const contagemEscolas = {};
+    
+    for (let item of this.actor.items) {
+      if (item.type === 'magia') {
+        const escola = item.system.escola || 'evocacao';
+        contagemEscolas[escola] = (contagemEscolas[escola] || 0) + 1;
+      }
+    }
+
+    if (Object.keys(contagemEscolas).length === 0) {
+      return 'Nenhuma';
+    }
+
+    const escolaPrincipal = Object.keys(contagemEscolas).reduce((a, b) => 
+      contagemEscolas[a] > contagemEscolas[b] ? a : b
+    );
+
+    return escolas[escolaPrincipal] || 'Evocação';
+  }
+
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
@@ -597,6 +727,12 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
     html.find(".remover-habilidade").click(this._onRemoverHabilidade.bind(this));
+
+    // Gerenciar magias
+    html.find(".adicionar-magia").click(this._onAdicionarMagia.bind(this));
+    html.find(".remover-magia").click(this._onRemoverMagia.bind(this));
+    html.find(".detalhes-magia").click(this._onDetalhesMagia.bind(this));
+    html.find(".detalhes-magia-disponivel").click(this._onDetalhesMagiaDisponivel.bind(this));
     html.find(".detalhes-habilidade").click(this._onDetalhesHabilidade.bind(this));
     html.find(".detalhes-habilidade-conhecida").click(this._onDetalhesHabilidadeConhecida.bind(this));
     html.find(".habilidades-filtro").change(this._onFiltrarHabilidades.bind(this));
@@ -1650,9 +1786,8 @@ export class ClubeActorSheet extends ActorSheet {
     // Preparar habilidades conhecidas processadas
     context.habilidadesConhecidasProcessadas = this._prepararHabilidadesConhecidas(SISTEMA.habilidades);
     
-    // Preparar habilidades disponíveis por categoria
+    // Preparar habilidades disponíveis por categoria (removendo mágicas)
     context.habilidadesCombateDisponiveis = this._prepararHabilidadesCategoria('combate', SISTEMA.habilidades.combate);
-    context.habilidadesMagicasDisponiveis = this._prepararHabilidadesCategoria('magicas', SISTEMA.habilidades.magicas);
     context.habilidadesFurtividadeDisponiveis = this._prepararHabilidadesCategoria('furtividade', SISTEMA.habilidades.furtividade);
     context.habilidadesSociaisDisponiveis = this._prepararHabilidadesCategoria('sociais', SISTEMA.habilidades.sociais);
     context.habilidadesGeraisDisponiveis = this._prepararHabilidadesCategoria('gerais', SISTEMA.habilidades.gerais);
@@ -2622,5 +2757,141 @@ export class ClubeActorSheet extends ActorSheet {
   async _onFinalizarDistribuicaoInicial(event) {
     event.preventDefault();
     await this.actor.finalizarDistribuicaoInicial();
+  }
+
+  /**
+   * Adiciona uma magia ao personagem
+   * @param {Event} event - Evento de clique
+   */
+  async _onAdicionarMagia(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const magiaId = element.dataset.magia;
+    
+    if (!magiaId) {
+      ui.notifications.error("ID da magia inválido");
+      return;
+    }
+
+    try {
+      await this.actor._adicionarMagia(magiaId);
+      this.render(true);
+    } catch (error) {
+      console.error("Erro ao adicionar magia:", error);
+      ui.notifications.error("Erro ao adicionar magia: " + error.message);
+    }
+  }
+
+  /**
+   * Remove uma magia do personagem
+   * @param {Event} event - Evento de clique
+   */
+  async _onRemoverMagia(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const itemId = element.dataset.itemId;
+
+    try {
+      const item = this.actor.items.get(itemId);
+      if (item && item.type === 'magia') {
+        const confirmacao = await Dialog.confirm({
+          title: "Remover Magia",
+          content: `<p>Tem certeza que deseja remover a magia <strong>${item.name}</strong>?</p>`,
+          yes: () => true,
+          no: () => false
+        });
+
+        if (confirmacao) {
+          await item.delete();
+          this.render(true);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao remover magia:", error);
+      ui.notifications.error("Erro ao remover magia: " + error.message);
+    }
+  }
+
+  /**
+   * Mostra detalhes de uma magia conhecida
+   * @param {Event} event - Evento de clique
+   */
+  async _onDetalhesMagia(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const itemId = element.dataset.itemId;
+
+    const item = this.actor.items.get(itemId);
+    if (item && item.type === 'magia') {
+      const content = `
+        <div class="magia-detalhes-popup">
+          <h3>${item.name}</h3>
+          <p><strong>Escola:</strong> ${item.system.escola || 'Evocação'}</p>
+          <p><strong>Nível:</strong> ${item.system.nivel || 1}</p>
+          <p><strong>Custo PM:</strong> ${item.system.custo_pm || 1}</p>
+          <p><strong>Alcance:</strong> ${item.system.alcance || 'Toque'}</p>
+          <p><strong>Duração:</strong> ${item.system.duracao || 'Instantânea'}</p>
+          ${item.system.descricao ? `<p><strong>Descrição:</strong> ${item.system.descricao}</p>` : ''}
+        </div>
+      `;
+      
+      new Dialog({
+        title: `Detalhes da Magia: ${item.name}`,
+        content: content,
+        buttons: {
+          close: {
+            label: "Fechar",
+            callback: () => {}
+          }
+        }
+      }).render(true);
+    }
+  }
+
+  /**
+   * Mostra detalhes de uma magia disponível
+   * @param {Event} event - Evento de clique
+   */
+  async _onDetalhesMagiaDisponivel(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const magiaId = element.dataset.magia;
+
+    // Buscar dados da magia nas listas disponíveis
+    const magiasDisponiveis = this._organizarMagiasDisponiveisPorEscola();
+    let magia = null;
+    let escola = '';
+
+    for (const [nomeEscola, lista] of Object.entries(magiasDisponiveis)) {
+      const encontrada = lista.find(m => m.id === magiaId);
+      if (encontrada) {
+        magia = encontrada;
+        escola = nomeEscola;
+        break;
+      }
+    }
+
+    if (magia) {
+      const content = `
+        <div class="magia-detalhes-popup">
+          <h3>${magia.nome}</h3>
+          <p><strong>Escola:</strong> ${escola}</p>
+          <p><strong>Nível:</strong> ${magia.nivel}</p>
+          <p><strong>Custo PM:</strong> ${magia.custo_pm}</p>
+          <p><strong>Pré-requisitos:</strong> ${magia.prerequisitos}</p>
+        </div>
+      `;
+      
+      new Dialog({
+        title: `Detalhes da Magia: ${magia.nome}`,
+        content: content,
+        buttons: {
+          close: {
+            label: "Fechar",
+            callback: () => {}
+          }
+        }
+      }).render(true);
+    }
   }
 } 

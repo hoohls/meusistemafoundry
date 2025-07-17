@@ -319,47 +319,106 @@
     {{!-- Aba Magias --}}
     <div class="tab" data-group="primary" data-tab="magias">
       <div class="magias-content">
-        <div class="item-controls">
-          <button type="button" class="item-create" data-type="magia">
-            <i class="fas fa-plus"></i> Adicionar Magia
-          </button>
+        
+        {{!-- Status Mágico --}}
+        <div class="status-magico">
+          <div class="status-box">
+            <strong>PM Atuais:</strong> {{system.recursos.pm.valor}} / {{system.recursos.pm.max}}
+          </div>
+          <div class="status-box">
+            <strong>Magias Conhecidas:</strong> {{magiasConhecidas}}
+          </div>
+          <div class="status-box">
+            <strong>Escola Principal:</strong> {{escolaPrincipal}}
+          </div>
         </div>
 
-        {{#each magiasPorEscola as |lista escola|}}
-        {{#if lista.length}}
-        <div class="magias-escola">
-          <h3>{{escola}}</h3>
-          <ol class="items-list">
-            {{#each lista}}
-            <li class="item" data-item-id="{{_id}}">
-              <div class="item-image">
-                <img src="{{img}}" title="{{name}}" width="36" height="36"/>
+        {{!-- Magias Conhecidas --}}
+        <div class="magias-conhecidas-section">
+          <h3><i class="fas fa-book-open"></i> Magias Conhecidas</h3>
+          
+          {{#each magiasPorEscola as |lista escola|}}
+          {{#if lista.length}}
+          <div class="magias-escola">
+            <h4>{{escola}}</h4>
+            <div class="magias-grid">
+              {{#each lista}}
+              <div class="magia-item conhecida" data-item-id="{{_id}}">
+                <div class="magia-header">
+                  <h5>{{name}}</h5>
+                  <div class="magia-botoes">
+                    {{#if system.pode_conjurar}}
+                    <button type="button" class="conjurar-magia" data-item-id="{{_id}}" title="Conjurar Magia">
+                      <i class="fas fa-magic"></i>
+                    </button>
+                    {{else}}
+                    <button type="button" class="disabled" title="PM Insuficiente">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                    {{/if}}
+                    <button type="button" class="detalhes-magia" data-item-id="{{_id}}" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button type="button" class="remover-magia" data-item-id="{{_id}}" title="Remover magia">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="magia-detalhes">
+                  <p><strong>Nível:</strong> {{system.nivel}} • <strong>Custo:</strong> {{system.custo_pm}} PM</p>
+                  <p><strong>Alcance:</strong> {{system.alcance}} • <strong>Duração:</strong> {{system.duracao}}</p>
+                  {{#if system.descricao}}
+                  <p class="magia-descricao">{{system.descricao}}</p>
+                  {{/if}}
+                </div>
               </div>
-              <div class="item-name">
-                <h4>{{name}}</h4>
-                <span class="item-details">Nível {{system.nivel}} • {{system.custo_pm}} PM</span>
-              </div>
-              <div class="item-controls">
-                {{#if system.pode_conjurar}}
-                <a class="item-control conjurar-magia" title="Conjurar Magia"><i class="fas fa-magic"></i></a>
-                {{else}}
-                <a class="item-control disabled" title="PM Insuficiente"><i class="fas fa-ban"></i></a>
-                {{/if}}
-                <a class="item-control item-edit" title="Editar"><i class="fas fa-edit"></i></a>
-                <a class="item-control item-delete" title="Excluir"><i class="fas fa-trash"></i></a>
-              </div>
-            </li>
-            {{/each}}
-          </ol>
-        </div>
-        {{/if}}
-        {{/each}}
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+          {{/each}}
 
-        {{#unless magiasPorEscola}}
-        <div class="empty-section">
-          <p>Nenhuma magia conhecida ainda. Clique em "Adicionar Magia" para começar!</p>
+          {{#unless magiasPorEscola}}
+          <div class="empty-section">
+            <p>Nenhuma magia conhecida ainda. Adicione magias através do sistema de habilidades!</p>
+          </div>
+          {{/unless}}
         </div>
-        {{/unless}}
+
+        {{!-- Magias Disponíveis --}}
+        <div class="magias-disponiveis-section">
+          <h3><i class="fas fa-plus-circle"></i> Magias Disponíveis</h3>
+          
+          {{#each magiasDisponiveisPorEscola as |lista escola|}}
+          {{#if lista.length}}
+          <div class="magias-escola">
+            <h4>{{escola}}</h4>
+            <div class="magias-grid">
+              {{#each lista}}
+              <div class="magia-item disponivel" data-magia="{{id}}">
+                <div class="magia-header">
+                  <h5>{{nome}}</h5>
+                  <div class="magia-botoes">
+                    <button type="button" class="detalhes-magia-disponivel" data-magia="{{id}}" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button type="button" class="adicionar-magia" data-magia="{{id}}" title="Adicionar magia">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="magia-requisitos">
+                  <p><strong>Nível:</strong> {{nivel}} • <strong>Custo:</strong> {{custo_pm}} PM</p>
+                  <p><strong>Pré-requisitos:</strong> {{prerequisitos}}</p>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+
       </div>
     </div>
 
@@ -597,37 +656,7 @@
               </div>
             </div>
 
-            {{!-- Habilidades Mágicas --}}
-            <div class="categoria-section magicas" data-categoria="magicas">
-              <h4>Mágicas</h4>
-              <div class="habilidades-grid">
-                {{#each habilidadesMagicasDisponiveis as |habilidade key|}}
-                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
-                  <div class="habilidade-header">
-                    <h5>{{habilidade.nome}}</h5>
-                    <div class="habilidade-botoes">
-                      <button type="button" class="detalhes-habilidade" data-habilidade="{{key}}" data-categoria="magicas" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="magicas" title="Adicionar habilidade">
-                        <i class="fas fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="habilidade-requisitos">
-                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
-                    {{#if habilidade.preRequisito}}
-                    <p>Pré-requisitos: 
-                      {{#each habilidade.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
+
 
             {{!-- Habilidades de Furtividade --}}
             <div class="categoria-section furtividade" data-categoria="furtividade">

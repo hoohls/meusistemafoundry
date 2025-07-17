@@ -2201,4 +2201,192 @@
 .habilidade-info-grid .info-item strong {
   color: var(--cor-texto);
   margin-right: 8px;
+}
+
+/* === Estilos para Magias === */
+.magias-content {
+  padding: 10px;
+}
+
+.status-magico {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.status-magico .status-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  min-width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.magias-conhecidas-section,
+.magias-disponiveis-section {
+  margin-bottom: 30px;
+}
+
+.magias-conhecidas-section h3,
+.magias-disponiveis-section h3 {
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+.magias-escola {
+  margin-bottom: 25px;
+}
+
+.magias-escola h4 {
+  color: #2d3748;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.magias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.magia-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.magia-item:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.magia-item.conhecida {
+  border-left: 4px solid #48bb78;
+  background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+}
+
+.magia-item.disponivel {
+  border-left: 4px solid #4299e1;
+  background: linear-gradient(135deg, #ebf8ff 0%, #f0fff4 100%);
+}
+
+.magia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.magia-header h5 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.magia-botoes {
+  display: flex;
+  gap: 5px;
+}
+
+.magia-botoes button {
+  background: none;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #4a5568;
+}
+
+.magia-botoes button:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.magia-botoes button.conjurar-magia {
+  color: #48bb78;
+}
+
+.magia-botoes button.conjurar-magia:hover {
+  background: #c6f6d5;
+}
+
+.magia-botoes button.disabled {
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.magia-botoes button.disabled:hover {
+  background: none;
+}
+
+.magia-detalhes p,
+.magia-requisitos p {
+  margin: 5px 0;
+  font-size: 0.9em;
+  color: #4a5568;
+}
+
+.magia-descricao {
+  font-style: italic;
+  color: #718096;
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 4px;
+  border-left: 3px solid #cbd5e0;
+}
+
+.magia-detalhes-popup {
+  padding: 15px;
+}
+
+.magia-detalhes-popup h3 {
+  color: #2d3748;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.magia-detalhes-popup p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.magia-detalhes-popup strong {
+  color: #4a5568;
+}
+
+/* Responsividade para magias */
+@media (max-width: 768px) {
+  .status-magico {
+    flex-direction: column;
+  }
+  
+  .magias-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .magia-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .magia-botoes {
+    align-self: flex-end;
+  }
 } 

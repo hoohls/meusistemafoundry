@@ -1016,6 +1016,265 @@ export class ClubeActor extends Actor {
   }
 
   /**
+   * Adiciona uma magia ao personagem
+   * @param {string} magiaId - ID da magia
+   */
+  async _adicionarMagia(magiaId) {
+    // Mapeamento de magias básicas
+    const magiasBasicas = {
+      'bola_fogo': {
+        name: 'Bola de Fogo',
+        img: 'icons/svg/fire.svg',
+        system: {
+          escola: 'evocacao',
+          nivel: 3,
+          custo_pm: 6,
+          alcance: '30m',
+          duracao: 'Instantânea',
+          descricao: 'Lança uma bola de fogo que causa 3d6 de dano de fogo em uma área de 3m de raio.'
+        }
+      },
+      'rajada_arcana': {
+        name: 'Rajada Arcana',
+        img: 'icons/svg/lightning.svg',
+        system: {
+          escola: 'evocacao',
+          nivel: 1,
+          custo_pm: 2,
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Dispara uma rajada de energia mágica que causa 1d6 + Mental de dano.'
+        }
+      },
+      'raio_eletrico': {
+        name: 'Raio Elétrico',
+        img: 'icons/svg/lightning.svg',
+        system: {
+          escola: 'evocacao',
+          nivel: 2,
+          custo_pm: 4,
+          alcance: '20m',
+          duracao: 'Instantânea',
+          descricao: 'Lança um raio elétrico que causa 2d6 de dano elétrico.'
+        }
+      },
+      'escudo_magico': {
+        name: 'Escudo Mágico',
+        img: 'icons/svg/shield.svg',
+        system: {
+          escola: 'abjuracao',
+          nivel: 1,
+          custo_pm: 2,
+          alcance: 'Pessoal',
+          duracao: '1 cena',
+          descricao: 'Cria um escudo mágico que concede +2 à Defesa.'
+        }
+      },
+      'protecao_elemental': {
+        name: 'Proteção Elemental',
+        img: 'icons/svg/shield.svg',
+        system: {
+          escola: 'abjuracao',
+          nivel: 2,
+          custo_pm: 4,
+          alcance: 'Pessoal',
+          duracao: '1 hora',
+          descricao: 'Concede resistência a um tipo de dano elementar.'
+        }
+      },
+      'dissipar_magia': {
+        name: 'Dissipar Magia',
+        img: 'icons/svg/magic-swirl.svg',
+        system: {
+          escola: 'abjuracao',
+          nivel: 3,
+          custo_pm: 5,
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Cancela uma magia ativa ou reduz seus efeitos.'
+        }
+      },
+      'transformar_objeto': {
+        name: 'Transformar Objeto',
+        img: 'icons/svg/transmutation.svg',
+        system: {
+          escola: 'transmutacao',
+          nivel: 1,
+          custo_pm: 3,
+          alcance: 'Toque',
+          duracao: '1 hora',
+          descricao: 'Transforma um objeto pequeno em outro objeto similar.'
+        }
+      },
+      'polimorfar': {
+        name: 'Polimorfar',
+        img: 'icons/svg/transmutation.svg',
+        system: {
+          escola: 'transmutacao',
+          nivel: 4,
+          custo_pm: 8,
+          alcance: '15m',
+          duracao: '1 hora',
+          descricao: 'Transforma uma criatura em outra forma.'
+        }
+      },
+      'voar': {
+        name: 'Voo',
+        img: 'icons/svg/wings.svg',
+        system: {
+          escola: 'transmutacao',
+          nivel: 3,
+          custo_pm: 6,
+          alcance: 'Pessoal',
+          duracao: '10 minutos',
+          descricao: 'Concede a capacidade de voar a uma velocidade de 18m.'
+        }
+      },
+      'invisibilidade': {
+        name: 'Invisibilidade',
+        img: 'icons/svg/illusion.svg',
+        system: {
+          escola: 'ilusao',
+          nivel: 2,
+          custo_pm: 4,
+          alcance: 'Pessoal',
+          duracao: '5 minutos',
+          descricao: 'Torna o conjurador invisível até que ele ataque ou use uma magia.'
+        }
+      },
+      'imagem_espelhada': {
+        name: 'Imagem Espelhada',
+        img: 'icons/svg/illusion.svg',
+        system: {
+          escola: 'ilusao',
+          nivel: 1,
+          custo_pm: 2,
+          alcance: 'Pessoal',
+          duracao: '1 minuto',
+          descricao: 'Cria 1d4 imagens ilusórias que confundem ataques.'
+        }
+      },
+      'sugestao': {
+        name: 'Sugestão',
+        img: 'icons/svg/illusion.svg',
+        system: {
+          escola: 'ilusao',
+          nivel: 2,
+          custo_pm: 4,
+          alcance: '15m',
+          duracao: '1 hora',
+          descricao: 'Influencia uma criatura a seguir uma sugestão razoável.'
+        }
+      },
+      'detectar_magia': {
+        name: 'Detectar Magia',
+        img: 'icons/svg/detect-magic.svg',
+        system: {
+          escola: 'divinacao',
+          nivel: 1,
+          custo_pm: 1,
+          alcance: '15m',
+          duracao: '1 minuto',
+          descricao: 'Detecta a presença de magia em uma área.'
+        }
+      },
+      'adivinhar': {
+        name: 'Adivinhar',
+        img: 'icons/svg/detect-magic.svg',
+        system: {
+          escola: 'divinacao',
+          nivel: 2,
+          custo_pm: 3,
+          alcance: 'Pessoal',
+          duracao: 'Instantânea',
+          descricao: 'Recebe uma resposta simples a uma pergunta sobre o futuro.'
+        }
+      },
+      'localizar_objeto': {
+        name: 'Localizar Objeto',
+        img: 'icons/svg/detect-magic.svg',
+        system: {
+          escola: 'divinacao',
+          nivel: 2,
+          custo_pm: 3,
+          alcance: '1km',
+          duracao: 'Instantânea',
+          descricao: 'Localiza um objeto específico conhecido dentro do alcance.'
+        }
+      },
+      'drenar_vida': {
+        name: 'Drenar Vida',
+        img: 'icons/svg/death.svg',
+        system: {
+          escola: 'necromancia',
+          nivel: 2,
+          custo_pm: 4,
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Drena a vida de uma criatura, causando dano e curando o conjurador.'
+        }
+      },
+      'animar_morto': {
+        name: 'Animar Morto',
+        img: 'icons/svg/death.svg',
+        system: {
+          escola: 'necromancia',
+          nivel: 3,
+          custo_pm: 6,
+          alcance: '15m',
+          duracao: '1 hora',
+          descricao: 'Anima um cadáver para servir ao conjurador.'
+        }
+      },
+      'medo': {
+        name: 'Medo',
+        img: 'icons/svg/death.svg',
+        system: {
+          escola: 'necromancia',
+          nivel: 1,
+          custo_pm: 2,
+          alcance: '15m',
+          duracao: '1 minuto',
+          descricao: 'Infunde medo em uma criatura, forçando-a a fugir.'
+        }
+      }
+    };
+
+    const magiaData = magiasBasicas[magiaId];
+    if (!magiaData) {
+      throw new Error("Magia não encontrada");
+    }
+
+    // Verificar se já possui a magia
+    const magiasExistentes = this.items.filter(item => item.type === 'magia');
+    const jaPossui = magiasExistentes.some(item => item.name.toLowerCase() === magiaData.name.toLowerCase());
+    
+    if (jaPossui) {
+      throw new Error("Você já possui esta magia");
+    }
+
+    // Verificar pré-requisitos (Mental 6+ para magias nível 1, Mental 7+ para nível 2, etc.)
+    const mental = this.system.atributos?.mental?.valor || 0;
+    const nivel = this.system.nivel || 1;
+    const nivelMagia = magiaData.system.nivel;
+    
+    if (mental < (nivelMagia + 5) || nivel < nivelMagia) {
+      throw new Error("Você não atende aos pré-requisitos para esta magia");
+    }
+
+    // Criar o item de magia
+    const magiaItem = await Item.create({
+      name: magiaData.name,
+      type: 'magia',
+      img: magiaData.img,
+      system: magiaData.system
+    }, { parent: this });
+
+    ui.notifications.info(`Magia ${magiaData.name} aprendida!`);
+    return magiaItem;
+  }
+
+  /**
    * Verifica se os atributos foram inicializados e se há pontos para distribuir
    * @returns {Object} Informações sobre distribuição de pontos
    */
