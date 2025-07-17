@@ -8,10 +8,20 @@
         <div class="name-group">
           <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"/>
           <div class="level-xp">
-            <label>Nível: <span class="nivel">{{system.nivel}}</span></label>
+            <div class="level-line">
+              <label>Nível: <span class="nivel">{{system.nivel}}</span></label>
+              <div class="xp-controls">
+                <button type="button" class="adicionar-xp" title="Adicionar XP">
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="ajustar-xp" title="Ajustar XP">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+            </div>
             <div class="xp-bar">
-              <div class="xp-progress" style="width: 0%"></div>
-              <span class="xp-text">{{system.experiencia.atual}} / 10 XP</span>
+              <div class="xp-progress" style="width: {{porcentagemXP}}%"></div>
+              <span class="xp-text">{{system.experiencia.atual}} / {{proximoNivel}} XP</span>
             </div>
           </div>
         </div>

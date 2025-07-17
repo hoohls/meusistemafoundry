@@ -156,7 +156,24 @@
     "EXCLUIR": "Excluir",
     "ADICIONAR": "Adicionar",
     "SALVAR": "Salvar",
-    "CANCELAR": "Cancelar"
+    "CANCELAR": "Cancelar",
+    "ADICIONAR_XP": "Adicionar XP",
+    "AJUSTAR_XP": "Ajustar XP"
+  },
+  "EXPERIENCIA": {
+    "XP": "XP",
+    "EXPERIENCIA": "Experiência",
+    "NIVEL": "Nível",
+    "SUBIR_NIVEL": "Subir de Nível",
+    "ADICIONAR_XP": "Adicionar Experiência",
+    "AJUSTAR_XP": "Ajustar Experiência",
+    "QUANTIDADE_XP": "Quantidade de XP",
+    "MOTIVO": "Motivo",
+    "XP_ATUAL": "XP Atual",
+    "XP_NECESSARIO": "XP Necessário",
+    "PROXIMO_NIVEL": "Próximo Nível",
+    "PONTOS_ATRIBUTO": "Pontos de Atributo",
+    "HABILIDADES_DISPONIVEIS": "Habilidades Disponíveis"
   },
   "DIALOGS": {
     "CONFIRMAR": "Confirmar",

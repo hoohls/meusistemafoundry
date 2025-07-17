@@ -123,6 +123,11 @@ export class ClubeActorSheet extends ActorSheet {
     // Configurações do sistema
     context.config = CONFIG.clube || {};
     
+    // Preparar dados específicos para personagens
+    if (this.actor.type === "personagem") {
+      await this._getPersonagemData(context);
+    }
+    
     return context;
   }
 
@@ -407,6 +412,10 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar recursos (PV/PM)
     html.find(".ajustar-pv").click(this._onAjustarPV.bind(this));
     html.find(".ajustar-pm").click(this._onAjustarPM.bind(this));
+
+    // Gerenciar XP
+    html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
+    html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
 
     // Arrastar e soltar itens
     html.find(".item-list .item").each((i, li) => {
@@ -909,15 +918,16 @@ export class ClubeActorSheet extends ActorSheet {
         };
         break;
     }
-    
+
+    // Criar item
     const itemData = {
-      name: `Nova ${this._getTipoNome(type)}`,
+      name: game.i18n.localize(`EQUIPAMENTOS.${type.toUpperCase()}`),
       type: type,
-      img: this._getDefaultIcon(type),
       system: systemData
     };
-    
-    await this.actor.createEmbeddedDocuments("Item", [itemData]);
+
+    const newItem = await Item.create(itemData, {parent: this.actor});
+    return newItem;
   }
 
   /**
@@ -1280,5 +1290,126 @@ export class ClubeActorSheet extends ActorSheet {
       
       ui.notifications.info(`Item "${novoItem.nome}" atualizado!`);
     }
+  }
+
+  /**
+   * Adiciona XP ao personagem
+   * @param {Event} event - Evento de clique
+   */
+  async _onAdicionarXP(event) {
+    event.preventDefault();
+    
+    const dialog = new Dialog({
+      title: "Adicionar Experiência",
+      content: `
+        <form>
+          <div class="form-group">
+            <label>Quantidade de XP:</label>
+            <input type="number" name="quantidade" min="1" value="1" />
+          </div>
+          <div class="form-group">
+            <label>Motivo (opcional):</label>
+            <input type="text" name="motivo" placeholder="Ex: Derrotar goblin" />
+          </div>
+        </form>
+      `,
+      buttons: {
+        add: {
+          icon: '<i class="fas fa-plus"></i>',
+          label: "Adicionar",
+          callback: async (html) => {
+            const formData = new FormData(html[0].querySelector("form"));
+            const quantidade = parseInt(formData.get("quantidade")) || 1;
+            const motivo = formData.get("motivo") || "";
+            
+            await this.actor.adicionarXP(quantidade);
+            
+            // Se foi especificado um motivo, enviar para o chat
+            if (motivo) {
+              const chatData = {
+                user: game.user.id,
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                content: `<div class="xp-award">
+                  <p><strong>${this.actor.name}</strong> ganhou <strong>${quantidade} XP</strong></p>
+                  <p><em>Motivo: ${motivo}</em></p>
+                </div>`,
+                type: CONST.CHAT_MESSAGE_TYPES.OTHER
+              };
+              await ChatMessage.create(chatData);
+            }
+          }
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Cancelar"
+        }
+      },
+      default: "add"
+    });
+
+    dialog.render(true);
+  }
+
+  /**
+   * Ajusta XP do personagem (adicionar, remover, definir)
+   * @param {Event} event - Evento de clique
+   */
+  async _onAjustarXP(event) {
+    event.preventDefault();
+    
+    const xpAtual = this.actor.system.experiencia.atual || 0;
+    
+    const dialog = new Dialog({
+      title: "Ajustar Experiência",
+      content: `
+        <form>
+          <div class="form-group">
+            <label>XP Atual: <strong>${xpAtual}</strong></label>
+          </div>
+          <div class="form-group">
+            <label>Ação:</label>
+            <select name="acao">
+              <option value="adicionar">Adicionar XP</option>
+              <option value="remover">Remover XP</option>
+              <option value="definir">Definir XP Total</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantidade:</label>
+            <input type="number" name="quantidade" min="0" value="1" />
+          </div>
+        </form>
+      `,
+      buttons: {
+        apply: {
+          icon: '<i class="fas fa-check"></i>',
+          label: "Aplicar",
+          callback: async (html) => {
+            const formData = new FormData(html[0].querySelector("form"));
+            const acao = formData.get("acao");
+            const quantidade = parseInt(formData.get("quantidade")) || 0;
+            
+            switch (acao) {
+              case "adicionar":
+                await this.actor.adicionarXP(quantidade);
+                break;
+              case "remover":
+                await this.actor.removerXP(quantidade);
+                break;
+              case "definir":
+                await this.actor.definirXP(quantidade);
+                break;
+            }
+          }
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Cancelar"
+        }
+      },
+      default: "apply"
+    });
+
+    dialog.render(true);
   }
 } 

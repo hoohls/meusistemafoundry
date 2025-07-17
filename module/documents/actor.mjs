@@ -377,4 +377,138 @@ export class ClubeActor extends Actor {
     
     ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${novoValor}`);
   }
+
+  /**
+   * Adiciona experiência ao personagem
+   * @param {number} quantidade - Quantidade de XP a adicionar
+   */
+  async adicionarXP(quantidade) {
+    if (quantidade <= 0) {
+      ui.notifications.warn("Quantidade de XP deve ser positiva");
+      return;
+    }
+
+    const xpAtual = this.system.experiencia.atual || 0;
+    const novoXP = xpAtual + quantidade;
+    
+    await this.update({"system.experiencia.atual": novoXP});
+    
+    ui.notifications.info(`+${quantidade} XP adicionado! (Total: ${novoXP})`);
+    
+    // Verificar se deve subir de nível
+    await this._verificarSubidaNivel();
+  }
+
+  /**
+   * Verifica se o personagem deve subir de nível
+   * @private
+   */
+  async _verificarSubidaNivel() {
+    const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+    const nivelAtual = this.system.nivel || 1;
+    const xpAtual = this.system.experiencia.atual || 0;
+    
+    // Verificar quantos níveis pode subir
+    let novoNivel = nivelAtual;
+    while (novoNivel < tabelaXP.length && xpAtual >= tabelaXP[novoNivel]) {
+      novoNivel++;
+    }
+    
+    if (novoNivel > nivelAtual) {
+      await this._subirNivel(novoNivel);
+    }
+  }
+
+  /**
+   * Sobe o nível do personagem
+   * @param {number} novoNivel - Novo nível do personagem
+   * @private
+   */
+  async _subirNivel(novoNivel) {
+    const nivelAtual = this.system.nivel || 1;
+    const niveisSubidos = novoNivel - nivelAtual;
+    
+    // Calcular novos recursos baseados nos novos atributos
+    const updateData = {
+      "system.nivel": novoNivel,
+      "system.progressao.pontos_atributo": (this.system.progressao?.pontos_atributo || 0) + niveisSubidos,
+      "system.progressao.habilidades_disponiveis": (this.system.progressao?.habilidades_disponiveis || 0) + niveisSubidos
+    };
+
+    await this.update(updateData);
+    
+    // Mostrar notificação de subida de nível
+    ui.notifications.info(`🎉 ${this.name} subiu para o nível ${novoNivel}!`);
+    
+    // Se subiu múltiplos níveis
+    if (niveisSubidos > 1) {
+      ui.notifications.warn(`Subiu ${niveisSubidos} níveis de uma vez! Distribua os pontos de atributo.`);
+    }
+    
+    // Enviar mensagem no chat
+    await this._anunciarSubidaNivel(nivelAtual, novoNivel);
+  }
+
+  /**
+   * Anuncia a subida de nível no chat
+   * @param {number} nivelAnterior - Nível anterior
+   * @param {number} novoNivel - Novo nível
+   * @private
+   */
+  async _anunciarSubidaNivel(nivelAnterior, novoNivel) {
+    const chatData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({actor: this}),
+      content: `
+        <div class="subida-nivel">
+          <h3>🎉 Subida de Nível!</h3>
+          <p><strong>${this.name}</strong> subiu do nível <strong>${nivelAnterior}</strong> para o nível <strong>${novoNivel}</strong>!</p>
+          <ul>
+            <li>+ 1 ponto de atributo para distribuir</li>
+            <li>+ 1 habilidade disponível</li>
+            <li>PV e PM recalculados automaticamente</li>
+          </ul>
+        </div>
+      `,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+    };
+
+    await ChatMessage.create(chatData);
+  }
+
+  /**
+   * Remove experiência do personagem (para correções)
+   * @param {number} quantidade - Quantidade de XP a remover
+   */
+  async removerXP(quantidade) {
+    if (quantidade <= 0) {
+      ui.notifications.warn("Quantidade de XP deve ser positiva");
+      return;
+    }
+
+    const xpAtual = this.system.experiencia.atual || 0;
+    const novoXP = Math.max(0, xpAtual - quantidade);
+    
+    await this.update({"system.experiencia.atual": novoXP});
+    
+    ui.notifications.warn(`-${quantidade} XP removido! (Total: ${novoXP})`);
+  }
+
+  /**
+   * Define o XP diretamente (para correções)
+   * @param {number} quantidade - Quantidade total de XP
+   */
+  async definirXP(quantidade) {
+    if (quantidade < 0) {
+      ui.notifications.warn("XP não pode ser negativo");
+      return;
+    }
+
+    await this.update({"system.experiencia.atual": quantidade});
+    
+    ui.notifications.info(`XP definido para ${quantidade}`);
+    
+    // Verificar se deve subir de nível
+    await this._verificarSubidaNivel();
+  }
 } 
