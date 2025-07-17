@@ -196,12 +196,10 @@ export class ClubeActorSheet extends ActorSheet {
    */
   async _getPersonagemData(context) {
     try {
-      console.log("Preparando dados específicos para personagem...");
       const system = context.system;
       
       // Adicionar dados de pontos de atributos
       context.statusPontosAtributos = this.actor.getStatusPontosAtributos();
-      console.log("Status pontos atributos:", context.statusPontosAtributos);
       
       // Tabela de progressão de XP
       const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270];

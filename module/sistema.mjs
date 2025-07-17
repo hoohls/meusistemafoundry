@@ -417,6 +417,23 @@ function registerHandlebarsHelpers() {
     return atributosInicializados ? 18 : 8;
   });
 
+  // Helper para operações matemáticas
+  Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
+    const operators = {
+      '+': (l, r) => l + r,
+      '-': (l, r) => l - r,
+      '*': (l, r) => l * r,
+      '/': (l, r) => l / r,
+      '%': (l, r) => l % r
+    };
+    
+    if (!operators[operator]) {
+      throw new Error(`Operador não suportado: ${operator}`);
+    }
+    
+    return operators[operator](lvalue, rvalue);
+  });
+
   // Helper para concatenação de strings
   Handlebars.registerHelper('concat', function() {
     return Array.prototype.slice.call(arguments, 0, -1).join('');
