@@ -325,60 +325,71 @@ async function conjurarMagia({
 /* -------------------------------------------- */
 
 function registerHandlebarsHelpers() {
-  
-  // Helper para operações matemáticas (usado nas barras de progresso)
-  Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
-    lvalue = parseFloat(lvalue);
-    rvalue = parseFloat(rvalue);
-    
-    switch (operator) {
-      case '+': return lvalue + rvalue;
-      case '-': return lvalue - rvalue;
-      case '*': return lvalue * rvalue;
-      case '/': return rvalue !== 0 ? lvalue / rvalue : 0;
-      case '%': return lvalue % rvalue;
-      default: return lvalue;
-    }
-  });
+  console.log("Registrando helpers Handlebars...");
 
-  // Helper para localização de atributos
+  // Helper para localizar atributos
   Handlebars.registerHelper('localizeAtributo', function(atributo) {
     return game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`);
   });
 
+  // Helper para localizar classes
+  Handlebars.registerHelper('localizeClasse', function(classe) {
+    return game.i18n.localize(`CLASSES.${classe.toUpperCase()}`);
+  });
+
+  // Helper para localizar raças
+  Handlebars.registerHelper('localizeRaca', function(raca) {
+    return game.i18n.localize(`RACAS.${raca.toUpperCase()}`);
+  });
+
+  // Helper para localizar escolas de magia
+  Handlebars.registerHelper('localizeEscola', function(escola) {
+    return game.i18n.localize(`MAGIAS.ESCOLAS.${escola.toUpperCase()}`);
+  });
+
+  // Helper para localizar condições
+  Handlebars.registerHelper('localizeCondicao', function(condicao) {
+    return game.i18n.localize(`CONDICOES.${condicao.toUpperCase()}`);
+  });
+
+  // Helper para localizar equipamentos
+  Handlebars.registerHelper('localizeEquipamento', function(equipamento) {
+    return game.i18n.localize(`EQUIPAMENTOS.${equipamento.toUpperCase()}`);
+  });
+
   // Helper para calcular modificador de atributo
-  Handlebars.registerHelper('calcularModificador', function(valor) {
-    return Math.floor((valor - 10) / 3);
+  Handlebars.registerHelper('modificadorAtributo', function(valor) {
+    return Math.floor((valor - 10) / 2);
   });
 
-  // Helper para verificar se valor é par
-  Handlebars.registerHelper('ehPar', function(valor) {
-    return valor % 2 === 0;
+  // Helper para formatar modificador
+  Handlebars.registerHelper('formatarModificador', function(mod) {
+    if (mod >= 0) return `+${mod}`;
+    return `${mod}`;
   });
 
-  // Helper para formatação de moedas
-  Handlebars.registerHelper('formatarMoeda', function(valor, tipo) {
-    const tipos = {
-      'mc': 'MC',
-      'mp': 'MP', 
-      'mo': 'MO'
-    };
-    return `${valor} ${tipos[tipo] || 'MP'}`;
+  // Helper para calcular porcentagem
+  Handlebars.registerHelper('porcentagem', function(valor, total) {
+    if (total === 0) return 0;
+    return Math.round((valor / total) * 100);
   });
 
-  // Helper para status de condições
-  Handlebars.registerHelper('statusCondicao', function(ativo) {
-    return ativo ? 'ativo' : 'inativo';
+  // Helper para verificar se item está equipado
+  Handlebars.registerHelper('isEquipado', function(item) {
+    return item.system?.equipado || false;
   });
 
-  // Helper para calcular PV máximo
-  Handlebars.registerHelper('calcularPvMax', function(fisico) {
-    return fisico * 3 + 10;
-  });
-
-  // Helper para calcular PM máximo
-  Handlebars.registerHelper('calcularPmMax', function(mental) {
-    return mental * 2 + 5;
+  // Helper para verificar se habilidade está disponível
+  Handlebars.registerHelper('isHabilidadeDisponivel', function(habilidade, nivel, atributos) {
+    if (habilidade.nivelMin > nivel) return false;
+    
+    if (habilidade.preRequisito) {
+      for (const [atributo, valorMinimo] of Object.entries(habilidade.preRequisito)) {
+        if (atributos[atributo]?.valor < valorMinimo) return false;
+      }
+    }
+    
+    return true;
   });
 
   // Helper para calcular defesa
@@ -401,6 +412,11 @@ function registerHandlebarsHelpers() {
     return a < b;
   });
 
+  // Helper para determinar limite máximo de atributos
+  Handlebars.registerHelper('limiteMaximoAtributo', function(atributosInicializados) {
+    return atributosInicializados ? 18 : 8;
+  });
+
   // Helper para concatenação de strings
   Handlebars.registerHelper('concat', function() {
     return Array.prototype.slice.call(arguments, 0, -1).join('');
@@ -419,6 +435,8 @@ function registerHandlebarsHelpers() {
     }
     return result;
   });
+
+  console.log("Helpers Handlebars registrados com sucesso!");
 }
 
 /* -------------------------------------------- */

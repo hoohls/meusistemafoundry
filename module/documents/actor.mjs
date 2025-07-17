@@ -778,18 +778,29 @@ export class ClubeActor extends Actor {
    * @returns {Object} Informações sobre distribuição de pontos
    */
   getStatusPontosAtributos() {
-    const progressao = this.system.progressao || {};
-    const atributosInicializados = progressao.atributos_inicializados || false;
-    const pontosIniciais = progressao.pontos_atributo_iniciais || 18;
-    const pontosGastosIniciais = progressao.pontos_atributo_gastos_iniciais || 0;
-    const pontosPorNivel = progressao.pontos_atributo || 0;
-    
-    return {
-      atributosInicializados,
-      pontosDisponiveisIniciais: pontosIniciais - pontosGastosIniciais,
-      pontosPorNivel,
-      temPontosDisponiveis: (!atributosInicializados && (pontosIniciais - pontosGastosIniciais) > 0) || pontosPorNivel > 0
-    };
+    try {
+      const progressao = this.system.progressao || {};
+      const atributosInicializados = progressao.atributos_inicializados || false;
+      const pontosIniciais = progressao.pontos_atributo_iniciais || 18;
+      const pontosGastosIniciais = progressao.pontos_atributo_gastos_iniciais || 0;
+      const pontosPorNivel = progressao.pontos_atributo || 0;
+      
+      return {
+        atributosInicializados,
+        pontosDisponiveisIniciais: pontosIniciais - pontosGastosIniciais,
+        pontosPorNivel,
+        temPontosDisponiveis: (!atributosInicializados && (pontosIniciais - pontosGastosIniciais) > 0) || pontosPorNivel > 0
+      };
+    } catch (error) {
+      console.error("Erro ao obter status dos pontos de atributos:", error);
+      // Retornar valores padrão em caso de erro
+      return {
+        atributosInicializados: false,
+        pontosDisponiveisIniciais: 18,
+        pontosPorNivel: 0,
+        temPontosDisponiveis: true
+      };
+    }
   }
 
   /**

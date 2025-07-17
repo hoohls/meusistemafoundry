@@ -110,7 +110,7 @@
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
-                    {{#if (lt system.atributos.fisico.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    {{#if (lt system.atributos.fisico.valor (limiteMaximoAtributo statusPontosAtributos.atributosInicializados))}}
                     <button type="button" class="adicionar-ponto-atributo" data-atributo="fisico" title="Adicionar ponto">
                       <i class="fas fa-plus"></i>
                     </button>
@@ -146,7 +146,7 @@
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
-                    {{#if (lt system.atributos.acao.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    {{#if (lt system.atributos.acao.valor (limiteMaximoAtributo statusPontosAtributos.atributosInicializados))}}
                     <button type="button" class="adicionar-ponto-atributo" data-atributo="acao" title="Adicionar ponto">
                       <i class="fas fa-plus"></i>
                     </button>
@@ -182,7 +182,7 @@
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
-                    {{#if (lt system.atributos.mental.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    {{#if (lt system.atributos.mental.valor (limiteMaximoAtributo statusPontosAtributos.atributosInicializados))}}
                     <button type="button" class="adicionar-ponto-atributo" data-atributo="mental" title="Adicionar ponto">
                       <i class="fas fa-plus"></i>
                     </button>
@@ -218,7 +218,7 @@
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
-                    {{#if (lt system.atributos.social.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    {{#if (lt system.atributos.social.valor (limiteMaximoAtributo statusPontosAtributos.atributosInicializados))}}
                     <button type="button" class="adicionar-ponto-atributo" data-atributo="social" title="Adicionar ponto">
                       <i class="fas fa-plus"></i>
                     </button>

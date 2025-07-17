@@ -24,133 +24,169 @@ export class ClubeActorSheet extends ActorSheet {
 
   /** @override */
   async getData() {
-    const context = super.getData();
-    const actorData = this.actor.toObject(false);
-    
-    // Adicionar dados do sistema
-    context.system = actorData.system;
-    context.flags = actorData.flags;
-    
-    // Garantir que estrutura básica existe para evitar erros
-    if (!context.system.atributos) {
-      context.system.atributos = {
-        fisico: { valor: 3 },
-        acao: { valor: 3 },
-        mental: { valor: 3 },
-        social: { valor: 3 }
-      };
-    }
-    
-    if (!context.system.recursos) {
-      context.system.recursos = {
-        pv: { valor: 19, max: 19 },
-        pm: { valor: 11, max: 11 },
-        defesa: { valor: 13 }
-      };
-    }
-
-    if (!context.system.condicoes) {
-      context.system.condicoes = {
-        ferido: false,
-        gravemente_ferido: false,
-        inconsciente: false,
-        caido: false,
-        atordoado: false,
-        cego: false,
-        surdo: false
-      };
-    }
-
-    if (!context.system.detalhes) {
-      context.system.detalhes = {
-        biografia: "",
-        aparencia: "",
-        personalidade: "",
-        historia: "",
-        motivacoes: "",
-        notas: ""
-      };
-    }
-
-    if (!context.system.experiencia) {
-      context.system.experiencia = {
-        atual: 0,
-        necessaria: 10
-      };
-    }
-
-    if (!context.system.raca) {
-      context.system.raca = { nome: "" };
-    }
-
-    if (!context.system.classe) {
-      context.system.classe = { nome: "" };
-    }
-
-    if (!context.system.nivel) {
-      context.system.nivel = 1;
-    }
-
-    // Inicializar progressão de atributos para compatibilidade
-    if (!context.system.progressao) {
-      context.system.progressao = {
-        pontos_atributo: 0,
-        pontos_atributo_iniciais: 18,
-        pontos_atributo_gastos_iniciais: 0,
-        atributos_inicializados: false,
-        habilidades_disponiveis: 0
-      };
-    } else {
-      // Garantir que campos necessários existam
-      if (context.system.progressao.pontos_atributo_iniciais === undefined) {
-        context.system.progressao.pontos_atributo_iniciais = 18;
+    try {
+      const context = super.getData();
+      const actorData = this.actor.toObject(false);
+      
+      // Adicionar dados do sistema
+      context.system = actorData.system;
+      context.flags = actorData.flags;
+      
+      // Garantir que estrutura básica existe para evitar erros
+      if (!context.system.atributos) {
+        context.system.atributos = {
+          fisico: { valor: 3 },
+          acao: { valor: 3 },
+          mental: { valor: 3 },
+          social: { valor: 3 }
+        };
       }
-      if (context.system.progressao.pontos_atributo_gastos_iniciais === undefined) {
-        context.system.progressao.pontos_atributo_gastos_iniciais = 0;
+      
+      if (!context.system.recursos) {
+        context.system.recursos = {
+          pv: { valor: 19, max: 19 },
+          pm: { valor: 11, max: 11 },
+          defesa: { valor: 13 }
+        };
       }
-      if (context.system.progressao.atributos_inicializados === undefined) {
-        context.system.progressao.atributos_inicializados = false;
-      }
-    }
 
-    // Inicializar estrutura de equipamentos
-    if (!context.system.equipamentos) {
-      context.system.equipamentos = {
-        equipados: {
-          arma_principal: null,
-          armadura: null,
-          escudo: null
+      if (!context.system.condicoes) {
+        context.system.condicoes = {
+          ferido: false,
+          gravemente_ferido: false,
+          inconsciente: false,
+          caido: false,
+          atordoado: false,
+          cego: false,
+          surdo: false
+        };
+      }
+
+      if (!context.system.detalhes) {
+        context.system.detalhes = {
+          biografia: "",
+          aparencia: "",
+          personalidade: "",
+          historia: "",
+          motivacoes: "",
+          notas: ""
+        };
+      }
+
+      if (!context.system.experiencia) {
+        context.system.experiencia = {
+          atual: 0,
+          necessaria: 10
+        };
+      }
+
+      if (!context.system.raca) {
+        context.system.raca = { nome: "" };
+      }
+
+      if (!context.system.classe) {
+        context.system.classe = { nome: "" };
+      }
+
+      if (!context.system.nivel) {
+        context.system.nivel = 1;
+      }
+
+      // Inicializar progressão de atributos para compatibilidade
+      if (!context.system.progressao) {
+        context.system.progressao = {
+          pontos_atributo: 0,
+          pontos_atributo_iniciais: 18,
+          pontos_atributo_gastos_iniciais: 0,
+          atributos_inicializados: false,
+          habilidades_disponiveis: 0
+        };
+      } else {
+        // Garantir que campos necessários existam
+        if (context.system.progressao.pontos_atributo_iniciais === undefined) {
+          context.system.progressao.pontos_atributo_iniciais = 18;
+        }
+        if (context.system.progressao.pontos_atributo_gastos_iniciais === undefined) {
+          context.system.progressao.pontos_atributo_gastos_iniciais = 0;
+        }
+        if (context.system.progressao.atributos_inicializados === undefined) {
+          context.system.progressao.atributos_inicializados = false;
+        }
+      }
+
+      // Inicializar estrutura de equipamentos
+      if (!context.system.equipamentos) {
+        context.system.equipamentos = {
+          equipados: {
+            arma_principal: null,
+            armadura: null,
+            escudo: null
+          },
+          itens: [],
+          dinheiro: {
+            ouro: 0,
+            prata: 0,
+            cobre: 0
+          },
+          peso_total: 0,
+          capacidade_carga: 50
+        };
+      }
+
+      // Preparar dados de itens para o template
+      context.items = this._organizarItens();
+      context.equipados = this._obterEquipados();
+      context.pesoTotal = this._calcularPesoTotal();
+      context.capacidadeCarga = this._calcularCapacidadeCarga();
+      context.sobrecarregado = context.pesoTotal > context.capacidadeCarga;
+
+      // Preparar dados de magias para o template
+      context.magiasPorEscola = this._organizarMagiasPorEscola();
+
+      // Configurações do sistema
+      context.config = CONFIG.clube || {};
+      
+      // Preparar dados específicos para personagens
+      if (this.actor.type === "personagem") {
+        await this._getPersonagemData(context);
+      }
+      
+      return context;
+    } catch (error) {
+      console.error("Erro ao preparar dados da ficha:", error);
+      ui.notifications.error("Erro ao carregar ficha do personagem. Verifique o console para mais detalhes.");
+      
+      // Retornar dados mínimos para evitar quebra completa
+      return {
+        actor: this.actor,
+        system: {
+          atributos: {
+            fisico: { valor: 3 },
+            acao: { valor: 3 },
+            mental: { valor: 3 },
+            social: { valor: 3 }
+          },
+          recursos: {
+            pv: { valor: 19, max: 19 },
+            pm: { valor: 11, max: 11 },
+            defesa: { valor: 13 }
+          },
+          progressao: {
+            pontos_atributo: 0,
+            pontos_atributo_iniciais: 18,
+            pontos_atributo_gastos_iniciais: 0,
+            atributos_inicializados: false,
+            habilidades_disponiveis: 0
+          }
         },
-        itens: [],
-        dinheiro: {
-          ouro: 0,
-          prata: 0,
-          cobre: 0
-        },
-        peso_total: 0,
-        capacidade_carga: 50
+        statusPontosAtributos: {
+          atributosInicializados: false,
+          pontosDisponiveisIniciais: 18,
+          pontosPorNivel: 0,
+          temPontosDisponiveis: true
+        }
       };
     }
-
-    // Preparar dados de itens para o template
-    context.items = this._organizarItens();
-    context.equipados = this._obterEquipados();
-    context.pesoTotal = this._calcularPesoTotal();
-    context.capacidadeCarga = this._calcularCapacidadeCarga();
-    context.sobrecarregado = context.pesoTotal > context.capacidadeCarga;
-
-    // Preparar dados de magias para o template
-    context.magiasPorEscola = this._organizarMagiasPorEscola();
-
-    // Configurações do sistema
-    context.config = CONFIG.clube || {};
-    
-    // Preparar dados específicos para personagens
-    if (this.actor.type === "personagem") {
-      await this._getPersonagemData(context);
-    }
-    
-    return context;
   }
 
   /**
@@ -159,36 +195,44 @@ export class ClubeActorSheet extends ActorSheet {
    * @returns {Object} Contexto atualizado
    */
   async _getPersonagemData(context) {
-    const system = context.system;
-    
-    // Adicionar dados de pontos de atributos
-    context.statusPontosAtributos = this.actor.getStatusPontosAtributos();
-    
-    // Tabela de progressão de XP
-    const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270];
-    context.proximoNivel = tabelaXP[system.nivel] || (system.nivel * 50);
-    
-    // Porcentagem de XP para o próximo nível
-    const xpAtual = system.experiencia.atual;
-    const xpAnterior = tabelaXP[system.nivel - 1] || 0;
-    const xpProximo = context.proximoNivel;
-    context.porcentagemXP = Math.round(((xpAtual - xpAnterior) / (xpProximo - xpAnterior)) * 100);
+    try {
+      console.log("Preparando dados específicos para personagem...");
+      const system = context.system;
+      
+      // Adicionar dados de pontos de atributos
+      context.statusPontosAtributos = this.actor.getStatusPontosAtributos();
+      console.log("Status pontos atributos:", context.statusPontosAtributos);
+      
+      // Tabela de progressão de XP
+      const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270];
+      context.proximoNivel = tabelaXP[system.nivel] || (system.nivel * 50);
+      
+      // Porcentagem de XP para o próximo nível
+      const xpAtual = system.experiencia.atual;
+      const xpAnterior = tabelaXP[system.nivel - 1] || 0;
+      const xpProximo = context.proximoNivel;
+      context.porcentagemXP = Math.round(((xpAtual - xpAnterior) / (xpProximo - xpAnterior)) * 100);
 
-    // Status de condições
-    context.condicoesAtivas = Object.keys(system.condicoes)
-      .filter(condicao => system.condicoes[condicao]);
+      // Status de condições
+      context.condicoesAtivas = Object.keys(system.condicoes)
+        .filter(condicao => system.condicoes[condicao]);
 
-    // Modificadores de condições
-    context.modificadoresCondicoes = this._calcularModificadoresCondicoes(system.condicoes);
+      // Modificadores de condições
+      context.modificadoresCondicoes = this._calcularModificadoresCondicoes(system.condicoes);
 
-    // Preparar tabela de progressão para exibição
-    context.tabelaProgressao = this._prepararTabelaProgressao();
-    context.tabelaProgressaoCompleta = this._prepararTabelaProgressaoCompleta();
+      // Preparar tabela de progressão para exibição
+      context.tabelaProgressao = this._prepararTabelaProgressao();
+      context.tabelaProgressaoCompleta = this._prepararTabelaProgressaoCompleta();
 
-    // Preparar dados das habilidades
-    await this._prepararDadosHabilidades(context);
+      // Preparar dados das habilidades
+      await this._prepararDadosHabilidades(context);
 
-    return context;
+      console.log("Dados específicos do personagem preparados com sucesso!");
+      return context;
+    } catch (error) {
+      console.error("Erro ao preparar dados específicos do personagem:", error);
+      throw error;
+    }
   }
 
   /**

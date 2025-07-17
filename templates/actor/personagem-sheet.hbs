@@ -101,7 +101,7 @@
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
-                    {{#if (lt atributo.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    {{#if (lt atributo.valor (limiteMaximoAtributo statusPontosAtributos.atributosInicializados))}}
                     <button type="button" class="adicionar-ponto-atributo" data-atributo="{{key}}" title="Adicionar ponto">
                       <i class="fas fa-plus"></i>
                     </button>
