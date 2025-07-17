@@ -399,9 +399,9 @@
         <div class="habilidades-conhecidas">
           <h3>Habilidades Conhecidas</h3>
           
-          {{#if system.habilidades}}
+          {{#if habilidadesConhecidasProcessadas}}
           <div class="habilidades-grid">
-            {{#each system.habilidades as |habilidade key|}}
+            {{#each habilidadesConhecidasProcessadas as |habilidade key|}}
             <div class="habilidade-item conhecida" data-habilidade="{{key}}" data-categoria="{{habilidade.categoria}}">
               <div class="habilidade-header">
                 <h5>{{habilidade.nome}}</h5>

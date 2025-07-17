@@ -1526,12 +1526,172 @@ export class ClubeActorSheet extends ActorSheet {
     context.habilidadesTotal = Object.keys(this.actor.system.habilidades || {}).length;
     context.pontosHabilidadeDisponiveis = this.actor._calcularPontosHabilidadeDisponiveis();
     
+    // Preparar habilidades conhecidas processadas
+    context.habilidadesConhecidasProcessadas = this._prepararHabilidadesConhecidas(SISTEMA.habilidades);
+    
     // Preparar habilidades disponíveis por categoria
     context.habilidadesCombateDisponiveis = this._prepararHabilidadesCategoria('combate', SISTEMA.habilidades.combate);
     context.habilidadesMagicasDisponiveis = this._prepararHabilidadesCategoria('magicas', SISTEMA.habilidades.magicas);
     context.habilidadesFurtividadeDisponiveis = this._prepararHabilidadesCategoria('furtividade', SISTEMA.habilidades.furtividade);
     context.habilidadesSociaisDisponiveis = this._prepararHabilidadesCategoria('sociais', SISTEMA.habilidades.sociais);
     context.habilidadesGeraisDisponiveis = this._prepararHabilidadesCategoria('gerais', SISTEMA.habilidades.gerais);
+  }
+
+  /**
+   * Prepara habilidades conhecidas com nomes e efeitos corretos
+   * @param {Object} sistemaHabilidades - Todas as habilidades do sistema
+   * @returns {Object} Habilidades conhecidas processadas
+   */
+  _prepararHabilidadesConhecidas(sistemaHabilidades) {
+    const habilidadesConhecidas = this.actor.system.habilidades || {};
+    const habilidadesProcessadas = {};
+    
+    for (const [id, habilidadeConhecida] of Object.entries(habilidadesConhecidas)) {
+      // Buscar dados completos da habilidade no sistema
+      let habilidadeCompleta = null;
+      for (const [categoria, habilidades] of Object.entries(sistemaHabilidades)) {
+        if (habilidades[id]) {
+          habilidadeCompleta = habilidades[id];
+          break;
+        }
+      }
+      
+      if (!habilidadeCompleta) {
+        console.warn(`Habilidade ${id} não encontrada no sistema`);
+        // Usar dados básicos se não encontrar
+        habilidadesProcessadas[id] = {
+          nome: id,
+          efeito: "Efeito não encontrado",
+          categoria: habilidadeConhecida.categoria || "geral"
+        };
+        continue;
+      }
+      
+      // Aplicar fallback para nomes
+      let nome = game.i18n.localize(habilidadeCompleta.nome);
+      if (nome === habilidadeCompleta.nome || nome.startsWith("HABILIDADES.")) {
+        const nomesLimpos = {
+          ataquePoderoso: "Ataque Poderoso",
+          defesaAprimorada: "Defesa Aprimorada", 
+          especializacaoArma: "Especialização em Arma",
+          ataqueDuplo: "Ataque Duplo",
+          resistencia: "Resistência",
+          liderancaCombate: "Liderança de Combate",
+          contraAtaque: "Contra-Ataque",
+          berserker: "Berserker",
+          rajadaArcana: "Rajada Arcana",
+          escudoMagico: "Escudo Mágico",
+          misseisMagicos: "Mísseis Mágicos",
+          detectarMagia: "Detectar Magia",
+          contraMagia: "Contra-Magia",
+          bolaFogo: "Bola de Fogo",
+          invisibilidade: "Invisibilidade",
+          voo: "Voo",
+          teletransporte: "Teletransporte",
+          curaCompleta: "Cura Completa",
+          ataqueFurtivo: "Ataque Furtivo",
+          furtividadeAprimorada: "Furtividade Aprimorada",
+          desarmarArmadilhas: "Desarmar Armadilhas",
+          tiroCerteiro: "Tiro Certeiro",
+          escaladaAprimorada: "Escalada Aprimorada",
+          passoSombrio: "Passo Sombrio",
+          ataqueLetal: "Ataque Letal",
+          mestreSombras: "Mestre das Sombras",
+          reflexosAprimorados: "Reflexos Aprimorados",
+          venenos: "Venenos",
+          persuasaoIrresistivel: "Persuasão Irresistível",
+          lideranca: "Liderança",
+          coletaInformacoes: "Coleta de Informações",
+          intimidacao: "Intimidação",
+          redeContatos: "Rede de Contatos",
+          diplomacia: "Diplomacia",
+          inspiracao: "Inspiração",
+          comando: "Comando",
+          carismaSobrenatural: "Carisma Sobrenatural",
+          mestreNegociador: "Mestre Negociador",
+          versatilidade: "Versatilidade",
+          magiaNatureza: "Magia da Natureza",
+          resistenciaAna: "Resistência Anã",
+          sorteHalfling: "Sorte Halfling",
+          magiaInstavel: "Magia Instável",
+          astuciaComercial: "Astúcia Comercial",
+          primeirosSocorros: "Primeiros Socorros",
+          sobrevivencia: "Sobrevivência",
+          criacaoPocoes: "Criação de Poções",
+          montaria: "Montaria",
+          navegacao: "Navegação",
+          idiomas: "Idiomas"
+        };
+        nome = nomesLimpos[id] || id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+      }
+      
+      // Aplicar fallback para efeitos
+      let efeito = game.i18n.localize(habilidadeCompleta.efeito);
+      if (efeito === habilidadeCompleta.efeito || efeito.startsWith("HABILIDADES.")) {
+        const efeitosBasicos = {
+          ataquePoderoso: "Adiciona +2 ao dano em ataques corpo a corpo",
+          defesaAprimorada: "+1 bônus permanente à Defesa",
+          especializacaoArma: "+2 ataque com tipo específico de arma",
+          ataqueDuplo: "Dois ataques por turno com -2 cada",
+          resistencia: "+2 em testes de resistência física",
+          liderancaCombate: "Aliados próximos ganham +1 em ataques",
+          contraAtaque: "Ataque gratuito quando inimigo erra",
+          berserker: "+3 dano, -2 Defesa por combate",
+          rajadaArcana: "Ataque mágico (2d6 + Mental dano)",
+          escudoMagico: "+2 Defesa por uma cena (2 PM)",
+          misseisMagicos: "3 projéteis automáticos (3 PM)",
+          detectarMagia: "Percebe auras mágicas (1 PM)",
+          contraMagia: "Cancela magias inimigas (5 PM)",
+          bolaFogo: "Área de efeito (6 PM)",
+          invisibilidade: "Torna-se invisível (4 PM)",
+          voo: "Capacidade de voar (6 PM)",
+          teletransporte: "Movimento instantâneo (8 PM)",
+          curaCompleta: "Restaura todos os PV (10 PM)",
+          ataqueFurtivo: "+3 dano quando ataca pelas costas",
+          furtividadeAprimorada: "+2 em testes de furtividade",
+          desarmarArmadilhas: "Pode desarmar dispositivos complexos",
+          tiroCerteiro: "+2 ataque com armas à distância",
+          escaladaAprimorada: "+2 em testes de escalada",
+          passoSombrio: "Movimento furtivo rápido",
+          ataqueLetal: "Críticos em 11-12 nos dados",
+          mestreSombras: "Invisibilidade natural em sombras",
+          reflexosAprimorados: "+3 Iniciativa",
+          venenos: "Conhecimento e uso de venenos",
+          persuasaoIrresistivel: "+2 em testes de persuasão",
+          lideranca: "Aliados ganham +1 quando inspirados",
+          coletaInformacoes: "+2 para descobrir rumores e segredos",
+          intimidacao: "+2 em testes de intimidação",
+          redeContatos: "Conhece pessoas úteis em cidades",
+          diplomacia: "+3 em negociações formais",
+          inspiracao: "Aliados recuperam 1 PM por cena",
+          comando: "Pode dar ordens que devem ser obedecidas",
+          carismaSobrenatural: "Reroll automático em falhas sociais",
+          mestreNegociador: "Pode resolver conflitos impossíveis",
+          versatilidade: "Reroll uma vez por sessão",
+          magiaNatureza: "Magias menores sem custo PM",
+          resistenciaAna: "+2 vs venenos/doenças/magia",
+          sorteHalfling: "Força inimigo a rerollar ataque",
+          magiaInstavel: "Efeitos mágicos caóticos",
+          astuciaComercial: "+2 em comércio e navegação urbana",
+          primeirosSocorros: "Cura 1d6 PV uma vez por ferimento",
+          sobrevivencia: "+2 em testes de sobrevivência",
+          criacaoPocoes: "Pode criar poções básicas",
+          montaria: "+2 em testes com animais montados",
+          navegacao: "+2 em orientação e mapas",
+          idiomas: "Conhece idiomas adicionais"
+        };
+        efeito = efeitosBasicos[id] || `Efeito especial de ${nome}`;
+      }
+      
+      // Combinar dados processados
+      habilidadesProcessadas[id] = {
+        nome: nome,
+        efeito: efeito,
+        categoria: habilidadeConhecida.categoria
+      };
+    }
+    
+    return habilidadesProcessadas;
   }
 
   /**
