@@ -516,6 +516,7 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
     html.find(".remover-habilidade").click(this._onRemoverHabilidade.bind(this));
     html.find(".detalhes-habilidade").click(this._onDetalhesHabilidade.bind(this));
+    html.find(".detalhes-habilidade-conhecida").click(this._onDetalhesHabilidadeConhecida.bind(this));
     html.find(".habilidades-filtro").change(this._onFiltrarHabilidades.bind(this));
 
     // Arrastar e soltar itens
@@ -1990,6 +1991,254 @@ export class ClubeActorSheet extends ActorSheet {
           condition: atendeRequisitos && this.actor._calcularPontosHabilidadeDisponiveis() > 0 && !this.actor.system.habilidades?.[habilidadeId],
           callback: async () => {
             await this.actor.adicionarHabilidade(habilidadeId, categoria);
+          }
+        },
+        fechar: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Fechar"
+        }
+      },
+      default: "fechar"
+    });
+
+    dialog.render(true);
+  }
+
+  /**
+   * Mostrar detalhes de uma habilidade conhecida
+   * @param {Event} event - Evento de clique
+   */
+  async _onDetalhesHabilidadeConhecida(event) {
+    event.preventDefault();
+    
+    const element = event.currentTarget;
+    const habilidadeId = element.dataset.habilidade;
+    
+    if (!habilidadeId) {
+      ui.notifications.error("ID da habilidade inválido");
+      return;
+    }
+
+    // Buscar dados da habilidade conhecida
+    const habilidadeConhecida = this.actor.system.habilidades?.[habilidadeId];
+    if (!habilidadeConhecida) {
+      ui.notifications.error("Habilidade não encontrada no personagem");
+      return;
+    }
+
+    // Buscar dados completos da habilidade
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    let habilidadeData = null;
+    let categoria = habilidadeConhecida.categoria;
+    
+    // Procurar a habilidade nas diferentes categorias
+    for (const [cat, habilidades] of Object.entries(SISTEMA.habilidades)) {
+      if (habilidades[habilidadeId]) {
+        habilidadeData = habilidades[habilidadeId];
+        categoria = cat;
+        break;
+      }
+    }
+    
+    if (!habilidadeData) {
+      ui.notifications.error("Dados completos da habilidade não encontrados");
+      return;
+    }
+
+    // Preparar informações da habilidade (usando mesmo fallback do método original)
+    let nome = game.i18n.localize(habilidadeData.nome);
+    let efeito = game.i18n.localize(habilidadeData.efeito);
+    
+    // Usar fallback se localização falhar
+    if (nome === habilidadeData.nome || nome.startsWith("HABILIDADES.")) {
+      const nomesLimpos = {
+        ataquePoderoso: "Ataque Poderoso",
+        defesaAprimorada: "Defesa Aprimorada", 
+        especializacaoArma: "Especialização em Arma",
+        ataqueDuplo: "Ataque Duplo",
+        resistencia: "Resistência",
+        liderancaCombate: "Liderança de Combate",
+        contraAtaque: "Contra-Ataque",
+        berserker: "Berserker",
+        rajadaArcana: "Rajada Arcana",
+        escudoMagico: "Escudo Mágico",
+        misseisMagicos: "Mísseis Mágicos",
+        detectarMagia: "Detectar Magia",
+        contraMagia: "Contra-Magia",
+        bolaFogo: "Bola de Fogo",
+        invisibilidade: "Invisibilidade",
+        voo: "Voo",
+        teletransporte: "Teletransporte",
+        curaCompleta: "Cura Completa",
+        ataqueFurtivo: "Ataque Furtivo",
+        furtividadeAprimorada: "Furtividade Aprimorada",
+        desarmarArmadilhas: "Desarmar Armadilhas",
+        tiroCerteiro: "Tiro Certeiro",
+        escaladaAprimorada: "Escalada Aprimorada",
+        passoSombrio: "Passo Sombrio",
+        ataqueLetal: "Ataque Letal",
+        mestreSombras: "Mestre das Sombras",
+        reflexosAprimorados: "Reflexos Aprimorados",
+        venenos: "Venenos",
+        persuasaoIrresistivel: "Persuasão Irresistível",
+        lideranca: "Liderança",
+        coletaInformacoes: "Coleta de Informações",
+        intimidacao: "Intimidação",
+        redeContatos: "Rede de Contatos",
+        diplomacia: "Diplomacia",
+        inspiracao: "Inspiração",
+        comando: "Comando",
+        carismaSobrenatural: "Carisma Sobrenatural",
+        mestreNegociador: "Mestre Negociador",
+        versatilidade: "Versatilidade",
+        magiaNatureza: "Magia da Natureza",
+        resistenciaAna: "Resistência Anã",
+        sorteHalfling: "Sorte Halfling",
+        magiaInstavel: "Magia Instável",
+        astuciaComercial: "Astúcia Comercial",
+        primeirosSocorros: "Primeiros Socorros",
+        sobrevivencia: "Sobrevivência",
+        criacaoPocoes: "Criação de Poções",
+        montaria: "Montaria",
+        navegacao: "Navegação",
+        idiomas: "Idiomas"
+      };
+      nome = nomesLimpos[habilidadeId] || habilidadeId;
+    }
+    
+    if (efeito === habilidadeData.efeito || efeito.startsWith("HABILIDADES.")) {
+      const efeitosBasicos = {
+        ataquePoderoso: "Adiciona +2 ao dano em ataques corpo a corpo",
+        defesaAprimorada: "+1 bônus permanente à Defesa",
+        especializacaoArma: "+2 ataque com tipo específico de arma",
+        ataqueDuplo: "Dois ataques por turno com -2 cada",
+        resistencia: "+2 em testes de resistência física",
+        liderancaCombate: "Aliados próximos ganham +1 em ataques",
+        contraAtaque: "Ataque gratuito quando inimigo erra",
+        berserker: "+3 dano, -2 Defesa por combate",
+        rajadaArcana: "Ataque mágico (2d6 + Mental dano)",
+        escudoMagico: "+2 Defesa por uma cena (2 PM)",
+        misseisMagicos: "3 projéteis automáticos (3 PM)",
+        detectarMagia: "Percebe auras mágicas (1 PM)",
+        contraMagia: "Cancela magias inimigas (5 PM)",
+        bolaFogo: "Área de efeito (6 PM)",
+        invisibilidade: "Torna-se invisível (4 PM)",
+        voo: "Capacidade de voar (6 PM)",
+        teletransporte: "Movimento instantâneo (8 PM)",
+        curaCompleta: "Restaura todos os PV (10 PM)",
+        ataqueFurtivo: "+3 dano quando ataca pelas costas",
+        furtividadeAprimorada: "+2 em testes de furtividade",
+        desarmarArmadilhas: "Pode desarmar dispositivos complexos",
+        tiroCerteiro: "+2 ataque com armas à distância",
+        escaladaAprimorada: "+2 em testes de escalada",
+        passoSombrio: "Movimento furtivo rápido",
+        ataqueLetal: "Críticos em 11-12 nos dados",
+        mestreSombras: "Invisibilidade natural em sombras",
+        reflexosAprimorados: "+3 Iniciativa",
+        venenos: "Conhecimento e uso de venenos",
+        persuasaoIrresistivel: "+2 em testes de persuasão",
+        lideranca: "Aliados ganham +1 quando inspirados",
+        coletaInformacoes: "+2 para descobrir rumores e segredos",
+        intimidacao: "+2 em testes de intimidação",
+        redeContatos: "Conhece pessoas úteis em cidades",
+        diplomacia: "+3 em negociações formais",
+        inspiracao: "Aliados recuperam 1 PM por cena",
+        comando: "Pode dar ordens que devem ser obedecidas",
+        carismaSobrenatural: "Reroll automático em falhas sociais",
+        mestreNegociador: "Pode resolver conflitos impossíveis",
+        versatilidade: "Reroll uma vez por sessão",
+        magiaNatureza: "Magias menores sem custo PM",
+        resistenciaAna: "+2 vs venenos/doenças/magia",
+        sorteHalfling: "Força inimigo a rerollar ataque",
+        magiaInstavel: "Efeitos mágicos caóticos",
+        astuciaComercial: "+2 em comércio e navegação urbana",
+        primeirosSocorros: "Cura 1d6 PV uma vez por ferimento",
+        sobrevivencia: "+2 em testes de sobrevivência",
+        criacaoPocoes: "Pode criar poções básicas",
+        montaria: "+2 em testes com animais montados",
+        navegacao: "+2 em orientação e mapas",
+        idiomas: "Conhece idiomas adicionais"
+      };
+      efeito = efeitosBasicos[habilidadeId] || `Efeito especial de ${nome}`;
+    }
+
+    const nivelMin = habilidadeData.nivelMin;
+    const preRequisitos = habilidadeData.preRequisito || {};
+    const classesSugeridas = habilidadeData.classesSugeridas || [];
+    const raca = habilidadeData.raca;
+    
+    // Montar lista de pré-requisitos
+    let preReqText = "";
+    if (Object.keys(preRequisitos).length > 0) {
+      const reqList = Object.entries(preRequisitos).map(([attr, valor]) => 
+        `${attr.charAt(0).toUpperCase() + attr.slice(1)}: ${valor}`
+      );
+      preReqText = reqList.join(", ");
+    } else {
+      preReqText = "Nenhum";
+    }
+    
+    // Criar conteúdo do diálogo
+    const content = `
+      <div class="habilidade-detalhes">
+        <h2 style="color: #28a745; margin-bottom: 15px;">✓ ${nome}</h2>
+        <p style="color: #28a745; font-weight: bold; margin-bottom: 15px;">Habilidade Conhecida</p>
+        
+        <div class="habilidade-info-grid">
+          <div class="info-item">
+            <strong>Categoria:</strong> ${categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+          </div>
+          
+          <div class="info-item">
+            <strong>Nível Mínimo:</strong> ${nivelMin}
+          </div>
+          
+          <div class="info-item">
+            <strong>Pré-requisitos:</strong> ${preReqText}
+          </div>
+          
+          ${raca ? `<div class="info-item"><strong>Restrita à raça:</strong> ${raca.charAt(0).toUpperCase() + raca.slice(1)}</div>` : ""}
+          
+          ${classesSugeridas.length > 0 ? `<div class="info-item"><strong>Classes sugeridas:</strong> ${classesSugeridas.join(", ")}</div>` : ""}
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <h3 style="color: #28a745;">Efeito:</h3>
+          <p style="background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745; line-height: 1.5;">
+            ${efeito}
+          </p>
+        </div>
+      </div>
+    `;
+
+    // Mostrar diálogo
+    const dialog = new Dialog({
+      title: `Habilidade Conhecida: ${nome}`,
+      content: content,
+      buttons: {
+        remover: {
+          icon: '<i class="fas fa-trash"></i>',
+          label: "Remover Habilidade",
+          callback: async () => {
+            const confirmDialog = new Dialog({
+              title: "Confirmar Remoção",
+              content: `<p>Tem certeza que deseja remover a habilidade <strong>${nome}</strong>?</p>`,
+              buttons: {
+                sim: {
+                  icon: '<i class="fas fa-check"></i>',
+                  label: "Sim, remover",
+                  callback: async () => {
+                    await this.actor.removerHabilidade(habilidadeId);
+                  }
+                },
+                nao: {
+                  icon: '<i class="fas fa-times"></i>',
+                  label: "Cancelar"
+                }
+              },
+              default: "nao"
+            });
+            confirmDialog.render(true);
           }
         },
         fechar: {

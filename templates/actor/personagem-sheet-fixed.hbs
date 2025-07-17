@@ -404,14 +404,21 @@
             {{#each system.habilidades as |habilidade key|}}
             <div class="habilidade-item conhecida" data-categoria="{{habilidade.categoria}}">
               <div class="habilidade-header">
-                <h4>{{habilidade.nome}}</h4>
-                <button type="button" class="remover-habilidade" data-habilidade="{{key}}" title="Remover habilidade">
-                  <i class="fas fa-times"></i>
-                </button>
+                <div class="habilidade-titulo">
+                  <h4>{{habilidade.nome}}</h4>
+                  <span class="habilidade-categoria-tag">{{habilidade.categoria}}</span>
+                </div>
+                <div class="habilidade-controles">
+                  <button type="button" class="detalhes-habilidade-conhecida" data-habilidade="{{key}}" title="Ver informações completas">
+                    <i class="fas fa-info-circle"></i>
+                  </button>
+                  <button type="button" class="remover-habilidade" data-habilidade="{{key}}" title="Remover habilidade">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
               </div>
-              <div class="habilidade-info">
-                <p class="habilidade-categoria">{{habilidade.categoria}}</p>
-                <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+              <div class="habilidade-efeito-resumo">
+                <p>{{habilidade.efeito}}</p>
               </div>
             </div>
             {{/each}}
