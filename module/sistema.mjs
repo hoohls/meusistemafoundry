@@ -529,6 +529,8 @@ Hooks.once("ready", function() {
 // Hook para modificar dados derivados ao atualizar atributos
 Hooks.on("preUpdateActor", function(actor, data, options, userId) {
   if (actor.type === "personagem" && data.system?.atributos) {
+    console.log("[HOOK] preUpdateActor chamado com dados:", data);
+    
     const updateData = {};
     
     // Atualizar PV máximo se Físico mudou
@@ -542,10 +544,12 @@ Hooks.on("preUpdateActor", function(actor, data, options, userId) {
       if (pvAtual > novoPvMax) {
         updateData["system.recursos.pv.valor"] = novoPvMax;
       }
+      
+      console.log(`[HOOK] Atualizando PV: novo máximo = ${novoPvMax}`);
     }
     
-    // Atualizar PM máximo se Mental mudou
-    if (data.system.atributos.mental?.valor !== undefined) {
+    // Atualizar PM máximo se Mental mudou (apenas se não foi já atualizado)
+    if (data.system.atributos.mental?.valor !== undefined && !data.system.recursos?.pm?.max) {
       const novoMental = data.system.atributos.mental.valor;
       const novoPmMax = novoMental * 2 + 5;
       updateData["system.recursos.pm.max"] = novoPmMax;
@@ -555,6 +559,8 @@ Hooks.on("preUpdateActor", function(actor, data, options, userId) {
       if (pmAtual > novoPmMax) {
         updateData["system.recursos.pm.valor"] = novoPmMax;
       }
+      
+      console.log(`[HOOK] Atualizando PM: novo máximo = ${novoPmMax}`);
     }
     
     // Atualizar Defesa se Ação mudou
@@ -565,10 +571,15 @@ Hooks.on("preUpdateActor", function(actor, data, options, userId) {
       const escudo = actor.system.recursos.defesa.escudo || 0;
       const outros = actor.system.recursos.defesa.outros || 0;
       updateData["system.recursos.defesa.valor"] = defesaBase + armadura + escudo + outros;
+      
+      console.log(`[HOOK] Atualizando Defesa: nova base = ${defesaBase}, total = ${defesaBase + armadura + escudo + outros}`);
     }
     
-    // Aplicar atualizações
-    foundry.utils.mergeObject(data, updateData);
+    // Aplicar atualizações apenas se houver mudanças
+    if (Object.keys(updateData).length > 0) {
+      console.log("[HOOK] Aplicando atualizações:", updateData);
+      foundry.utils.mergeObject(data, updateData);
+    }
   }
 });
 

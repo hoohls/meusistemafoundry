@@ -1388,6 +1388,13 @@ export class ClubeActor extends Actor {
     const valorAtual = this.system.atributos[atributo]?.valor || 0;
     console.log(`[DEBUG] Valor atual do atributo ${atributo}: ${valorAtual}`);
     
+    // Log específico para Mental
+    if (atributo === 'mental') {
+      console.log(`[DEBUG MENTAL] Valor atual: ${valorAtual}`);
+      console.log(`[DEBUG MENTAL] PM atual: ${this.system.recursos?.pm?.valor || 0}`);
+      console.log(`[DEBUG MENTAL] PM máximo atual: ${this.system.recursos?.pm?.max || 0}`);
+    }
+    
     // Verificar se há pontos disponíveis
     if (!statusPontos.temPontosDisponiveis) {
       console.log(`[DEBUG] Não há pontos disponíveis`);
@@ -1410,6 +1417,21 @@ export class ClubeActor extends Actor {
     const updateData = {};
     updateData[`system.atributos.${atributo}.valor`] = valorAtual + 1;
     
+    // Se for Mental, calcular novo PM máximo
+    if (atributo === 'mental') {
+      const novoPmMax = (valorAtual + 1) * 2 + 5;
+      const pmAtual = this.system.recursos?.pm?.valor || 0;
+      updateData["system.recursos.pm.max"] = novoPmMax;
+      
+      // Ajustar PM atual se necessário
+      if (pmAtual > novoPmMax) {
+        updateData["system.recursos.pm.valor"] = novoPmMax;
+      }
+      
+      console.log(`[DEBUG MENTAL] Novo PM máximo será: ${novoPmMax}`);
+      console.log(`[DEBUG MENTAL] PM atual: ${pmAtual}, será ajustado para: ${pmAtual > novoPmMax ? novoPmMax : pmAtual}`);
+    }
+    
     if (!statusPontos.atributosInicializados && statusPontos.pontosDisponiveisIniciais > 0) {
       // Usar pontos iniciais
       const pontosGastosAtuais = this.system.progressao?.pontos_atributo_gastos_iniciais || 0;
@@ -1431,6 +1453,13 @@ export class ClubeActor extends Actor {
     try {
       await this.update(updateData);
       console.log(`[DEBUG] Atualização bem-sucedida`);
+      
+      // Log específico para Mental após atualização
+      if (atributo === 'mental') {
+        console.log(`[DEBUG MENTAL] Atualização concluída. Novo valor: ${valorAtual + 1}`);
+        console.log(`[DEBUG MENTAL] Novo PM máximo: ${(valorAtual + 1) * 2 + 5}`);
+      }
+      
       ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${valorAtual + 1}.`);
       return true;
     } catch (error) {
@@ -1609,6 +1638,64 @@ export class ClubeActor extends Actor {
   }
 
   /**
+   * Testa especificamente o atributo Mental para identificar problemas
+   * @returns {Object} Resultado do teste
+   */
+  testarAtributoMental() {
+    console.log("=== TESTE ESPECÍFICO DO ATRIBUTO MENTAL ===");
+    
+    const resultado = {
+      valorAtual: this.system.atributos?.mental?.valor || 0,
+      pmAtual: this.system.recursos?.pm?.valor || 0,
+      pmMaximo: this.system.recursos?.pm?.max || 0,
+      progressao: this.system.progressao || {},
+      statusPontos: this.getStatusPontosAtributos(),
+      podeAdicionar: false,
+      limiteMaximo: 0,
+      problemas: []
+    };
+    
+    // Verificar se pode adicionar ponto
+    const statusPontos = resultado.statusPontos;
+    const valorAtual = resultado.valorAtual;
+    const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
+    
+    resultado.limiteMaximo = limiteMaximo;
+    resultado.podeAdicionar = valorAtual < limiteMaximo && statusPontos.temPontosDisponiveis;
+    
+    // Verificar problemas específicos
+    if (valorAtual >= 5) {
+      resultado.problemas.push("Atributo Mental está no nível 5 ou superior - possível área de problema");
+    }
+    
+    if (resultado.pmAtual > resultado.pmMaximo) {
+      resultado.problemas.push("PM atual maior que PM máximo - inconsistência detectada");
+    }
+    
+    if (!statusPontos.temPontosDisponiveis) {
+      resultado.problemas.push("Não há pontos disponíveis para distribuir");
+    }
+    
+    if (valorAtual >= limiteMaximo) {
+      resultado.problemas.push("Atributo já está no limite máximo");
+    }
+    
+    // Simular o que aconteceria se adicionasse um ponto
+    if (resultado.podeAdicionar) {
+      const novoValor = valorAtual + 1;
+      const novoPmMax = novoValor * 2 + 5;
+      resultado.simulacao = {
+        novoValor: novoValor,
+        novoPmMax: novoPmMax,
+        pmSeraAjustado: resultado.pmAtual > novoPmMax
+      };
+    }
+    
+    console.log("Resultado do teste:", resultado);
+    return resultado;
+  }
+
+  /**
    * Método de teste para verificar o estado atual dos atributos e pontos
    * @returns {Object} Estado atual do personagem
    */
@@ -1745,6 +1832,62 @@ export class ClubeActor extends Actor {
       progressao: this.system.progressao,
       atributos: this.system.atributos
     };
+  }
+
+  /**
+   * Corrige problemas específicos com o atributo Mental
+   * @returns {Promise<boolean>} Se foi possível corrigir
+   */
+  async corrigirAtributoMental() {
+    try {
+      console.log("=== CORRIGINDO ATRIBUTO MENTAL ===");
+      
+      const valorMental = this.system.atributos?.mental?.valor || 0;
+      const pmAtual = this.system.recursos?.pm?.valor || 0;
+      const pmMaximo = this.system.recursos?.pm?.max || 0;
+      const pmMaximoCorreto = valorMental * 2 + 5;
+      
+      console.log(`[CORREÇÃO] Mental: ${valorMental}, PM atual: ${pmAtual}, PM max atual: ${pmMaximo}, PM max correto: ${pmMaximoCorreto}`);
+      
+      const updateData = {};
+      let precisaAtualizar = false;
+      
+      // Corrigir PM máximo se estiver incorreto
+      if (pmMaximo !== pmMaximoCorreto) {
+        updateData["system.recursos.pm.max"] = pmMaximoCorreto;
+        precisaAtualizar = true;
+        console.log(`[CORREÇÃO] Corrigindo PM máximo de ${pmMaximo} para ${pmMaximoCorreto}`);
+      }
+      
+      // Ajustar PM atual se estiver maior que o máximo
+      if (pmAtual > pmMaximoCorreto) {
+        updateData["system.recursos.pm.valor"] = pmMaximoCorreto;
+        precisaAtualizar = true;
+        console.log(`[CORREÇÃO] Ajustando PM atual de ${pmAtual} para ${pmMaximoCorreto}`);
+      }
+      
+      // Garantir que a estrutura de atributos existe
+      if (!this.system.atributos?.mental) {
+        updateData["system.atributos.mental"] = { valor: valorMental };
+        precisaAtualizar = true;
+        console.log(`[CORREÇÃO] Criando estrutura do atributo Mental`);
+      }
+      
+      if (precisaAtualizar) {
+        await this.update(updateData);
+        console.log("[CORREÇÃO] Atributo Mental corrigido com sucesso!");
+        ui.notifications.info("Atributo Mental corrigido com sucesso!");
+        return true;
+      } else {
+        console.log("[CORREÇÃO] Nenhuma correção necessária para o atributo Mental");
+        ui.notifications.info("Atributo Mental está correto!");
+        return true;
+      }
+    } catch (error) {
+      console.error("[CORREÇÃO] Erro ao corrigir atributo Mental:", error);
+      ui.notifications.error("Erro ao corrigir atributo Mental: " + error.message);
+      return false;
+    }
   }
 
 } 

@@ -336,6 +336,36 @@
   background: #F57C00;
 }
 
+.testar-mental {
+  background: #9C27B0;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 5px;
+}
+
+.testar-mental:hover {
+  background: #7B1FA2;
+}
+
+.corrigir-mental {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 5px;
+}
+
+.corrigir-mental:hover {
+  background: #1976D2;
+}
+
 .reinicializar-dados {
   background: #F44336;
   color: white;

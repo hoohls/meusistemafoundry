@@ -715,6 +715,8 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".remover-ponto-atributo").click(this._onRemoverPontoAtributo.bind(this));
     html.find(".finalizar-distribuicao-inicial").click(this._onFinalizarDistribuicaoInicial.bind(this));
     html.find(".testar-atributos").click(this._onTestarAtributos.bind(this));
+    html.find(".testar-mental").click(this._onTestarMental.bind(this));
+    html.find(".corrigir-mental").click(this._onCorrigirMental.bind(this));
     html.find(".reinicializar-dados").click(this._onReinicializarDados.bind(this));
 
     // Gerenciar recursos (PV/PM)
@@ -2780,6 +2782,37 @@ export class ClubeActorSheet extends ActorSheet {
     event.preventDefault();
     const resultado = this.actor.testarEstadoAtributos();
     ui.notifications.info("Teste de atributos executado. Verifique o console para detalhes.");
+  }
+
+  /**
+   * Testa especificamente o atributo Mental
+   * @param {Event} event - Evento de clique
+   */
+  async _onTestarMental(event) {
+    event.preventDefault();
+    const resultado = this.actor.testarAtributoMental();
+    
+    // Mostrar resultado em uma notificação mais detalhada
+    let mensagem = `Mental: ${resultado.valorAtual} | PM: ${resultado.pmAtual}/${resultado.pmMaximo}`;
+    if (resultado.problemas.length > 0) {
+      mensagem += `\nProblemas: ${resultado.problemas.join(', ')}`;
+    }
+    if (resultado.simulacao) {
+      mensagem += `\nSimulação: Mental ${resultado.simulacao.novoValor}, PM Max ${resultado.simulacao.novoPmMax}`;
+    }
+    
+    ui.notifications.info(mensagem);
+    console.log("Teste específico do Mental executado. Verifique o console para detalhes completos.");
+  }
+
+  /**
+   * Corrige problemas com o atributo Mental
+   * @param {Event} event - Evento de clique
+   */
+  async _onCorrigirMental(event) {
+    event.preventDefault();
+    await this.actor.corrigirAtributoMental();
+    this.render(true);
   }
 
   /**
