@@ -1747,11 +1747,73 @@ export class ClubeActorSheet extends ActorSheet {
       return;
     }
 
+    // Buscar nome da habilidade
+    const habilidadeData = this.actor.system.habilidades?.[habilidadeId];
+    let nomeHabilidade = "habilidade";
+    
+    if (habilidadeData) {
+      // Usar fallback para nomes em português
+      const nomesLimpos = {
+        ataquePoderoso: "Ataque Poderoso",
+        defesaAprimorada: "Defesa Aprimorada", 
+        especializacaoArma: "Especialização em Arma",
+        ataqueDuplo: "Ataque Duplo",
+        resistencia: "Resistência",
+        liderancaCombate: "Liderança de Combate",
+        contraAtaque: "Contra-Ataque",
+        berserker: "Berserker",
+        rajadaArcana: "Rajada Arcana",
+        escudoMagico: "Escudo Mágico",
+        misseisMagicos: "Mísseis Mágicos",
+        detectarMagia: "Detectar Magia",
+        contraMagia: "Contra-Magia",
+        bolaFogo: "Bola de Fogo",
+        invisibilidade: "Invisibilidade",
+        voo: "Voo",
+        teletransporte: "Teletransporte",
+        curaCompleta: "Cura Completa",
+        ataqueFurtivo: "Ataque Furtivo",
+        furtividadeAprimorada: "Furtividade Aprimorada",
+        desarmarArmadilhas: "Desarmar Armadilhas",
+        tiroCerteiro: "Tiro Certeiro",
+        escaladaAprimorada: "Escalada Aprimorada",
+        passoSombrio: "Passo Sombrio",
+        ataqueLetal: "Ataque Letal",
+        mestreSombras: "Mestre das Sombras",
+        reflexosAprimorados: "Reflexos Aprimorados",
+        venenos: "Venenos",
+        persuasaoIrresistivel: "Persuasão Irresistível",
+        lideranca: "Liderança",
+        coletaInformacoes: "Coleta de Informações",
+        intimidacao: "Intimidação",
+        redeContatos: "Rede de Contatos",
+        diplomacia: "Diplomacia",
+        inspiracao: "Inspiração",
+        comando: "Comando",
+        carismaSobrenatural: "Carisma Sobrenatural",
+        mestreNegociador: "Mestre Negociador",
+        versatilidade: "Versatilidade",
+        magiaNatureza: "Magia da Natureza",
+        resistenciaAna: "Resistência Anã",
+        sorteHalfling: "Sorte Halfling",
+        magiaInstavel: "Magia Instável",
+        astuciaComercial: "Astúcia Comercial",
+        primeirosSocorros: "Primeiros Socorros",
+        sobrevivencia: "Sobrevivência",
+        criacaoPocoes: "Criação de Poções",
+        montaria: "Montaria",
+        navegacao: "Navegação",
+        idiomas: "Idiomas"
+      };
+      
+      nomeHabilidade = nomesLimpos[habilidadeId] || habilidadeData.nome || habilidadeId;
+    }
+
     // Confirmar remoção
-    const nomeHabilidade = this.actor.system.habilidades[habilidadeId]?.nome || "habilidade";
     const confirmacao = await Dialog.confirm({
       title: "Remover Habilidade",
-      content: `<p>Tem certeza que deseja remover a habilidade <strong>${nomeHabilidade}</strong>?</p>`,
+      content: `<p>Tem certeza que deseja remover a habilidade <strong>${nomeHabilidade}</strong>?</p>
+                <p><em>A habilidade voltará para as habilidades disponíveis.</em></p>`,
       yes: () => true,
       no: () => false
     });

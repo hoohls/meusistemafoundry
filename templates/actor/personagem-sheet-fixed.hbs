@@ -400,15 +400,12 @@
           <h3>Habilidades Conhecidas</h3>
           
           {{#if system.habilidades}}
-          <div class="habilidades-lista">
+          <div class="habilidades-grid">
             {{#each system.habilidades as |habilidade key|}}
-            <div class="habilidade-item conhecida" data-categoria="{{habilidade.categoria}}">
+            <div class="habilidade-item conhecida" data-habilidade="{{key}}" data-categoria="{{habilidade.categoria}}">
               <div class="habilidade-header">
-                <div class="habilidade-titulo">
-                  <h4>{{habilidade.nome}}</h4>
-                  <span class="habilidade-categoria-tag">{{habilidade.categoria}}</span>
-                </div>
-                <div class="habilidade-controles">
+                <h5>{{habilidade.nome}}</h5>
+                <div class="habilidade-botoes">
                   <button type="button" class="detalhes-habilidade-conhecida" data-habilidade="{{key}}" title="Ver informações completas">
                     <i class="fas fa-info-circle"></i>
                   </button>
@@ -417,8 +414,8 @@
                   </button>
                 </div>
               </div>
-              <div class="habilidade-efeito-resumo">
-                <p>{{habilidade.efeito}}</p>
+              <div class="habilidade-efeito">
+                {{habilidade.efeito}}
               </div>
             </div>
             {{/each}}
