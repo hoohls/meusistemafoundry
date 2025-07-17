@@ -160,6 +160,9 @@ export class ClubeActorSheet extends ActorSheet {
     context.tabelaProgressao = this._prepararTabelaProgressao();
     context.tabelaProgressaoCompleta = this._prepararTabelaProgressaoCompleta();
 
+    // Preparar dados das habilidades
+    await this._prepararDadosHabilidades(context);
+
     return context;
   }
 
@@ -508,6 +511,11 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
+
+    // Gerenciar habilidades
+    html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
+    html.find(".remover-habilidade").click(this._onRemoverHabilidade.bind(this));
+    html.find(".habilidades-filtro").change(this._onFiltrarHabilidades.bind(this));
 
     // Arrastar e soltar itens
     html.find(".item-list .item").each((i, li) => {
@@ -1503,5 +1511,149 @@ export class ClubeActorSheet extends ActorSheet {
     });
 
     dialog.render(true);
+  }
+
+  /**
+   * Prepara dados das habilidades para exibição
+   * @param {Object} context - Contexto da planilha
+   */
+  async _prepararDadosHabilidades(context) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    
+    // Informações gerais sobre habilidades
+    context.habilidadesTotal = Object.keys(this.actor.system.habilidades || {}).length;
+    context.pontosHabilidadeDisponiveis = this.actor._calcularPontosHabilidadeDisponiveis();
+    
+    // Preparar habilidades disponíveis por categoria
+    context.habilidadesCombateDisponiveis = this._prepararHabilidadesCategoria('combate', SISTEMA.habilidades.combate);
+    context.habilidadesMagicasDisponiveis = this._prepararHabilidadesCategoria('magicas', SISTEMA.habilidades.magicas);
+    context.habilidadesFurtividadeDisponiveis = this._prepararHabilidadesCategoria('furtividade', SISTEMA.habilidades.furtividade);
+    context.habilidadesSociaisDisponiveis = this._prepararHabilidadesCategoria('sociais', SISTEMA.habilidades.sociais);
+    context.habilidadesGeraisDisponiveis = this._prepararHabilidadesCategoria('gerais', SISTEMA.habilidades.gerais);
+  }
+
+  /**
+   * Prepara habilidades disponíveis de uma categoria específica
+   * @param {string} categoria - Nome da categoria
+   * @param {Object} habilidadesCategoria - Habilidades da categoria
+   * @returns {Object}
+   */
+  _prepararHabilidadesCategoria(categoria, habilidadesCategoria) {
+    const habilidadesDisponiveis = {};
+    
+    for (const [id, habilidade] of Object.entries(habilidadesCategoria)) {
+      // Não mostrar se já possui
+      if (this.actor.system.habilidades?.[id]) continue;
+      
+      // Verificar pré-requisitos
+      const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade(habilidade);
+      
+      habilidadesDisponiveis[id] = {
+        ...habilidade,
+        nome: game.i18n.localize(habilidade.nome),
+        efeito: game.i18n.localize(habilidade.efeito),
+        disponivel: atendeRequisitos,
+        motivo: atendeRequisitos ? "" : this._obterMotivoIndisponibilidade(habilidade)
+      };
+    }
+    
+    return habilidadesDisponiveis;
+  }
+
+  /**
+   * Obtém o motivo pelo qual uma habilidade não está disponível
+   * @param {Object} habilidade - Dados da habilidade
+   * @returns {string}
+   */
+  _obterMotivoIndisponibilidade(habilidade) {
+    const system = this.actor.system;
+    
+    // Verificar nível
+    if (system.nivel < habilidade.nivelMin) {
+      return `Nível mínimo: ${habilidade.nivelMin}`;
+    }
+    
+    // Verificar atributos
+    if (habilidade.preRequisito) {
+      for (const [atributo, valorMinimo] of Object.entries(habilidade.preRequisito)) {
+        const valorAtual = system.atributos[atributo]?.valor || 0;
+        if (valorAtual < valorMinimo) {
+          return `${atributo.charAt(0).toUpperCase() + atributo.slice(1)} mínimo: ${valorMinimo}`;
+        }
+      }
+    }
+    
+    // Verificar raça
+    if (habilidade.raca && system.raca?.nome !== habilidade.raca) {
+      return `Restrito a: ${habilidade.raca}`;
+    }
+    
+    return "Pré-requisitos não atendidos";
+  }
+
+  /**
+   * Gerencia adição de habilidades
+   * @param {Event} event - Evento de clique
+   */
+  async _onAdicionarHabilidade(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const habilidadeId = element.dataset.habilidade;
+    const categoria = element.dataset.categoria;
+    
+    if (!habilidadeId || !categoria) {
+      ui.notifications.error("Dados da habilidade inválidos");
+      return;
+    }
+
+    await this.actor.adicionarHabilidade(habilidadeId, categoria);
+  }
+
+  /**
+   * Gerencia remoção de habilidades
+   * @param {Event} event - Evento de clique
+   */
+  async _onRemoverHabilidade(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const habilidadeId = element.dataset.habilidade;
+    
+    if (!habilidadeId) {
+      ui.notifications.error("ID da habilidade inválido");
+      return;
+    }
+
+    // Confirmar remoção
+    const nomeHabilidade = this.actor.system.habilidades[habilidadeId]?.nome || "habilidade";
+    const confirmacao = await Dialog.confirm({
+      title: "Remover Habilidade",
+      content: `<p>Tem certeza que deseja remover a habilidade <strong>${nomeHabilidade}</strong>?</p>`,
+      yes: () => true,
+      no: () => false
+    });
+
+    if (confirmacao) {
+      await this.actor.removerHabilidade(habilidadeId);
+    }
+  }
+
+  /**
+   * Filtra habilidades por categoria
+   * @param {Event} event - Evento de mudança
+   */
+  _onFiltrarHabilidades(event) {
+    event.preventDefault();
+    const filtro = event.currentTarget.value;
+    const habilidadesDisponiveis = this.element.find('.habilidades-disponiveis');
+    const categorias = habilidadesDisponiveis.find('.categoria-section');
+    
+    categorias.each((i, categoria) => {
+      const categoriaData = categoria.dataset.categoria;
+      if (filtro === 'todas' || filtro === categoriaData) {
+        categoria.style.display = 'block';
+      } else {
+        categoria.style.display = 'none';
+      }
+    });
   }
 } 

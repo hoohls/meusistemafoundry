@@ -1719,4 +1719,337 @@
 
 .clube-dos-taberneiros-foundry.item .magia-properties input[type="checkbox"] {
   accent-color: #4B0082;
+}
+
+/* ================================== */
+/* Aba Habilidades */
+/* ================================== */
+
+.habilidades-content {
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Header das habilidades */
+.habilidades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+}
+
+.habilidades-filtros {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.habilidades-filtros label {
+  font-weight: bold;
+  color: var(--cor-texto);
+}
+
+.habilidades-filtro {
+  padding: 5px 10px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  background: white;
+  color: var(--cor-texto);
+  font-size: 14px;
+}
+
+.habilidades-info {
+  text-align: right;
+}
+
+.habilidades-info p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: var(--cor-texto);
+}
+
+.habilidades-total,
+.pontos-habilidade {
+  font-weight: bold;
+  color: var(--cor-primaria);
+}
+
+/* Seções de habilidades */
+.habilidades-conhecidas,
+.habilidades-disponiveis {
+  margin-bottom: 25px;
+}
+
+.habilidades-conhecidas h3,
+.habilidades-disponiveis h3 {
+  color: var(--cor-primaria);
+  font-family: var(--fonte-titulo);
+  font-size: 18px;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--cor-acento);
+}
+
+/* Lista de habilidades conhecidas */
+.habilidades-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.no-habilidades {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+}
+
+/* Categorias de habilidades */
+.categorias-habilidades {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.categoria-section {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 15px;
+  background: white;
+}
+
+.categoria-section h4 {
+  color: var(--cor-secundaria);
+  font-family: var(--fonte-titulo);
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.categoria-section.combate {
+  border-left: 4px solid #dc3545;
+}
+
+.categoria-section.magicas {
+  border-left: 4px solid #6f42c1;
+}
+
+.categoria-section.furtividade {
+  border-left: 4px solid #198754;
+}
+
+.categoria-section.sociais {
+  border-left: 4px solid #0dcaf0;
+}
+
+.categoria-section.gerais {
+  border-left: 4px solid #fd7e14;
+}
+
+/* Grid de habilidades disponíveis */
+.habilidades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+/* Itens de habilidade */
+.habilidade-item {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.habilidade-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.habilidade-item.conhecida {
+  background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+  border-color: var(--cor-sucesso);
+}
+
+.habilidade-item.disponivel {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.habilidade-item.disponivel:not(.acessivel) {
+  background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
+  opacity: 0.7;
+}
+
+/* Header da habilidade */
+.habilidade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.habilidade-header h4,
+.habilidade-header h5 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  color: var(--cor-primaria);
+  font-size: 14px;
+}
+
+.habilidade-header h4 {
+  font-size: 16px;
+}
+
+/* Botões de ação das habilidades */
+.adicionar-habilidade,
+.remover-habilidade {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+}
+
+.adicionar-habilidade {
+  background: var(--cor-sucesso);
+  color: white;
+}
+
+.adicionar-habilidade:hover {
+  background: #1e7e1e;
+  transform: scale(1.05);
+}
+
+.adicionar-habilidade:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.remover-habilidade {
+  background: var(--cor-erro);
+  color: white;
+}
+
+.remover-habilidade:hover {
+  background: #c41e3a;
+  transform: scale(1.05);
+}
+
+/* Informações da habilidade */
+.habilidade-info,
+.habilidade-requisitos {
+  margin-bottom: 8px;
+}
+
+.habilidade-categoria {
+  font-size: 12px;
+  color: #666;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 0 5px 0;
+}
+
+.habilidade-requisitos p {
+  margin: 0 0 3px 0;
+  font-size: 12px;
+  color: #555;
+}
+
+.habilidade-efeito {
+  font-size: 13px;
+  color: var(--cor-texto);
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Indicadores de requisitos */
+.requisito-atendido {
+  color: var(--cor-sucesso);
+}
+
+.requisito-nao-atendido {
+  color: var(--cor-erro);
+}
+
+/* Responsividade para habilidades */
+@media (max-width: 768px) {
+  .habilidades-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .habilidades-info {
+    text-align: left;
+  }
+  
+  .habilidades-grid,
+  .habilidades-lista {
+    grid-template-columns: 1fr;
+  }
+  
+  .categorias-habilidades {
+    gap: 15px;
+  }
+  
+  .categoria-section {
+    padding: 10px;
+  }
+  
+  .habilidade-item {
+    padding: 10px;
+  }
+}
+
+/* Animações para feedback */
+.habilidade-adicionada {
+  animation: habilidadeAdicionada 0.6s ease;
+}
+
+.habilidade-removida {
+  animation: habilidadeRemovida 0.4s ease;
+}
+
+@keyframes habilidadeAdicionada {
+  0% {
+    transform: scale(1);
+    background: white;
+  }
+  50% {
+    transform: scale(1.05);
+    background: #d4edda;
+  }
+  100% {
+    transform: scale(1);
+    background: #e8f5e8;
+  }
+}
+
+@keyframes habilidadeRemovida {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
 } 

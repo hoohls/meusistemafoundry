@@ -595,4 +595,180 @@ export class ClubeActor extends Actor {
     // Verificar se deve subir de nível
     await this._verificarSubidaNivel();
   }
+
+  /**
+   * Adiciona uma habilidade ao personagem
+   * @param {string} habilidadeId - ID da habilidade
+   * @param {string} categoria - Categoria da habilidade
+   */
+  async adicionarHabilidade(habilidadeId, categoria) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    
+    // Verificar se a habilidade existe
+    const habilidadeData = SISTEMA.habilidades[categoria]?.[habilidadeId];
+    if (!habilidadeData) {
+      ui.notifications.error("Habilidade não encontrada");
+      return;
+    }
+
+    // Verificar se já possui a habilidade
+    if (this.system.habilidades?.[habilidadeId]) {
+      ui.notifications.warn("Você já possui esta habilidade");
+      return;
+    }
+
+    // Verificar pré-requisitos
+    if (!this._verificarPreRequisitosHabilidade(habilidadeData)) {
+      ui.notifications.error("Você não atende aos pré-requisitos para esta habilidade");
+      return;
+    }
+
+    // Verificar pontos de habilidade disponíveis
+    const pontosDisponiveis = this._calcularPontosHabilidadeDisponiveis();
+    if (pontosDisponiveis <= 0) {
+      ui.notifications.error("Você não possui pontos de habilidade disponíveis");
+      return;
+    }
+
+    // Adicionar a habilidade
+    const novaHabilidade = {
+      nome: game.i18n.localize(habilidadeData.nome),
+      categoria: categoria,
+      efeito: game.i18n.localize(habilidadeData.efeito),
+      nivelAdquirido: this.system.nivel
+    };
+
+    const habilidadesAtuais = this.system.habilidades || {};
+    habilidadesAtuais[habilidadeId] = novaHabilidade;
+
+    await this.update({"system.habilidades": habilidadesAtuais});
+    
+    ui.notifications.info(`Habilidade ${novaHabilidade.nome} adquirida!`);
+  }
+
+  /**
+   * Remove uma habilidade do personagem
+   * @param {string} habilidadeId - ID da habilidade
+   */
+  async removerHabilidade(habilidadeId) {
+    if (!this.system.habilidades?.[habilidadeId]) {
+      ui.notifications.warn("Você não possui esta habilidade");
+      return;
+    }
+
+    const habilidadesAtuais = {...this.system.habilidades};
+    const nomeHabilidade = habilidadesAtuais[habilidadeId].nome;
+    
+    delete habilidadesAtuais[habilidadeId];
+
+    await this.update({"system.habilidades": habilidadesAtuais});
+    
+    ui.notifications.info(`Habilidade ${nomeHabilidade} removida`);
+  }
+
+  /**
+   * Verifica se o personagem atende aos pré-requisitos de uma habilidade
+   * @param {Object} habilidadeData - Dados da habilidade
+   * @returns {boolean}
+   */
+  _verificarPreRequisitosHabilidade(habilidadeData) {
+    // Verificar nível mínimo
+    if (this.system.nivel < habilidadeData.nivelMin) {
+      return false;
+    }
+
+    // Verificar pré-requisitos de atributos
+    if (habilidadeData.preRequisito) {
+      for (const [atributo, valorMinimo] of Object.entries(habilidadeData.preRequisito)) {
+        const valorAtual = this.system.atributos[atributo]?.valor || 0;
+        if (valorAtual < valorMinimo) {
+          return false;
+        }
+      }
+    }
+
+    // Verificar se é habilidade racial
+    if (habilidadeData.raca && this.system.raca?.nome !== habilidadeData.raca) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Calcula quantos pontos de habilidade o personagem tem disponíveis
+   * @returns {number}
+   */
+  _calcularPontosHabilidadeDisponiveis() {
+    const nivel = this.system.nivel || 1;
+    const habilidadesConhecidas = Object.keys(this.system.habilidades || {}).length;
+    
+    // Segundo o livro, personagens começam com 4 habilidades e ganham mais conforme o nível
+    let pontosTotal = 4; // Habilidades iniciais
+    
+    // Nos níveis pares (2, 4, 6, 8, 10) ganha +1 habilidade
+    for (let i = 2; i <= nivel; i += 2) {
+      pontosTotal++;
+    }
+    
+    return pontosTotal - habilidadesConhecidas;
+  }
+
+  /**
+   * Obtém habilidades disponíveis por categoria
+   * @param {string} categoria - Categoria das habilidades
+   * @returns {Object}
+   */
+  async getHabilidadesDisponiveis(categoria) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    const habilidadesCategoria = SISTEMA.habilidades[categoria] || {};
+    const habilidadesDisponiveis = {};
+
+    for (const [id, habilidade] of Object.entries(habilidadesCategoria)) {
+      // Não mostrar se já possui
+      if (this.system.habilidades?.[id]) continue;
+      
+      // Não mostrar se não atende pré-requisitos
+      if (!this._verificarPreRequisitosHabilidade(habilidade)) continue;
+      
+      habilidadesDisponiveis[id] = {
+        ...habilidade,
+        nome: game.i18n.localize(habilidade.nome),
+        efeito: game.i18n.localize(habilidade.efeito)
+      };
+    }
+
+    return habilidadesDisponiveis;
+  }
+
+  /**
+   * Verifica se o personagem possui uma habilidade específica
+   * @param {string} habilidadeId - ID da habilidade
+   * @returns {boolean}
+   */
+  possuiHabilidade(habilidadeId) {
+    return !!this.system.habilidades?.[habilidadeId];
+  }
+
+  /**
+   * Obtém todas as habilidades conhecidas organizadas por categoria
+   * @returns {Object}
+   */
+  getHabilidadesPorCategoria() {
+    const habilidades = this.system.habilidades || {};
+    const categorias = {
+      combate: {},
+      magicas: {},
+      furtividade: {},
+      sociais: {},
+      gerais: {}
+    };
+
+    for (const [id, habilidade] of Object.entries(habilidades)) {
+      const categoria = habilidade.categoria || 'gerais';
+      categorias[categoria][id] = habilidade;
+    }
+
+    return categorias;
+  }
 } 

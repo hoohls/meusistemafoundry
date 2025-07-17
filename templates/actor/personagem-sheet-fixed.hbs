@@ -60,6 +60,7 @@
     <a class="item" data-tab="principal">Principal</a>
     <a class="item" data-tab="magias">Magias</a>
     <a class="item" data-tab="equipamentos">Equipamentos</a>
+    <a class="item" data-tab="habilidades">Habilidades</a>
     <a class="item" data-tab="detalhes">Detalhes</a>
   </nav>
 
@@ -364,6 +365,208 @@
               <label>Cobre:</label>
               <input type="number" name="system.equipamentos.dinheiro.cobre" value="{{#if system.equipamentos.dinheiro.cobre}}{{system.equipamentos.dinheiro.cobre}}{{else}}0{{/if}}" min="0"/>
             </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{!-- Aba Habilidades --}}
+    <div class="tab" data-group="primary" data-tab="habilidades">
+      <div class="habilidades-content">
+        
+        {{!-- Filtros e Controles --}}
+        <div class="habilidades-header">
+          <div class="habilidades-filtros">
+            <label>Filtrar por categoria:</label>
+            <select class="habilidades-filtro">
+              <option value="todas">Todas</option>
+              <option value="combate">Combate</option>
+              <option value="magicas">Mágicas</option>
+              <option value="furtividade">Furtividade</option>
+              <option value="sociais">Sociais</option>
+              <option value="gerais">Gerais</option>
+            </select>
+          </div>
+          
+          <div class="habilidades-info">
+            <p>Habilidades Conhecidas: <span class="habilidades-total">{{habilidadesTotal}}</span></p>
+            <p>Pontos Disponíveis: <span class="pontos-habilidade">{{pontosHabilidadeDisponiveis}}</span></p>
+          </div>
+        </div>
+
+        {{!-- Habilidades Conhecidas --}}
+        <div class="habilidades-conhecidas">
+          <h3>Habilidades Conhecidas</h3>
+          
+          {{#if system.habilidades}}
+          <div class="habilidades-lista">
+            {{#each system.habilidades as |habilidade key|}}
+            <div class="habilidade-item conhecida" data-categoria="{{habilidade.categoria}}">
+              <div class="habilidade-header">
+                <h4>{{habilidade.nome}}</h4>
+                <button type="button" class="remover-habilidade" data-habilidade="{{key}}" title="Remover habilidade">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="habilidade-info">
+                <p class="habilidade-categoria">{{habilidade.categoria}}</p>
+                <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+          {{else}}
+          <p class="no-habilidades">Nenhuma habilidade conhecida ainda.</p>
+          {{/if}}
+        </div>
+
+        {{!-- Habilidades Disponíveis --}}
+        <div class="habilidades-disponiveis">
+          <h3>Habilidades Disponíveis</h3>
+          
+          <div class="categorias-habilidades">
+            
+            {{!-- Habilidades de Combate --}}
+            <div class="categoria-section combate" data-categoria="combate">
+              <h4>Combate</h4>
+              <div class="habilidades-grid">
+                {{#each habilidadesCombateDisponiveis as |habilidade key|}}
+                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
+                  <div class="habilidade-header">
+                    <h5>{{habilidade.nome}}</h5>
+                    <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="combate" title="Adicionar habilidade">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="habilidade-requisitos">
+                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
+                    {{#if habilidade.preRequisito}}
+                    <p>Pré-requisitos: 
+                      {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                  <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Habilidades Mágicas --}}
+            <div class="categoria-section magicas" data-categoria="magicas">
+              <h4>Mágicas</h4>
+              <div class="habilidades-grid">
+                {{#each habilidadesMagicasDisponiveis as |habilidade key|}}
+                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
+                  <div class="habilidade-header">
+                    <h5>{{habilidade.nome}}</h5>
+                    <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="magicas" title="Adicionar habilidade">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="habilidade-requisitos">
+                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
+                    {{#if habilidade.preRequisito}}
+                    <p>Pré-requisitos: 
+                      {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                  <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Habilidades de Furtividade --}}
+            <div class="categoria-section furtividade" data-categoria="furtividade">
+              <h4>Furtividade</h4>
+              <div class="habilidades-grid">
+                {{#each habilidadesFurtividadeDisponiveis as |habilidade key|}}
+                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
+                  <div class="habilidade-header">
+                    <h5>{{habilidade.nome}}</h5>
+                    <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="furtividade" title="Adicionar habilidade">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="habilidade-requisitos">
+                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
+                    {{#if habilidade.preRequisito}}
+                    <p>Pré-requisitos: 
+                      {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                  <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Habilidades Sociais --}}
+            <div class="categoria-section sociais" data-categoria="sociais">
+              <h4>Sociais</h4>
+              <div class="habilidades-grid">
+                {{#each habilidadesSociaisDisponiveis as |habilidade key|}}
+                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
+                  <div class="habilidade-header">
+                    <h5>{{habilidade.nome}}</h5>
+                    <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="sociais" title="Adicionar habilidade">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="habilidade-requisitos">
+                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
+                    {{#if habilidade.preRequisito}}
+                    <p>Pré-requisitos: 
+                      {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                  <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Habilidades Gerais --}}
+            <div class="categoria-section gerais" data-categoria="gerais">
+              <h4>Gerais</h4>
+              <div class="habilidades-grid">
+                {{#each habilidadesGeraisDisponiveis as |habilidade key|}}
+                <div class="habilidade-item disponivel" data-habilidade="{{key}}">
+                  <div class="habilidade-header">
+                    <h5>{{habilidade.nome}}</h5>
+                    <button type="button" class="adicionar-habilidade" data-habilidade="{{key}}" data-categoria="gerais" title="Adicionar habilidade">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="habilidade-requisitos">
+                    <p>Nível Mín: {{habilidade.nivelMin}}</p>
+                    {{#if habilidade.preRequisito}}
+                    <p>Pré-requisitos: 
+                      {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                  <p class="habilidade-efeito">{{habilidade.efeito}}</p>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
           </div>
         </div>
 
