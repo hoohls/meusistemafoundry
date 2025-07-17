@@ -2046,6 +2046,7 @@
   font-family: var(--fonte-titulo);
   color: var(--cor-primaria);
   font-size: 14px;
+  font-weight: bold;
 }
 
 /* Grupo de botões */
@@ -2459,4 +2460,200 @@
   .magia-botoes {
     align-self: flex-end;
   }
+} 
+
+/* Status de equipamentos */
+.status-equipamentos {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.status-equipamentos .status-box {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 1px solid var(--cor-borda);
+  border-radius: 6px;
+  padding: 12px 15px;
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+}
+
+.status-equipamentos .status-box strong {
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-equipamentos .status-box span {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--cor-texto);
+}
+
+/* Seção de equipamentos disponíveis */
+.equipamentos-disponiveis-section {
+  margin-top: 20px;
+}
+
+.equipamentos-disponiveis-section h3 {
+  color: var(--cor-primaria);
+  border-bottom: 2px solid var(--cor-acento);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.equipamentos-disponiveis-section h3 i {
+  margin-right: 8px;
+  color: var(--cor-acento);
+}
+
+/* Escola de equipamentos */
+.equipamentos-escola {
+  margin-bottom: 25px;
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.equipamentos-escola h4 {
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: white;
+  margin: 0;
+  padding: 12px 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.equipamentos-escola h4 i {
+  margin-right: 8px;
+}
+
+.equipamentos-escola .equipamentos-grid {
+  padding: 15px;
+}
+
+/* Grid de equipamentos disponíveis */
+.equipamentos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+/* Itens de equipamento */
+.equipamento-item {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.equipamento-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.equipamento-item.disponivel {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.equipamento-item.disponivel:not(.acessivel) {
+  background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
+  opacity: 0.7;
+}
+
+.equipamento-item.disponivel:not(.acessivel) .comprar-equipamento {
+  display: none;
+}
+
+/* Header do equipamento */
+.equipamento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.equipamento-header h5 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  color: var(--cor-primaria);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Grupo de botões */
+.equipamento-botoes {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+/* Botões de ação dos equipamentos */
+.comprar-equipamento,
+.detalhes-equipamento {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.comprar-equipamento {
+  background: #28a745;
+}
+
+.comprar-equipamento:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+
+.detalhes-equipamento {
+  background: #007bff;
+}
+
+.detalhes-equipamento:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Detalhes dos equipamentos */
+.equipamento-detalhes {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.equipamento-detalhes p {
+  margin: 4px 0;
+}
+
+.equipamento-detalhes strong {
+  color: var(--cor-primaria);
+}
+
+/* Seção vazia */
+.empty-section {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 40px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.empty-section p {
+  margin: 0;
+  font-size: 14px;
 } 

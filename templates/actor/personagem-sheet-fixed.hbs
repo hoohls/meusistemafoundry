@@ -424,137 +424,391 @@
     <div class="tab" data-group="primary" data-tab="equipamentos">
       <div class="equipamentos-content">
         
-        {{!-- Equipados --}}
-        <div class="equipados-section">
-          <h3>Equipamentos Equipados</h3>
-          <div class="equipados-grid">
-            <div class="slot arma-principal">
-              <label>Arma Principal:</label>
-              {{#if equipados.arma_principal}}
-              <div class="item equipado" data-item-id="{{equipados.arma_principal._id}}">
-                <img src="{{equipados.arma_principal.img}}" width="32" height="32"/>
-                <span>{{equipados.arma_principal.name}}</span>
-                <a class="atacar" title="Atacar"><i class="fas fa-sword"></i></a>
-              </div>
-              {{else}}
-              <div class="slot-vazio">Vazio</div>
-              {{/if}}
-            </div>
-
-            <div class="slot armadura">
-              <label>Armadura:</label>
-              {{#if equipados.armadura}}
-              <div class="item equipado" data-item-id="{{equipados.armadura._id}}">
-                <img src="{{equipados.armadura.img}}" width="32" height="32"/>
-                <span>{{equipados.armadura.name}}</span>
-              </div>
-              {{else}}
-              <div class="slot-vazio">Vazio</div>
-              {{/if}}
-            </div>
-
-            <div class="slot escudo">
-              <label>Escudo:</label>
-              {{#if equipados.escudo}}
-              <div class="item equipado" data-item-id="{{equipados.escudo._id}}">
-                <img src="{{equipados.escudo.img}}" width="32" height="32"/>
-                <span>{{equipados.escudo.name}}</span>
-              </div>
-              {{else}}
-              <div class="slot-vazio">Vazio</div>
-              {{/if}}
-            </div>
+        {{!-- Status de Equipamentos --}}
+        <div class="status-equipamentos">
+          <div class="status-box">
+            <strong>Dinheiro Total:</strong> {{#if system.equipamentos.dinheiro.ouro}}{{system.equipamentos.dinheiro.ouro}}{{else}}0{{/if}} ouro
+          </div>
+          <div class="status-box">
+            <strong>Peso Atual:</strong> {{pesoTotal}}kg / {{capacidadeCarga}}kg
+          </div>
+          <div class="status-box">
+            <strong>Itens no Inventário:</strong> {{#if items}}{{#each items}}{{#if @first}}{{this.length}}{{/if}}{{/each}}{{else}}0{{/if}}
           </div>
         </div>
 
-        {{!-- Inventário --}}
-        <div class="inventario-section">
-          <div class="inventario-header">
-            <h3>Inventário</h3>
-            <div class="peso-info">
-              <span class="peso {{#if sobrecarregado}}sobrecarregado{{/if}}">
-                {{pesoTotal}}kg / {{capacidadeCarga}}kg
-              </span>
-            </div>
-          </div>
-
-          {{!-- Controles de Criação de Itens --}}
-          <div class="item-controls">
-            <button type="button" class="item-create" data-type="arma">+ Arma</button>
-            <button type="button" class="item-create" data-type="armadura">+ Armadura</button>
-            <button type="button" class="item-create" data-type="equipamento">+ Equipamento</button>
-            <button type="button" class="item-create" data-type="consumivel">+ Consumível</button>
-            <button type="button" class="adicionar-item">+ Item Simples</button>
-          </div>
-
-          {{!-- Lista de Itens por Categoria --}}
-          {{#each items as |lista categoria|}}
-          {{#if lista.length}}
-          <div class="items-categoria">
-            <h4>{{categoria}}</h4>
-            <ol class="items-list">
-              {{#each lista}}
-              <li class="item" data-item-id="{{_id}}" data-tooltip="true">
-                <div class="item-image">
-                  <img src="{{img}}" title="{{name}}" width="24" height="24"/>
+        {{!-- Equipamentos Disponíveis --}}
+        <div class="equipamentos-disponiveis-section">
+          <h3><i class="fas fa-shopping-cart"></i> Equipamentos Disponíveis</h3>
+          
+          {{!-- Armas --}}
+          {{#if equipamentosArmasDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4><i class="fas fa-sword"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ARMAS'}}</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosArmasDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento">
+                      <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    {{/if}}
+                  </div>
                 </div>
-                <div class="item-name">
-                  <h4>{{name}}</h4>
-                  {{#if system.quantidade}}
-                  <span class="item-qty">x{{system.quantidade}}</span>
+                <div class="equipamento-detalhes">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Dano:</strong> {{equipamento.dano}}</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
                   {{/if}}
                 </div>
-                <div class="item-properties">
-                  {{#if system.equipado}}
-                  <span class="property equipado">Equipado</span>
-                  {{/if}}
-                  {{#if system.peso}}
-                  <span class="property peso">{{system.peso}}kg</span>
-                  {{/if}}
-                </div>
-                <div class="item-controls">
-                  {{#if (eq categoria "armas")}}
-                  <a class="item-control atacar" title="Atacar"><i class="fas fa-sword"></i></a>
-                  {{/if}}
-                  {{#if (eq categoria "consumiveis")}}
-                  <a class="item-control usar-item" title="Usar"><i class="fas fa-flask"></i></a>
-                  {{/if}}
-                  {{#if system.equipado}}
-                  <a class="item-control desequipar-item" title="Desequipar"><i class="fas fa-times"></i></a>
-                  {{else}}
-                  <a class="item-control equipar-item" title="Equipar"><i class="fas fa-check"></i></a>
-                  {{/if}}
-                  {{#if isSimple}}
-                  <a class="item-control editar-item-simples" data-index="{{simpleIndex}}" title="Editar"><i class="fas fa-edit"></i></a>
-                  <a class="item-control remover-item" data-index="{{simpleIndex}}" title="Remover"><i class="fas fa-trash"></i></a>
-                  {{else}}
-                  <a class="item-control item-edit" title="Editar"><i class="fas fa-edit"></i></a>
-                  <a class="item-control item-delete" title="Excluir"><i class="fas fa-trash"></i></a>
-                  {{/if}}
-                </div>
-              </li>
+              </div>
               {{/each}}
-            </ol>
+            </div>
           </div>
           {{/if}}
-          {{/each}}
+
+          {{!-- Armaduras --}}
+          {{#if equipamentosArmadurasDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4><i class="fas fa-shield-alt"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ARMADURAS'}}</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento">
+                      <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="equipamento-detalhes">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{!-- Escudos --}}
+          {{#if equipamentosEscudosDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4><i class="fas fa-shield"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ESCUDOS'}}</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento">
+                      <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="equipamento-detalhes">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{!-- Equipamentos Gerais --}}
+          {{#if equipamentosEquipamentosDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4><i class="fas fa-toolbox"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.EQUIPAMENTOS'}}</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento">
+                      <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="equipamento-detalhes">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}}</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{!-- Consumíveis --}}
+          {{#if equipamentosConsumiveisDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4><i class="fas fa-flask"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.CONSUMIVEIS'}}</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento">
+                      <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="equipamento-detalhes">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Efeito:</strong> {{equipamento.efeito}}</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{#unless equipamentosArmasDisponiveis}}
+          {{#unless equipamentosArmadurasDisponiveis}}
+          {{#unless equipamentosEscudosDisponiveis}}
+          {{#unless equipamentosEquipamentosDisponiveis}}
+          {{#unless equipamentosConsumiveisDisponiveis}}
+          <div class="empty-section">
+            <p>Nenhum equipamento disponível para compra no momento.</p>
+          </div>
+          {{/unless}}
+          {{/unless}}
+          {{/unless}}
+          {{/unless}}
+          {{/unless}}
         </div>
 
-        {{!-- Dinheiro --}}
-        <div class="dinheiro-section">
-          <h3>Dinheiro</h3>
-          <div class="moedas-grid">
-            <div class="moeda">
-              <label>Ouro:</label>
-              <input type="number" name="system.equipamentos.dinheiro.ouro" value="{{#if system.equipamentos.dinheiro.ouro}}{{system.equipamentos.dinheiro.ouro}}{{else}}0{{/if}}" min="0"/>
+      </div>
+    </div>
+
+    {{!-- Aba Detalhes --}}
+    <div class="tab" data-group="primary" data-tab="detalhes">
+      <div class="detalhes-content">
+        
+        <div class="form-group">
+          <label>Biografia:</label>
+          <textarea name="system.detalhes.biografia" rows="4">{{system.detalhes.biografia}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Aparência:</label>
+          <textarea name="system.detalhes.aparencia" rows="3">{{system.detalhes.aparencia}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Personalidade:</label>
+          <textarea name="system.detalhes.personalidade" rows="3">{{system.detalhes.personalidade}}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>História:</label>
+          <textarea name="system.detalhes.historia" rows="5">{{system.detalhes.historia}}</textarea>
+        </div>
+
+        {{!-- Seção de Progressão de Nível --}}
+        <div class="progressao-section">
+          <h3><i class="fas fa-arrow-up"></i> Progressão de Nível</h3>
+          
+          {{!-- Status Atual --}}
+          <div class="status-atual">
+            <div class="status-box">
+              <strong>Nível Atual:</strong> {{system.nivel}}
             </div>
-            <div class="moeda">
-              <label>Prata:</label>
-              <input type="number" name="system.equipamentos.dinheiro.prata" value="{{#if system.equipamentos.dinheiro.prata}}{{system.equipamentos.dinheiro.prata}}{{else}}0{{/if}}" min="0"/>
+            <div class="status-box">
+              <strong>XP Atual:</strong> {{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{proximoNivel}}
             </div>
-            <div class="moeda">
-              <label>Cobre:</label>
-              <input type="number" name="system.equipamentos.dinheiro.cobre" value="{{#if system.equipamentos.dinheiro.cobre}}{{system.equipamentos.dinheiro.cobre}}{{else}}0{{/if}}" min="0"/>
+            <div class="status-box">
+              <strong>Pontos de Atributo:</strong> {{#if system.progressao.pontos_atributo}}{{system.progressao.pontos_atributo}}{{else}}0{{/if}}
+            </div>
+          </div>
+
+          {{!-- Benefícios ao Subir de Nível --}}
+          <div class="beneficios-nivel">
+            <h4><i class="fas fa-gift"></i> Sistema de Progressão:</h4>
+            <div class="progressao-pattern">
+              <div class="pattern-item">
+                <strong>Nível 1:</strong> 4 habilidades iniciais
+              </div>
+              <div class="pattern-item">
+                <strong>Níveis 2, 4, 6, 8:</strong> +1 habilidade
+              </div>
+              <div class="pattern-item">
+                <strong>Níveis 3, 7:</strong> +1 ponto de atributo
+              </div>
+              <div class="pattern-item">
+                <strong>Níveis 5, 9:</strong> Habilidade especial de classe
+              </div>
+              <div class="pattern-item">
+                <strong>Nível 10:</strong> Maestria (habilidade única)
+              </div>
+            </div>
+            <div class="beneficio-atual">
+              <h5><i class="fas fa-star"></i> Próximo Nível ({{math system.nivel "+" 1}}):</h5>
+              <p class="proximo-beneficio">
+                {{#if (eq (math system.nivel "+" 1) 2)}}+1 habilidade{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 3)}}+1 ponto de atributo{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 4)}}+1 habilidade{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 5)}}Habilidade especial de classe{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 6)}}+1 habilidade{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 7)}}+1 ponto de atributo{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 8)}}+1 habilidade{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 9)}}Habilidade especial de classe{{/if}}
+                {{#if (eq (math system.nivel "+" 1) 10)}}Maestria (habilidade única){{/if}}
+                {{#if (gt (math system.nivel "+" 1) 10)}}Sistema de progressão épica{{/if}}
+              </p>
+            </div>
+          </div>
+
+                     {{!-- Tabela de Progressão de XP --}}
+           <div class="tabela-xp">
+             <h4><i class="fas fa-chart-line"></i> Tabela de Progressão</h4>
+             <div class="xp-grid-completa">
+               <div class="xp-header">
+                 <span>Nível</span>
+                 <span>XP para Subir</span>
+                 <span>XP Total</span>
+                 <span>Benefícios Ganhos</span>
+               </div>
+               {{#each tabelaProgressaoCompleta as |nivel|}}
+               <div class="xp-row {{#if (eq nivel.numero ../system.nivel)}}atual{{/if}} {{#if (lt nivel.numero ../system.nivel)}}concluido{{/if}}">
+                 <span class="nivel">{{nivel.numero}}</span>
+                 <span class="xp-necessario">{{nivel.xp_necessario}}</span>
+                 <span class="xp-total">{{nivel.xp_total}}</span>
+                 <span class="beneficios">{{nivel.beneficios}}</span>
+               </div>
+               {{/each}}
+             </div>
+           </div>
+
+          {{!-- Informações de Classe --}}
+          {{#if system.classe.nome}}
+          <div class="info-classe">
+            <h4><i class="fas fa-shield-alt"></i> Sua Classe: {{system.classe.nome}}</h4>
+            <div class="classe-descricao">
+              {{#if (eq system.classe.nome "guerreiro")}}
+              <p><strong>Guerreiro</strong> - Especialista em combate e proteção</p>
+              <ul>
+                <li>Foco em atributos Físico e Ação</li>
+                <li>Habilidades de combate e liderança</li>
+                <li>Especialização em armas e armaduras</li>
+                <li>Manobras especiais de combate</li>
+              </ul>
+              {{else if (eq system.classe.nome "mago")}}
+              <p><strong>Mago</strong> - Manipulador das forças arcanas</p>
+              <ul>
+                <li>Foco em atributo Mental</li>
+                <li>Acesso a todas as escolas de magia</li>
+                <li>PM adicional e magias poderosas</li>
+                <li>Habilidades de pesquisa e conhecimento</li>
+              </ul>
+              {{else if (eq system.classe.nome "ladino")}}
+              <p><strong>Ladino</strong> - Mestre da furtividade e precisão</p>
+              <ul>
+                <li>Foco em atributos Ação e Mental</li>
+                <li>Habilidades de furtividade e subterfúgio</li>
+                <li>Ataques precisos e críticos</li>
+                <li>Especialização em ferramentas e disfarces</li>
+              </ul>
+              {{else if (eq system.classe.nome "diplomata")}}
+              <p><strong>Diplomata</strong> - Expert em interações sociais</p>
+              <ul>
+                <li>Foco em atributos Social e Mental</li>
+                <li>Habilidades de persuasão e negociação</li>
+                <li>Conhecimento de idiomas e culturas</li>
+                <li>Redes de contatos e influência</li>
+              </ul>
+              {{else}}
+              <p>Classe selecionada: <strong>{{system.classe.nome}}</strong></p>
+              <p>Escolha uma classe para ver informações específicas de progressão.</p>
+              {{/if}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{!-- Dicas de Progressão --}}
+          <div class="dicas-progressao">
+            <h4><i class="fas fa-lightbulb"></i> Dicas de Progressão</h4>
+            <div class="dica-box">
+              <p><strong>Distribuição de Atributos:</strong></p>
+              <ul>
+                <li><strong>Físico:</strong> Aumenta PV (×3) e dano corpo a corpo</li>
+                <li><strong>Ação:</strong> Aumenta Defesa e precisão à distância</li>
+                <li><strong>Mental:</strong> Aumenta PM (×2) e poder de magias</li>
+                <li><strong>Social:</strong> Melhora interações e liderança</li>
+              </ul>
+            </div>
+            
+            <div class="dica-box">
+              <p><strong>Planejamento:</strong></p>
+              <ul>
+                <li>Considere o estilo de jogo que você quer</li>
+                <li>Equilibre entre ataque, defesa e utilidade</li>
+                <li>Converse com o Mestre sobre habilidades disponíveis</li>
+                <li>Pense na sinergia entre atributos e classe</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -743,374 +997,6 @@
               </div>
             </div>
 
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    {{!-- Aba Equipamentos --}}
-    <div class="tab" data-group="primary" data-tab="equipamentos">
-      <div class="equipamentos-content">
-        
-        {{!-- Equipamentos Disponíveis --}}
-        <div class="equipamentos-disponiveis">
-          <h3>{{localize 'EQUIPAMENTOS.EQUIPAMENTOS_DISPONIVEIS'}}</h3>
-          
-          <div class="categorias-equipamentos">
-            
-            {{!-- Armas --}}
-            <div class="categoria-section armas" data-categoria="armas">
-              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ARMAS'}}</h4>
-              <div class="equipamentos-grid">
-                {{#each equipamentosArmasDisponiveis as |equipamento key|}}
-                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
-                  <div class="equipamento-header">
-                    <h5>{{equipamento.nome}}</h5>
-                    <div class="equipamento-botoes">
-                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      {{#if equipamento.podeComprar}}
-                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento">
-                        <i class="fas fa-shopping-cart"></i>
-                      </button>
-                      {{/if}}
-                    </div>
-                  </div>
-                  <div class="equipamento-info">
-                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
-                    {{#if equipamento.preRequisito}}
-                    <p><strong>Pré-requisitos:</strong> 
-                      {{#each equipamento.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
-
-            {{!-- Armaduras --}}
-            <div class="categoria-section armaduras" data-categoria="armaduras">
-              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ARMADURAS'}}</h4>
-              <div class="equipamentos-grid">
-                {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
-                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
-                  <div class="equipamento-header">
-                    <h5>{{equipamento.nome}}</h5>
-                    <div class="equipamento-botoes">
-                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      {{#if equipamento.podeComprar}}
-                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento">
-                        <i class="fas fa-shopping-cart"></i>
-                      </button>
-                      {{/if}}
-                    </div>
-                  </div>
-                  <div class="equipamento-info">
-                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
-                    {{#if equipamento.preRequisito}}
-                    <p><strong>Pré-requisitos:</strong> 
-                      {{#each equipamento.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
-
-            {{!-- Escudos --}}
-            <div class="categoria-section escudos" data-categoria="escudos">
-              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ESCUDOS'}}</h4>
-              <div class="equipamentos-grid">
-                {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
-                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
-                  <div class="equipamento-header">
-                    <h5>{{equipamento.nome}}</h5>
-                    <div class="equipamento-botoes">
-                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      {{#if equipamento.podeComprar}}
-                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento">
-                        <i class="fas fa-shopping-cart"></i>
-                      </button>
-                      {{/if}}
-                    </div>
-                  </div>
-                  <div class="equipamento-info">
-                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
-                    {{#if equipamento.preRequisito}}
-                    <p><strong>Pré-requisitos:</strong> 
-                      {{#each equipamento.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
-
-            {{!-- Equipamentos Gerais --}}
-            <div class="categoria-section equipamentos" data-categoria="equipamentos">
-              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.EQUIPAMENTOS'}}</h4>
-              <div class="equipamentos-grid">
-                {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
-                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
-                  <div class="equipamento-header">
-                    <h5>{{equipamento.nome}}</h5>
-                    <div class="equipamento-botoes">
-                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      {{#if equipamento.podeComprar}}
-                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento">
-                        <i class="fas fa-shopping-cart"></i>
-                      </button>
-                      {{/if}}
-                    </div>
-                  </div>
-                  <div class="equipamento-info">
-                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
-                    {{#if equipamento.preRequisito}}
-                    <p><strong>Pré-requisitos:</strong> 
-                      {{#each equipamento.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
-
-            {{!-- Consumíveis --}}
-            <div class="categoria-section consumiveis" data-categoria="consumiveis">
-              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.CONSUMIVEIS'}}</h4>
-              <div class="equipamentos-grid">
-                {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
-                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
-                  <div class="equipamento-header">
-                    <h5>{{equipamento.nome}}</h5>
-                    <div class="equipamento-botoes">
-                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Ver detalhes">
-                        <i class="fas fa-info-circle"></i>
-                      </button>
-                      {{#if equipamento.podeComprar}}
-                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento">
-                        <i class="fas fa-shopping-cart"></i>
-                      </button>
-                      {{/if}}
-                    </div>
-                  </div>
-                  <div class="equipamento-info">
-                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
-                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
-                    {{#if equipamento.preRequisito}}
-                    <p><strong>Pré-requisitos:</strong> 
-                      {{#each equipamento.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
-                    {{/if}}
-                  </div>
-                </div>
-                {{/each}}
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    {{!-- Aba Detalhes --}}
-    <div class="tab" data-group="primary" data-tab="detalhes">
-      <div class="detalhes-content">
-        
-        <div class="form-group">
-          <label>Biografia:</label>
-          <textarea name="system.detalhes.biografia" rows="4">{{system.detalhes.biografia}}</textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Aparência:</label>
-          <textarea name="system.detalhes.aparencia" rows="3">{{system.detalhes.aparencia}}</textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Personalidade:</label>
-          <textarea name="system.detalhes.personalidade" rows="3">{{system.detalhes.personalidade}}</textarea>
-        </div>
-
-        <div class="form-group">
-          <label>História:</label>
-          <textarea name="system.detalhes.historia" rows="5">{{system.detalhes.historia}}</textarea>
-        </div>
-
-        {{!-- Seção de Progressão de Nível --}}
-        <div class="progressao-section">
-          <h3><i class="fas fa-arrow-up"></i> Progressão de Nível</h3>
-          
-          {{!-- Status Atual --}}
-          <div class="status-atual">
-            <div class="status-box">
-              <strong>Nível Atual:</strong> {{system.nivel}}
-            </div>
-            <div class="status-box">
-              <strong>XP Atual:</strong> {{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{proximoNivel}}
-            </div>
-            <div class="status-box">
-              <strong>Pontos de Atributo:</strong> {{#if system.progressao.pontos_atributo}}{{system.progressao.pontos_atributo}}{{else}}0{{/if}}
-            </div>
-          </div>
-
-          {{!-- Benefícios ao Subir de Nível --}}
-          <div class="beneficios-nivel">
-            <h4><i class="fas fa-gift"></i> Sistema de Progressão:</h4>
-            <div class="progressao-pattern">
-              <div class="pattern-item">
-                <strong>Nível 1:</strong> 4 habilidades iniciais
-              </div>
-              <div class="pattern-item">
-                <strong>Níveis 2, 4, 6, 8:</strong> +1 habilidade
-              </div>
-              <div class="pattern-item">
-                <strong>Níveis 3, 7:</strong> +1 ponto de atributo
-              </div>
-              <div class="pattern-item">
-                <strong>Níveis 5, 9:</strong> Habilidade especial de classe
-              </div>
-              <div class="pattern-item">
-                <strong>Nível 10:</strong> Maestria (habilidade única)
-              </div>
-            </div>
-            <div class="beneficio-atual">
-              <h5><i class="fas fa-star"></i> Próximo Nível ({{math system.nivel "+" 1}}):</h5>
-              <p class="proximo-beneficio">
-                {{#if (eq (math system.nivel "+" 1) 2)}}+1 habilidade{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 3)}}+1 ponto de atributo{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 4)}}+1 habilidade{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 5)}}Habilidade especial de classe{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 6)}}+1 habilidade{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 7)}}+1 ponto de atributo{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 8)}}+1 habilidade{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 9)}}Habilidade especial de classe{{/if}}
-                {{#if (eq (math system.nivel "+" 1) 10)}}Maestria (habilidade única){{/if}}
-                {{#if (gt (math system.nivel "+" 1) 10)}}Sistema de progressão épica{{/if}}
-              </p>
-            </div>
-          </div>
-
-                     {{!-- Tabela de Progressão de XP --}}
-           <div class="tabela-xp">
-             <h4><i class="fas fa-chart-line"></i> Tabela de Progressão</h4>
-             <div class="xp-grid-completa">
-               <div class="xp-header">
-                 <span>Nível</span>
-                 <span>XP para Subir</span>
-                 <span>XP Total</span>
-                 <span>Benefícios Ganhos</span>
-               </div>
-               {{#each tabelaProgressaoCompleta as |nivel|}}
-               <div class="xp-row {{#if (eq nivel.numero ../system.nivel)}}atual{{/if}} {{#if (lt nivel.numero ../system.nivel)}}concluido{{/if}}">
-                 <span class="nivel">{{nivel.numero}}</span>
-                 <span class="xp-necessario">{{nivel.xp_necessario}}</span>
-                 <span class="xp-total">{{nivel.xp_total}}</span>
-                 <span class="beneficios">{{nivel.beneficios}}</span>
-               </div>
-               {{/each}}
-             </div>
-           </div>
-
-          {{!-- Informações de Classe --}}
-          {{#if system.classe.nome}}
-          <div class="info-classe">
-            <h4><i class="fas fa-shield-alt"></i> Sua Classe: {{system.classe.nome}}</h4>
-            <div class="classe-descricao">
-              {{#if (eq system.classe.nome "guerreiro")}}
-              <p><strong>Guerreiro</strong> - Especialista em combate e proteção</p>
-              <ul>
-                <li>Foco em atributos Físico e Ação</li>
-                <li>Habilidades de combate e liderança</li>
-                <li>Especialização em armas e armaduras</li>
-                <li>Manobras especiais de combate</li>
-              </ul>
-              {{else if (eq system.classe.nome "mago")}}
-              <p><strong>Mago</strong> - Manipulador das forças arcanas</p>
-              <ul>
-                <li>Foco em atributo Mental</li>
-                <li>Acesso a todas as escolas de magia</li>
-                <li>PM adicional e magias poderosas</li>
-                <li>Habilidades de pesquisa e conhecimento</li>
-              </ul>
-              {{else if (eq system.classe.nome "ladino")}}
-              <p><strong>Ladino</strong> - Mestre da furtividade e precisão</p>
-              <ul>
-                <li>Foco em atributos Ação e Mental</li>
-                <li>Habilidades de furtividade e subterfúgio</li>
-                <li>Ataques precisos e críticos</li>
-                <li>Especialização em ferramentas e disfarces</li>
-              </ul>
-              {{else if (eq system.classe.nome "diplomata")}}
-              <p><strong>Diplomata</strong> - Expert em interações sociais</p>
-              <ul>
-                <li>Foco em atributos Social e Mental</li>
-                <li>Habilidades de persuasão e negociação</li>
-                <li>Conhecimento de idiomas e culturas</li>
-                <li>Redes de contatos e influência</li>
-              </ul>
-              {{else}}
-              <p>Classe selecionada: <strong>{{system.classe.nome}}</strong></p>
-              <p>Escolha uma classe para ver informações específicas de progressão.</p>
-              {{/if}}
-            </div>
-          </div>
-          {{/if}}
-
-          {{!-- Dicas de Progressão --}}
-          <div class="dicas-progressao">
-            <h4><i class="fas fa-lightbulb"></i> Dicas de Progressão</h4>
-            <div class="dica-box">
-              <p><strong>Distribuição de Atributos:</strong></p>
-              <ul>
-                <li><strong>Físico:</strong> Aumenta PV (×3) e dano corpo a corpo</li>
-                <li><strong>Ação:</strong> Aumenta Defesa e precisão à distância</li>
-                <li><strong>Mental:</strong> Aumenta PM (×2) e poder de magias</li>
-                <li><strong>Social:</strong> Melhora interações e liderança</li>
-              </ul>
-            </div>
-            
-            <div class="dica-box">
-              <p><strong>Planejamento:</strong></p>
-              <ul>
-                <li>Considere o estilo de jogo que você quer</li>
-                <li>Equilibre entre ataque, defesa e utilidade</li>
-                <li>Converse com o Mestre sobre habilidades disponíveis</li>
-                <li>Pense na sinergia entre atributos e classe</li>
-              </ul>
-            </div>
           </div>
         </div>
 
