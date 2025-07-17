@@ -581,37 +581,199 @@ export class ClubeActorSheet extends ActorSheet {
       magiasDisponiveis[nomeEscola] = [];
     });
 
-    // Lista básica de magias disponíveis por escola
+    // Lista completa de magias disponíveis por escola com todas as informações
     const magiasBasicas = {
       'evocacao': [
-        { id: 'bola_fogo', nome: 'Bola de Fogo', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' },
-        { id: 'rajada_arcana', nome: 'Rajada Arcana', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
-        { id: 'raio_eletrico', nome: 'Raio Elétrico', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' }
+        { 
+          id: 'bola_fogo', 
+          nome: 'Bola de Fogo', 
+          nivel: 3, 
+          custo_pm: 6, 
+          prerequisitos: 'Mental 8',
+          alcance: '30m',
+          duracao: 'Instantânea',
+          descricao: 'Lança uma bola de fogo que causa 3d6 de dano de fogo em uma área de 3m de raio.'
+        },
+        { 
+          id: 'rajada_arcana', 
+          nome: 'Rajada Arcana', 
+          nivel: 1, 
+          custo_pm: 2, 
+          prerequisitos: 'Mental 6',
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Dispara uma rajada de energia mágica que causa 1d6 + Mental de dano.'
+        },
+        { 
+          id: 'raio_eletrico', 
+          nome: 'Raio Elétrico', 
+          nivel: 2, 
+          custo_pm: 4, 
+          prerequisitos: 'Mental 7',
+          alcance: '20m',
+          duracao: 'Instantânea',
+          descricao: 'Lança um raio elétrico que causa 2d6 de dano elétrico.'
+        }
       ],
       'abjuracao': [
-        { id: 'escudo_magico', nome: 'Escudo Mágico', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
-        { id: 'protecao_elemental', nome: 'Proteção Elemental', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
-        { id: 'dissipar_magia', nome: 'Dissipar Magia', nivel: 3, custo_pm: 5, prerequisitos: 'Mental 8' }
+        { 
+          id: 'escudo_magico', 
+          nome: 'Escudo Mágico', 
+          nivel: 1, 
+          custo_pm: 2, 
+          prerequisitos: 'Mental 6',
+          alcance: 'Pessoal',
+          duracao: '1 cena',
+          descricao: 'Cria um escudo mágico que concede +2 à Defesa.'
+        },
+        { 
+          id: 'protecao_elemental', 
+          nome: 'Proteção Elemental', 
+          nivel: 2, 
+          custo_pm: 4, 
+          prerequisitos: 'Mental 7',
+          alcance: 'Pessoal',
+          duracao: '1 hora',
+          descricao: 'Concede resistência a um tipo de dano elementar.'
+        },
+        { 
+          id: 'dissipar_magia', 
+          nome: 'Dissipar Magia', 
+          nivel: 3, 
+          custo_pm: 5, 
+          prerequisitos: 'Mental 8',
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Cancela uma magia ativa ou reduz seus efeitos.'
+        }
       ],
       'transmutacao': [
-        { id: 'transformar_objeto', nome: 'Transformar Objeto', nivel: 1, custo_pm: 3, prerequisitos: 'Mental 6' },
-        { id: 'polimorfar', nome: 'Polimorfar', nivel: 4, custo_pm: 8, prerequisitos: 'Mental 9' },
-        { id: 'voar', nome: 'Voo', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' }
+        { 
+          id: 'transformar_objeto', 
+          nome: 'Transformar Objeto', 
+          nivel: 1, 
+          custo_pm: 3, 
+          prerequisitos: 'Mental 6',
+          alcance: 'Toque',
+          duracao: '1 hora',
+          descricao: 'Transforma um objeto pequeno em outro objeto similar.'
+        },
+        { 
+          id: 'polimorfar', 
+          nome: 'Polimorfar', 
+          nivel: 4, 
+          custo_pm: 8, 
+          prerequisitos: 'Mental 9',
+          alcance: '15m',
+          duracao: '1 hora',
+          descricao: 'Transforma uma criatura em outra forma.'
+        },
+        { 
+          id: 'voar', 
+          nome: 'Voo', 
+          nivel: 3, 
+          custo_pm: 6, 
+          prerequisitos: 'Mental 8',
+          alcance: 'Pessoal',
+          duracao: '10 minutos',
+          descricao: 'Concede a capacidade de voar a uma velocidade de 18m.'
+        }
       ],
       'ilusao': [
-        { id: 'invisibilidade', nome: 'Invisibilidade', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
-        { id: 'imagem_espelhada', nome: 'Imagem Espelhada', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
-        { id: 'sugestao', nome: 'Sugestão', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' }
+        { 
+          id: 'invisibilidade', 
+          nome: 'Invisibilidade', 
+          nivel: 2, 
+          custo_pm: 4, 
+          prerequisitos: 'Mental 7',
+          alcance: 'Pessoal',
+          duracao: '5 minutos',
+          descricao: 'Torna o conjurador invisível até que ele ataque ou use uma magia.'
+        },
+        { 
+          id: 'imagem_espelhada', 
+          nome: 'Imagem Espelhada', 
+          nivel: 1, 
+          custo_pm: 2, 
+          prerequisitos: 'Mental 6',
+          alcance: 'Pessoal',
+          duracao: '1 minuto',
+          descricao: 'Cria 1d4 imagens ilusórias que confundem ataques.'
+        },
+        { 
+          id: 'sugestao', 
+          nome: 'Sugestão', 
+          nivel: 2, 
+          custo_pm: 4, 
+          prerequisitos: 'Mental 7',
+          alcance: '15m',
+          duracao: '1 hora',
+          descricao: 'Influencia uma criatura a seguir uma sugestão razoável.'
+        }
       ],
       'adivinhacao': [
-        { id: 'detectar_magia', nome: 'Detectar Magia', nivel: 1, custo_pm: 1, prerequisitos: 'Mental 6' },
-        { id: 'adivinhar', nome: 'Adivinhar', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' },
-        { id: 'localizar_objeto', nome: 'Localizar Objeto', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' }
+        { 
+          id: 'detectar_magia', 
+          nome: 'Detectar Magia', 
+          nivel: 1, 
+          custo_pm: 1, 
+          prerequisitos: 'Mental 6',
+          alcance: '15m',
+          duracao: '1 minuto',
+          descricao: 'Detecta a presença de magia em uma área.'
+        },
+        { 
+          id: 'adivinhar', 
+          nome: 'Adivinhar', 
+          nivel: 2, 
+          custo_pm: 3, 
+          prerequisitos: 'Mental 7',
+          alcance: 'Pessoal',
+          duracao: 'Instantânea',
+          descricao: 'Recebe uma resposta simples a uma pergunta sobre o futuro.'
+        },
+        { 
+          id: 'localizar_objeto', 
+          nome: 'Localizar Objeto', 
+          nivel: 2, 
+          custo_pm: 3, 
+          prerequisitos: 'Mental 7',
+          alcance: '1km',
+          duracao: 'Instantânea',
+          descricao: 'Localiza um objeto específico conhecido dentro do alcance.'
+        }
       ],
       'necromancia': [
-        { id: 'drenar_vida', nome: 'Drenar Vida', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' },
-        { id: 'animar_morto', nome: 'Animar Morto', nivel: 3, custo_pm: 6, prerequisitos: 'Mental 8' },
-        { id: 'medo', nome: 'Medo', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' }
+        { 
+          id: 'drenar_vida', 
+          nome: 'Drenar Vida', 
+          nivel: 2, 
+          custo_pm: 4, 
+          prerequisitos: 'Mental 7',
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Drena a vida de uma criatura, causando dano e curando o conjurador.'
+        },
+        { 
+          id: 'animar_morto', 
+          nome: 'Animar Morto', 
+          nivel: 3, 
+          custo_pm: 6, 
+          prerequisitos: 'Mental 8',
+          alcance: '15m',
+          duracao: 'Permanente',
+          descricao: 'Anima um cadáver para servir como servo não-morto.'
+        },
+        { 
+          id: 'medo', 
+          nome: 'Medo', 
+          nivel: 1, 
+          custo_pm: 2, 
+          prerequisitos: 'Mental 6',
+          alcance: '15m',
+          duracao: '1 minuto',
+          descricao: 'Inspira medo em uma criatura, fazendo-a fugir.'
+        }
       ]
     };
 

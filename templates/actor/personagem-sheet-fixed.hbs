@@ -405,8 +405,12 @@
                     </button>
                   </div>
                 </div>
-                <div class="magia-requisitos">
+                <div class="magia-detalhes">
                   <p><strong>Nível:</strong> {{nivel}} • <strong>Custo:</strong> {{custo_pm}} PM</p>
+                  <p><strong>Alcance:</strong> {{alcance}} • <strong>Duração:</strong> {{duracao}}</p>
+                  {{#if descricao}}
+                  <p class="magia-descricao">{{descricao}}</p>
+                  {{/if}}
                   <p><strong>Pré-requisitos:</strong> {{prerequisitos}}</p>
                 </div>
               </div>
