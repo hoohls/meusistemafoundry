@@ -531,6 +531,18 @@ Hooks.on("preUpdateActor", function(actor, data, options, userId) {
   if (actor.type === "personagem" && data.system?.atributos) {
     console.log("[HOOK] preUpdateActor chamado com dados:", data);
     
+    // Verificar se os recursos já estão sendo atualizados (evitar conflito com adicionarPontoAtributo)
+    const recursosJaAtualizados = data.system.recursos && (
+      data.system.recursos.pv?.max !== undefined ||
+      data.system.recursos.pm?.max !== undefined ||
+      data.system.recursos.defesa?.valor !== undefined
+    );
+    
+    if (recursosJaAtualizados) {
+      console.log("[HOOK] Recursos já estão sendo atualizados, pulando hook para evitar conflito");
+      return;
+    }
+    
     const updateData = {};
     
     // Atualizar PV máximo se Físico mudou
@@ -548,8 +560,8 @@ Hooks.on("preUpdateActor", function(actor, data, options, userId) {
       console.log(`[HOOK] Atualizando PV: novo máximo = ${novoPvMax}`);
     }
     
-    // Atualizar PM máximo se Mental mudou (apenas se não foi já atualizado)
-    if (data.system.atributos.mental?.valor !== undefined && !data.system.recursos?.pm?.max) {
+    // Atualizar PM máximo se Mental mudou
+    if (data.system.atributos.mental?.valor !== undefined) {
       const novoMental = data.system.atributos.mental.valor;
       const novoPmMax = novoMental * 2 + 5;
       updateData["system.recursos.pm.max"] = novoPmMax;

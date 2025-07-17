@@ -1417,6 +1417,21 @@ export class ClubeActor extends Actor {
     const updateData = {};
     updateData[`system.atributos.${atributo}.valor`] = valorAtual + 1;
     
+    // Se for Físico, calcular novo PV máximo
+    if (atributo === 'fisico') {
+      const novoPvMax = (valorAtual + 1) * 3 + 10;
+      const pvAtual = this.system.recursos?.pv?.valor || 0;
+      updateData["system.recursos.pv.max"] = novoPvMax;
+      
+      // Ajustar PV atual se necessário
+      if (pvAtual > novoPvMax) {
+        updateData["system.recursos.pv.valor"] = novoPvMax;
+      }
+      
+      console.log(`[DEBUG FISICO] Novo PV máximo será: ${novoPvMax}`);
+      console.log(`[DEBUG FISICO] PV atual: ${pvAtual}, será ajustado para: ${pvAtual > novoPvMax ? novoPvMax : pvAtual}`);
+    }
+    
     // Se for Mental, calcular novo PM máximo
     if (atributo === 'mental') {
       const novoPmMax = (valorAtual + 1) * 2 + 5;
@@ -1430,6 +1445,21 @@ export class ClubeActor extends Actor {
       
       console.log(`[DEBUG MENTAL] Novo PM máximo será: ${novoPmMax}`);
       console.log(`[DEBUG MENTAL] PM atual: ${pmAtual}, será ajustado para: ${pmAtual > novoPmMax ? novoPmMax : pmAtual}`);
+    }
+    
+    // Se for Ação, calcular nova defesa
+    if (atributo === 'acao') {
+      const novaDefesaBase = 10 + (valorAtual + 1);
+      const armadura = this.system.recursos?.defesa?.armadura || 0;
+      const escudo = this.system.recursos?.defesa?.escudo || 0;
+      const outros = this.system.recursos?.defesa?.outros || 0;
+      const novaDefesaTotal = novaDefesaBase + armadura + escudo + outros;
+      
+      updateData["system.recursos.defesa.base"] = novaDefesaBase;
+      updateData["system.recursos.defesa.valor"] = novaDefesaTotal;
+      
+      console.log(`[DEBUG ACAO] Nova defesa base será: ${novaDefesaBase}`);
+      console.log(`[DEBUG ACAO] Nova defesa total será: ${novaDefesaTotal}`);
     }
     
     if (!statusPontos.atributosInicializados && statusPontos.pontosDisponiveisIniciais > 0) {
@@ -1454,10 +1484,18 @@ export class ClubeActor extends Actor {
       await this.update(updateData);
       console.log(`[DEBUG] Atualização bem-sucedida`);
       
-      // Log específico para Mental após atualização
-      if (atributo === 'mental') {
+      // Log específico para cada atributo após atualização
+      if (atributo === 'fisico') {
+        console.log(`[DEBUG FISICO] Atualização concluída. Novo valor: ${valorAtual + 1}`);
+        console.log(`[DEBUG FISICO] Novo PV máximo: ${(valorAtual + 1) * 3 + 10}`);
+      } else if (atributo === 'mental') {
         console.log(`[DEBUG MENTAL] Atualização concluída. Novo valor: ${valorAtual + 1}`);
         console.log(`[DEBUG MENTAL] Novo PM máximo: ${(valorAtual + 1) * 2 + 5}`);
+      } else if (atributo === 'acao') {
+        console.log(`[DEBUG ACAO] Atualização concluída. Novo valor: ${valorAtual + 1}`);
+        console.log(`[DEBUG ACAO] Nova defesa base: ${10 + (valorAtual + 1)}`);
+      } else if (atributo === 'social') {
+        console.log(`[DEBUG SOCIAL] Atualização concluída. Novo valor: ${valorAtual + 1}`);
       }
       
       ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${valorAtual + 1}.`);
@@ -1888,6 +1926,64 @@ export class ClubeActor extends Actor {
       ui.notifications.error("Erro ao corrigir atributo Mental: " + error.message);
       return false;
     }
+  }
+
+  /**
+   * Compara o comportamento do Físico vs Mental para identificar diferenças
+   * @returns {Object} Comparação entre os atributos
+   */
+  compararFisicoMental() {
+    console.log("=== COMPARAÇÃO FÍSICO VS MENTAL ===");
+    
+    const fisico = this.system.atributos?.fisico?.valor || 0;
+    const mental = this.system.atributos?.mental?.valor || 0;
+    const pvAtual = this.system.recursos?.pv?.valor || 0;
+    const pvMax = this.system.recursos?.pv?.max || 0;
+    const pmAtual = this.system.recursos?.pm?.valor || 0;
+    const pmMax = this.system.recursos?.pm?.max || 0;
+    
+    const pvCalculado = fisico * 3 + 10;
+    const pmCalculado = mental * 2 + 5;
+    
+    const comparacao = {
+      fisico: {
+        valor: fisico,
+        pvAtual: pvAtual,
+        pvMax: pvMax,
+        pvCalculado: pvCalculado,
+        pvConsistente: pvMax === pvCalculado,
+        pvAtualValido: pvAtual <= pvMax
+      },
+      mental: {
+        valor: mental,
+        pmAtual: pmAtual,
+        pmMax: pmMax,
+        pmCalculado: pmCalculado,
+        pmConsistente: pmMax === pmCalculado,
+        pmAtualValido: pmAtual <= pmMax
+      },
+      problemas: []
+    };
+    
+    // Verificar problemas
+    if (!comparacao.fisico.pvConsistente) {
+      comparacao.problemas.push(`PV máximo inconsistente: armazenado=${pvMax}, calculado=${pvCalculado}`);
+    }
+    
+    if (!comparacao.fisico.pvAtualValido) {
+      comparacao.problemas.push(`PV atual inválido: ${pvAtual} > ${pvMax}`);
+    }
+    
+    if (!comparacao.mental.pmConsistente) {
+      comparacao.problemas.push(`PM máximo inconsistente: armazenado=${pmMax}, calculado=${pmCalculado}`);
+    }
+    
+    if (!comparacao.mental.pmAtualValido) {
+      comparacao.problemas.push(`PM atual inválido: ${pmAtual} > ${pmMax}`);
+    }
+    
+    console.log("Comparação:", comparacao);
+    return comparacao;
   }
 
 } 
