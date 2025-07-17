@@ -7,7 +7,7 @@ export class ClubeRollerDialog extends Dialog {
     super(data, options);
     
     this.atributo = data.atributo || "fisico";
-    this.valor = data.valor || 3;
+    this.valor = data.valor || 0;
     this.nd = data.nd || 9;
     this.modificador = data.modificador || 0;
     this.nome = data.nome || "Teste";
@@ -63,7 +63,7 @@ export class ClubeRollerDialog extends Dialog {
     this.atributo = novoAtributo;
     
     if (this.ator) {
-      const novoValor = this.ator.system.atributos[novoAtributo]?.valor || 3;
+      const novoValor = this.ator.system.atributos[novoAtributo]?.valor || 0;
       this.valor = novoValor;
       this.element.find("#valor").val(novoValor);
     }

@@ -86,7 +86,7 @@
                 {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#unless statusPontosAtributos.atributosInicializados}}
-                    {{#if (gt atributo.valor 3)}}
+                    {{#if (gt atributo.valor 0)}}
                     <button type="button" class="remover-ponto-atributo" data-atributo="{{key}}" title="Remover ponto">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -96,7 +96,7 @@
                   {{/unless}}
                 {{/if}}
                 
-                <input type="number" name="system.atributos.{{key}}.valor" value="{{atributo.valor}}" min="3" max="18" readonly/>
+                <input type="number" name="system.atributos.{{key}}.valor" value="{{atributo.valor}}" min="0" max="18" readonly/>
                 
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}

@@ -105,7 +105,7 @@ Hooks.once('init', function() {
  */
 async function executarTeste({
   atributo = "fisico",
-  valor = 3,
+  valor = 0,
   nd = 9,
   modificador = 0,
   nome = "Teste",

@@ -42,7 +42,7 @@
                 {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#unless statusPontosAtributos.atributosInicializados}}
-                    {{#if (gt system.atributos.fisico.valor 3)}}
+                    {{#if (gt system.atributos.fisico.valor 0)}}
                     <button type="button" class="remover-ponto-atributo" data-atributo="fisico" title="Remover ponto">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -52,7 +52,7 @@
                   {{/unless}}
                 {{/if}}
                 
-                <input type="number" name="system.atributos.fisico.valor" value="{{system.atributos.fisico.valor}}" min="3" max="18" readonly/>
+                <input type="number" name="system.atributos.fisico.valor" value="{{system.atributos.fisico.valor}}" min="0" max="18" readonly/>
                 
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
@@ -74,7 +74,7 @@
                 {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#unless statusPontosAtributos.atributosInicializados}}
-                    {{#if (gt system.atributos.acao.valor 3)}}
+                    {{#if (gt system.atributos.acao.valor 0)}}
                     <button type="button" class="remover-ponto-atributo" data-atributo="acao" title="Remover ponto">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -84,7 +84,7 @@
                   {{/unless}}
                 {{/if}}
                 
-                <input type="number" name="system.atributos.acao.valor" value="{{system.atributos.acao.valor}}" min="3" max="18" readonly/>
+                <input type="number" name="system.atributos.acao.valor" value="{{system.atributos.acao.valor}}" min="0" max="18" readonly/>
                 
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
@@ -106,7 +106,7 @@
                 {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#unless statusPontosAtributos.atributosInicializados}}
-                    {{#if (gt system.atributos.mental.valor 3)}}
+                    {{#if (gt system.atributos.mental.valor 0)}}
                     <button type="button" class="remover-ponto-atributo" data-atributo="mental" title="Remover ponto">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -116,7 +116,7 @@
                   {{/unless}}
                 {{/if}}
                 
-                <input type="number" name="system.atributos.mental.valor" value="{{system.atributos.mental.valor}}" min="3" max="18" readonly/>
+                <input type="number" name="system.atributos.mental.valor" value="{{system.atributos.mental.valor}}" min="0" max="18" readonly/>
                 
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
@@ -138,7 +138,7 @@
                 {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}
                   {{#unless statusPontosAtributos.atributosInicializados}}
-                    {{#if (gt system.atributos.social.valor 3)}}
+                    {{#if (gt system.atributos.social.valor 0)}}
                     <button type="button" class="remover-ponto-atributo" data-atributo="social" title="Remover ponto">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -148,7 +148,7 @@
                   {{/unless}}
                 {{/if}}
                 
-                <input type="number" name="system.atributos.social.valor" value="{{system.atributos.social.valor}}" min="3" max="18" readonly/>
+                <input type="number" name="system.atributos.social.valor" value="{{system.atributos.social.valor}}" min="0" max="18" readonly/>
                 
                 {{!-- Botão para aumentar --}}
                 {{#if statusPontosAtributos.temPontosDisponiveis}}

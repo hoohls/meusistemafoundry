@@ -35,10 +35,10 @@ export class ClubeActorSheet extends ActorSheet {
       // Garantir que estrutura básica existe para evitar erros
       if (!context.system.atributos) {
         context.system.atributos = {
-          fisico: { valor: 3 },
-          acao: { valor: 3 },
-          mental: { valor: 3 },
-          social: { valor: 3 }
+          fisico: { valor: 0 },
+          acao: { valor: 0 },
+          mental: { valor: 0 },
+          social: { valor: 0 }
         };
       }
       
@@ -161,10 +161,10 @@ export class ClubeActorSheet extends ActorSheet {
         actor: this.actor,
         system: {
           atributos: {
-            fisico: { valor: 3 },
-            acao: { valor: 3 },
-            mental: { valor: 3 },
-            social: { valor: 3 }
+            fisico: { valor: 0 },
+            acao: { valor: 0 },
+            mental: { valor: 0 },
+            social: { valor: 0 }
           },
           recursos: {
             pv: { valor: 19, max: 19 },
@@ -866,7 +866,7 @@ export class ClubeActorSheet extends ActorSheet {
           <form>
             <div class="form-group">
               <label>Novo valor:</label>
-              <input type="number" name="valor" value="${valorAtual}" min="3" max="18" />
+              <input type="number" name="valor" value="${valorAtual}" min="0" max="18" />
             </div>
           </form>
         `,

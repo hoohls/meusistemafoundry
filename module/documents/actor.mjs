@@ -167,7 +167,7 @@ export class ClubeActor extends Actor {
    */
   async rolarTeste(atributo, nd = 9, modificador = 0, nome = null) {
     const data = this.system;
-    const valorAtributo = data.atributos[atributo]?.valor || 3;
+    const valorAtributo = data.atributos[atributo]?.valor || 0;
     
     // Aplicar penalidades por condições
     let penalidade = 0;
@@ -364,10 +364,10 @@ export class ClubeActor extends Actor {
    * @param {number} incremento - Quantidade a aumentar
    */
   async aumentarAtributo(atributo, incremento = 1) {
-    const valorAtual = this.system.atributos[atributo]?.valor || 3;
+    const valorAtual = this.system.atributos[atributo]?.valor || 0;
     const novoValor = valorAtual + incremento;
     
-    // Limitar a valores razoáveis (3-18)
+    // Limitar a valores razoáveis (0-18)
     if (novoValor > 18) {
       ui.notifications.warn("Valor máximo de atributo é 18");
       return;
@@ -810,7 +810,7 @@ export class ClubeActor extends Actor {
    */
   async adicionarPontoAtributo(atributo) {
     const statusPontos = this.getStatusPontosAtributos();
-    const valorAtual = this.system.atributos[atributo]?.valor || 3;
+    const valorAtual = this.system.atributos[atributo]?.valor || 0;
     
     // Verificar se há pontos disponíveis
     if (!statusPontos.temPontosDisponiveis) {
@@ -854,7 +854,7 @@ export class ClubeActor extends Actor {
    */
   async removerPontoAtributo(atributo) {
     const statusPontos = this.getStatusPontosAtributos();
-    const valorAtual = this.system.atributos[atributo]?.valor || 3;
+    const valorAtual = this.system.atributos[atributo]?.valor || 0;
     
     // Só permitir remoção durante distribuição inicial
     if (statusPontos.atributosInicializados) {
@@ -863,8 +863,8 @@ export class ClubeActor extends Actor {
     }
     
     // Verificar limite mínimo
-    if (valorAtual <= 3) {
-      ui.notifications.warn(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} já está no valor mínimo (3).`);
+    if (valorAtual <= 0) {
+      ui.notifications.warn(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} já está no valor mínimo (0).`);
       return false;
     }
     
