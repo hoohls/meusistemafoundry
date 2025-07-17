@@ -37,6 +37,41 @@ export class ClubeActor extends Actor {
         habilidades_disponiveis: 0
       };
     }
+    
+    // Garantir que experiência seja inicializada
+    if (!this.system.experiencia) {
+      this.system.experiencia = {
+        atual: 0,
+        necessaria: 10
+      };
+    }
+    
+    // Garantir que nível seja inicializado
+    if (!this.system.nivel) {
+      this.system.nivel = 1;
+    }
+    
+    // Garantir que recursos sejam inicializados
+    if (!this.system.recursos) {
+      this.system.recursos = {
+        pv: { valor: 10, max: 10 },
+        pm: { valor: 5, max: 5 },
+        defesa: { valor: 10, base: 10, armadura: 0, escudo: 0, outros: 0 }
+      };
+    }
+    
+    // Garantir que condições sejam inicializadas
+    if (!this.system.condicoes) {
+      this.system.condicoes = {
+        ferido: false,
+        gravemente_ferido: false,
+        inconsciente: false,
+        caido: false,
+        atordoado: false,
+        cego: false,
+        surdo: false
+      };
+    }
   }
 
   /** @override */
@@ -106,6 +141,18 @@ export class ClubeActor extends Actor {
     }
     if (!atributos.acao || atributos.acao.valor === undefined) {
       atributos.acao = { valor: 0 };
+    }
+    if (!atributos.social || atributos.social.valor === undefined) {
+      atributos.social = { valor: 0 };
+    }
+    
+    // Garantir que recursos existam
+    if (!data.recursos) {
+      data.recursos = {
+        pv: { valor: 10, max: 10 },
+        pm: { valor: 5, max: 5 },
+        defesa: { valor: 10, base: 10, armadura: 0, escudo: 0, outros: 0 }
+      };
     }
     
     // Calcular PV máximo (Físico × 3 + 10)
@@ -186,8 +233,26 @@ export class ClubeActor extends Actor {
    * @param {Object} data - Dados do sistema do ator
    */
   _verificarCondicoesFerimento(data) {
+    // Garantir que condições existam
+    if (!data.condicoes) {
+      data.condicoes = {
+        ferido: false,
+        gravemente_ferido: false,
+        inconsciente: false,
+        caido: false,
+        atordoado: false,
+        cego: false,
+        surdo: false
+      };
+    }
+    
+    // Garantir que recursos existam
+    if (!data.recursos || !data.recursos.pv) {
+      return;
+    }
+    
     const pv = data.recursos.pv;
-    const porcentagemPv = pv.valor / pv.max;
+    const porcentagemPv = pv.max > 0 ? pv.valor / pv.max : 0;
     
     // Ferido (PV < 50%)
     data.condicoes.ferido = porcentagemPv < 0.5 && pv.valor > 0;
@@ -204,6 +269,12 @@ export class ClubeActor extends Actor {
    * @param {Object} data - Dados do sistema do ator
    */
   _calcularCapacidadeCarga(data) {
+    // Garantir que atributos existam
+    if (!data.atributos || !data.atributos.fisico) {
+      data.capacidade_carga = 1;
+      return;
+    }
+    
     // Capacidade de carga = Físico × 5 kg (mínimo 1 kg)
     data.capacidade_carga = Math.max(1, data.atributos.fisico.valor * 5);
   }
@@ -244,6 +315,41 @@ export class ClubeActor extends Actor {
           pontos_atributo_gastos_iniciais: 0,
           atributos_inicializados: false,
           habilidades_disponiveis: 0
+        };
+      }
+      
+      // Garantir que experiência seja inicializada
+      if (!data.system.experiencia) {
+        data.system.experiencia = {
+          atual: 0,
+          necessaria: 10
+        };
+      }
+      
+      // Garantir que nível seja inicializado
+      if (!data.system.nivel) {
+        data.system.nivel = 1;
+      }
+      
+      // Garantir que recursos sejam inicializados
+      if (!data.system.recursos) {
+        data.system.recursos = {
+          pv: { valor: 10, max: 10 },
+          pm: { valor: 5, max: 5 },
+          defesa: { valor: 10, base: 10, armadura: 0, escudo: 0, outros: 0 }
+        };
+      }
+      
+      // Garantir que condições sejam inicializadas
+      if (!data.system.condicoes) {
+        data.system.condicoes = {
+          ferido: false,
+          gravemente_ferido: false,
+          inconsciente: false,
+          caido: false,
+          atordoado: false,
+          cego: false,
+          surdo: false
         };
       }
     }
@@ -481,6 +587,14 @@ export class ClubeActor extends Actor {
       return;
     }
 
+    // Garantir que estrutura de experiência exista
+    if (!this.system.experiencia) {
+      this.system.experiencia = {
+        atual: 0,
+        necessaria: 10
+      };
+    }
+
     const xpAtual = this.system.experiencia.atual || 0;
     const novoXP = xpAtual + quantidade;
     
@@ -497,6 +611,14 @@ export class ClubeActor extends Actor {
    * @private
    */
   async _verificarSubidaNivel() {
+    // Garantir que estruturas existam
+    if (!this.system.experiencia) {
+      this.system.experiencia = { atual: 0, necessaria: 10 };
+    }
+    if (!this.system.nivel) {
+      this.system.nivel = 1;
+    }
+    
     const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
     const nivelAtual = this.system.nivel || 1;
     const xpAtual = this.system.experiencia.atual || 0;
@@ -520,9 +642,20 @@ export class ClubeActor extends Actor {
   async _subirNivel(novoNivel) {
     const nivelAtual = this.system.nivel || 1;
     
+    // Garantir que progressão exista
+    if (!this.system.progressao) {
+      this.system.progressao = {
+        pontos_atributo: 0,
+        pontos_atributo_iniciais: 18,
+        pontos_atributo_gastos_iniciais: 0,
+        atributos_inicializados: false,
+        habilidades_disponiveis: 0
+      };
+    }
+    
     // Calcular recompensas baseadas no sistema oficial
-    let pontosAtributo = this.system.progressao?.pontos_atributo || 0;
-    let habilidadesDisponiveis = this.system.progressao?.habilidades_disponiveis || 0;
+    let pontosAtributo = this.system.progressao.pontos_atributo || 0;
+    let habilidadesDisponiveis = this.system.progressao.habilidades_disponiveis || 0;
     
     // Aplicar recompensas para cada nível subido
     for (let nivel = nivelAtual + 1; nivel <= novoNivel; nivel++) {
@@ -663,6 +796,14 @@ export class ClubeActor extends Actor {
       return;
     }
 
+    // Garantir que estrutura de experiência exista
+    if (!this.system.experiencia) {
+      this.system.experiencia = {
+        atual: 0,
+        necessaria: 10
+      };
+    }
+
     const xpAtual = this.system.experiencia.atual || 0;
     const novoXP = Math.max(0, xpAtual - quantidade);
     
@@ -679,6 +820,14 @@ export class ClubeActor extends Actor {
     if (quantidade < 0) {
       ui.notifications.warn("XP não pode ser negativo");
       return;
+    }
+
+    // Garantir que estrutura de experiência exista
+    if (!this.system.experiencia) {
+      this.system.experiencia = {
+        atual: 0,
+        necessaria: 10
+      };
     }
 
     await this.update({"system.experiencia.atual": quantidade});
@@ -991,6 +1140,25 @@ export class ClubeActor extends Actor {
     await this.update({"system.progressao.atributos_inicializados": true});
     ui.notifications.info("Distribuição inicial de atributos finalizada!");
     return true;
+  }
+
+  /**
+   * Método de teste para verificar se o sistema de XP está funcionando
+   * @returns {Object} Status do sistema de XP
+   */
+  testarSistemaXP() {
+    console.log("=== Teste do Sistema de XP ===");
+    console.log("Estrutura do sistema:", this.system);
+    console.log("Experiência:", this.system.experiencia);
+    console.log("Nível:", this.system.nivel);
+    console.log("Progressão:", this.system.progressao);
+    
+    return {
+      experiencia: this.system.experiencia,
+      nivel: this.system.nivel,
+      progressao: this.system.progressao,
+      atributos: this.system.atributos
+    };
   }
 
 } 

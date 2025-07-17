@@ -206,10 +206,19 @@ export class ClubeActorSheet extends ActorSheet {
       context.proximoNivel = tabelaXP[system.nivel] || (system.nivel * 50);
       
       // Porcentagem de XP para o próximo nível
-      const xpAtual = system.experiencia.atual;
+      const xpAtual = system.experiencia?.atual || 0;
       const xpAnterior = tabelaXP[system.nivel - 1] || 0;
       const xpProximo = context.proximoNivel;
-      context.porcentagemXP = Math.round(((xpAtual - xpAnterior) / (xpProximo - xpAnterior)) * 100);
+      
+      // Calcular porcentagem com proteção contra divisão por zero
+      if (xpProximo > xpAnterior) {
+        context.porcentagemXP = Math.round(((xpAtual - xpAnterior) / (xpProximo - xpAnterior)) * 100);
+      } else {
+        context.porcentagemXP = 0;
+      }
+      
+      // Garantir que a porcentagem esteja entre 0 e 100
+      context.porcentagemXP = Math.max(0, Math.min(100, context.porcentagemXP));
 
       // Status de condições
       context.condicoesAtivas = Object.keys(system.condicoes)
@@ -583,6 +592,7 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
+    html.find(".testar-xp").click(this._onTestarXP.bind(this));
 
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
@@ -1531,7 +1541,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onAjustarXP(event) {
     event.preventDefault();
     
-    const xpAtual = this.actor.system.experiencia.atual || 0;
+    const xpAtual = this.actor.system.experiencia?.atual || 0;
     
     const dialog = new Dialog({
       title: "Ajustar Experiência",
@@ -1585,6 +1595,45 @@ export class ClubeActorSheet extends ActorSheet {
     });
 
     dialog.render(true);
+  }
+
+  /**
+   * Testa o sistema de XP
+   * @param {Event} event - Evento de clique
+   */
+  async _onTestarXP(event) {
+    event.preventDefault();
+    
+    try {
+      const resultado = this.actor.testarSistemaXP();
+      
+      const dialog = new Dialog({
+        title: "Teste do Sistema de XP",
+        content: `
+          <div style="font-family: monospace; font-size: 12px;">
+            <h3>Status do Sistema de XP</h3>
+            <p><strong>Experiência:</strong> ${JSON.stringify(resultado.experiencia, null, 2)}</p>
+            <p><strong>Nível:</strong> ${resultado.nivel}</p>
+            <p><strong>Progressão:</strong> ${JSON.stringify(resultado.progressao, null, 2)}</p>
+            <p><strong>Atributos:</strong> ${JSON.stringify(resultado.atributos, null, 2)}</p>
+          </div>
+        `,
+        buttons: {
+          close: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Fechar"
+          }
+        },
+        default: "close"
+      });
+
+      dialog.render(true);
+      
+      ui.notifications.info("Teste do sistema de XP executado. Verifique o console para mais detalhes.");
+    } catch (error) {
+      console.error("Erro ao testar sistema de XP:", error);
+      ui.notifications.error("Erro ao testar sistema de XP: " + error.message);
+    }
   }
 
   /**

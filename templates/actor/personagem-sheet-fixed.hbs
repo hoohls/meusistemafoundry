@@ -17,11 +17,14 @@
                 <button type="button" class="ajustar-xp" title="Ajustar XP">
                   <i class="fas fa-cog"></i>
                 </button>
+                <button type="button" class="testar-xp" title="Testar Sistema XP">
+                  <i class="fas fa-bug"></i>
+                </button>
               </div>
             </div>
             <div class="xp-bar">
               <div class="xp-progress" style="width: {{porcentagemXP}}%"></div>
-              <span class="xp-text">{{system.experiencia.atual}} / {{proximoNivel}} XP</span>
+              <span class="xp-text">{{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{proximoNivel}} XP</span>
             </div>
           </div>
         </div>
@@ -762,7 +765,7 @@
               <strong>Nível Atual:</strong> {{system.nivel}}
             </div>
             <div class="status-box">
-              <strong>XP Atual:</strong> {{system.experiencia.atual}} / {{proximoNivel}}
+              <strong>XP Atual:</strong> {{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{proximoNivel}}
             </div>
             <div class="status-box">
               <strong>Pontos de Atributo:</strong> {{#if system.progressao.pontos_atributo}}{{system.progressao.pontos_atributo}}{{else}}0{{/if}}
