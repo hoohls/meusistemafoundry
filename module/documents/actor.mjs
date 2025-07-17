@@ -1297,18 +1297,34 @@ export class ClubeActor extends Actor {
    */
   getStatusPontosAtributos() {
     try {
+      console.log(`[DEBUG] Verificando status dos pontos de atributos`);
+      console.log(`[DEBUG] Dados do sistema:`, this.system);
+      
       const progressao = this.system.progressao || {};
+      console.log(`[DEBUG] Dados da progressão:`, progressao);
+      
       const atributosInicializados = progressao.atributos_inicializados || false;
       const pontosIniciais = progressao.pontos_atributo_iniciais || 18;
       const pontosGastosIniciais = progressao.pontos_atributo_gastos_iniciais || 0;
       const pontosPorNivel = progressao.pontos_atributo || 0;
       
-      return {
+      console.log(`[DEBUG] Valores calculados:`, {
+        atributosInicializados,
+        pontosIniciais,
+        pontosGastosIniciais,
+        pontosPorNivel,
+        pontosDisponiveisIniciais: pontosIniciais - pontosGastosIniciais
+      });
+      
+      const resultado = {
         atributosInicializados,
         pontosDisponiveisIniciais: pontosIniciais - pontosGastosIniciais,
         pontosPorNivel,
         temPontosDisponiveis: (!atributosInicializados && (pontosIniciais - pontosGastosIniciais) > 0) || pontosPorNivel > 0
       };
+      
+      console.log(`[DEBUG] Resultado final:`, resultado);
+      return resultado;
     } catch (error) {
       console.error("Erro ao obter status dos pontos de atributos:", error);
       // Retornar valores padrão em caso de erro
@@ -1327,19 +1343,65 @@ export class ClubeActor extends Actor {
    * @returns {Promise<boolean>} Se foi possível adicionar o ponto
    */
   async adicionarPontoAtributo(atributo) {
+    console.log(`[DEBUG] Tentando adicionar ponto ao atributo: ${atributo}`);
+    
+    // Verificar se o atributo é válido
+    const atributosValidos = ['fisico', 'acao', 'mental', 'social'];
+    if (!atributosValidos.includes(atributo)) {
+      console.error(`[DEBUG] Atributo inválido: ${atributo}`);
+      ui.notifications.error(`Atributo inválido: ${atributo}`);
+      return false;
+    }
+    
+    // Garantir que a estrutura de atributos existe
+    if (!this.system.atributos) {
+      console.log(`[DEBUG] Criando estrutura de atributos`);
+      this.system.atributos = {
+        fisico: { valor: 0 },
+        acao: { valor: 0 },
+        mental: { valor: 0 },
+        social: { valor: 0 }
+      };
+    }
+    
+    // Garantir que o atributo específico existe
+    if (!this.system.atributos[atributo]) {
+      console.log(`[DEBUG] Criando atributo ${atributo}`);
+      this.system.atributos[atributo] = { valor: 0 };
+    }
+    
+    // Garantir que a estrutura de progressão existe
+    if (!this.system.progressao) {
+      console.log(`[DEBUG] Criando estrutura de progressão`);
+      this.system.progressao = {
+        pontos_atributo: 0,
+        pontos_atributo_iniciais: 18,
+        pontos_atributo_gastos_iniciais: 0,
+        atributos_inicializados: false,
+        habilidades_disponiveis: 0
+      };
+    }
+    
     const statusPontos = this.getStatusPontosAtributos();
+    console.log(`[DEBUG] Status dos pontos:`, statusPontos);
+    
     const valorAtual = this.system.atributos[atributo]?.valor || 0;
+    console.log(`[DEBUG] Valor atual do atributo ${atributo}: ${valorAtual}`);
     
     // Verificar se há pontos disponíveis
     if (!statusPontos.temPontosDisponiveis) {
+      console.log(`[DEBUG] Não há pontos disponíveis`);
       ui.notifications.warn("Não há pontos de atributo disponíveis.");
       return false;
     }
     
     // Verificar limite máximo
     const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
+    console.log(`[DEBUG] Limite máximo para ${atributo}: ${limiteMaximo}`);
+    
     if (valorAtual >= limiteMaximo) {
       const tipoLimite = statusPontos.atributosInicializados ? "máximo do sistema" : "inicial";
+      console.log(`[DEBUG] Atributo ${atributo} já está no limite ${tipoLimite}`);
       ui.notifications.warn(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} já está no limite ${tipoLimite} (${limiteMaximo}).`);
       return false;
     }
@@ -1352,18 +1414,30 @@ export class ClubeActor extends Actor {
       // Usar pontos iniciais
       const pontosGastosAtuais = this.system.progressao?.pontos_atributo_gastos_iniciais || 0;
       updateData["system.progressao.pontos_atributo_gastos_iniciais"] = pontosGastosAtuais + 1;
+      console.log(`[DEBUG] Usando pontos iniciais. Gastos atuais: ${pontosGastosAtuais}, novos gastos: ${pontosGastosAtuais + 1}`);
     } else if (statusPontos.pontosPorNivel > 0) {
       // Usar pontos ganhos por nível
       const pontosAtuais = this.system.progressao?.pontos_atributo || 0;
       updateData["system.progressao.pontos_atributo"] = pontosAtuais - 1;
+      console.log(`[DEBUG] Usando pontos por nível. Pontos atuais: ${pontosAtuais}, novos pontos: ${pontosAtuais - 1}`);
     } else {
+      console.log(`[DEBUG] Não há pontos disponíveis de nenhum tipo`);
       ui.notifications.warn("Não há pontos de atributo disponíveis.");
       return false;
     }
     
-    await this.update(updateData);
-    ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${valorAtual + 1}.`);
-    return true;
+    console.log(`[DEBUG] Dados para atualização:`, updateData);
+    
+    try {
+      await this.update(updateData);
+      console.log(`[DEBUG] Atualização bem-sucedida`);
+      ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${valorAtual + 1}.`);
+      return true;
+    } catch (error) {
+      console.error(`[DEBUG] Erro ao atualizar atributo ${atributo}:`, error);
+      ui.notifications.error(`Erro ao atualizar atributo ${atributo}: ${error.message}`);
+      return false;
+    }
   }
 
   /**
@@ -1478,6 +1552,92 @@ export class ClubeActor extends Actor {
       console.error("Erro ao obter XP do próximo nível:", error);
       return 10;
     }
+  }
+
+  /**
+   * Força a reinicialização dos dados do personagem
+   * @returns {Promise<boolean>} Se foi possível reinicializar
+   */
+  async reinicializarDados() {
+    try {
+      console.log("=== REINICIALIZANDO DADOS DO PERSONAGEM ===");
+      
+      const updateData = {
+        "system.atributos": {
+          fisico: { valor: 0 },
+          acao: { valor: 0 },
+          mental: { valor: 0 },
+          social: { valor: 0 }
+        },
+        "system.progressao": {
+          pontos_atributo: 0,
+          pontos_atributo_iniciais: 18,
+          pontos_atributo_gastos_iniciais: 0,
+          atributos_inicializados: false,
+          habilidades_disponiveis: 0
+        },
+        "system.experiencia": {
+          atual: 0,
+          necessaria: 10
+        },
+        "system.nivel": 1,
+        "system.recursos": {
+          pv: { valor: 10, max: 10 },
+          pm: { valor: 5, max: 5 },
+          defesa: { valor: 10, base: 10, armadura: 0, escudo: 0, outros: 0 }
+        },
+        "system.condicoes": {
+          ferido: false,
+          gravemente_ferido: false,
+          inconsciente: false,
+          caido: false,
+          atordoado: false,
+          cego: false,
+          surdo: false
+        }
+      };
+      
+      await this.update(updateData);
+      console.log("Dados reinicializados com sucesso!");
+      ui.notifications.info("Dados do personagem reinicializados com sucesso!");
+      return true;
+    } catch (error) {
+      console.error("Erro ao reinicializar dados:", error);
+      ui.notifications.error("Erro ao reinicializar dados: " + error.message);
+      return false;
+    }
+  }
+
+  /**
+   * Método de teste para verificar o estado atual dos atributos e pontos
+   * @returns {Object} Estado atual do personagem
+   */
+  testarEstadoAtributos() {
+    console.log("=== TESTE DE ESTADO DOS ATRIBUTOS ===");
+    console.log("Dados completos do sistema:", this.system);
+    console.log("Atributos:", this.system.atributos);
+    console.log("Progressão:", this.system.progressao);
+    console.log("Experiência:", this.system.experiencia);
+    console.log("Nível:", this.system.nivel);
+    
+    const statusPontos = this.getStatusPontosAtributos();
+    console.log("Status dos pontos:", statusPontos);
+    
+    // Verificar cada atributo individualmente
+    const atributos = ['fisico', 'acao', 'mental', 'social'];
+    atributos.forEach(atributo => {
+      const valor = this.system.atributos[atributo]?.valor || 0;
+      const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
+      const podeAdicionar = valor < limiteMaximo && statusPontos.temPontosDisponiveis;
+      
+      console.log(`${atributo.toUpperCase()}: valor=${valor}, limite=${limiteMaximo}, podeAdicionar=${podeAdicionar}`);
+    });
+    
+    return {
+      atributos: this.system.atributos,
+      progressao: this.system.progressao,
+      statusPontos: statusPontos
+    };
   }
 
   /**

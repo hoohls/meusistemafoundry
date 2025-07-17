@@ -298,24 +298,57 @@
 
 /* === Pontos de Atributos === */
 .pontos-atributos-info {
-  background: #e8f5e8;
-  border: 1px solid #4caf50;
-  border-radius: 4px;
-  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
   margin-bottom: 15px;
   text-align: center;
 }
 
 .pontos-atributos-info p {
-  margin: 4px 0;
-  color: #2e7d32;
+  margin: 5px 0;
   font-weight: bold;
 }
 
 .pontos-atributos-info small {
-  color: #666;
-  font-weight: normal;
-  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+/* === Debug Section === */
+.debug-section {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.testar-atributos {
+  background: #FF9800;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.testar-atributos:hover {
+  background: #F57C00;
+}
+
+.reinicializar-dados {
+  background: #F44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 5px;
+}
+
+.reinicializar-dados:hover {
+  background: #D32F2F;
 }
 
 .adicionar-ponto-atributo, .remover-ponto-atributo {

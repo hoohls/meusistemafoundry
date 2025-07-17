@@ -714,6 +714,8 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".adicionar-ponto-atributo").click(this._onAdicionarPontoAtributo.bind(this));
     html.find(".remover-ponto-atributo").click(this._onRemoverPontoAtributo.bind(this));
     html.find(".finalizar-distribuicao-inicial").click(this._onFinalizarDistribuicaoInicial.bind(this));
+    html.find(".testar-atributos").click(this._onTestarAtributos.bind(this));
+    html.find(".reinicializar-dados").click(this._onReinicializarDados.bind(this));
 
     // Gerenciar recursos (PV/PM)
     html.find(".ajustar-pv").click(this._onAjustarPV.bind(this));
@@ -2768,6 +2770,36 @@ export class ClubeActorSheet extends ActorSheet {
   async _onFinalizarDistribuicaoInicial(event) {
     event.preventDefault();
     await this.actor.finalizarDistribuicaoInicial();
+  }
+
+  /**
+   * Testa o estado atual dos atributos (debug)
+   * @param {Event} event - Evento de clique
+   */
+  async _onTestarAtributos(event) {
+    event.preventDefault();
+    const resultado = this.actor.testarEstadoAtributos();
+    ui.notifications.info("Teste de atributos executado. Verifique o console para detalhes.");
+  }
+
+  /**
+   * Reinicializa os dados do personagem
+   * @param {Event} event - Evento de clique
+   */
+  async _onReinicializarDados(event) {
+    event.preventDefault();
+    
+    const confirmacao = await Dialog.confirm({
+      title: "Reinicializar Dados",
+      content: "<p>Tem certeza que deseja reinicializar todos os dados do personagem? Esta ação não pode ser desfeita.</p>",
+      yes: () => true,
+      no: () => false
+    });
+    
+    if (confirmacao) {
+      await this.actor.reinicializarDados();
+      this.render(true);
+    }
   }
 
   /**
