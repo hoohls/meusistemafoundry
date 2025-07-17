@@ -1942,8 +1942,8 @@
 /* Grid de equipamentos disponíveis */
 .equipamentos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
 }
 
 /* Itens de habilidade */
@@ -1970,19 +1970,19 @@
 .equipamento-item {
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   transition: all 0.2s ease;
 }
 
 .equipamento-item:hover {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
 }
 
 .equipamento-item.disponivel {
-  border-left: 3px solid #4299e1;
+  border-left: 4px solid #4299e1;
   background: linear-gradient(135deg, #ebf8ff 0%, #f0fff4 100%);
 }
 
@@ -2040,13 +2040,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .equipamento-header h5 {
   margin: 0;
   color: #2d3748;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 600;
 }
 
@@ -2466,8 +2466,8 @@
 /* Status de equipamentos */
 .status-equipamentos {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 15px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -2475,53 +2475,52 @@
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 12px 15px;
   flex: 1;
-  min-width: 120px;
+  min-width: 150px;
   text-align: center;
 }
 
 .status-equipamentos .status-box strong {
   color: #4a5568;
   display: block;
-  margin-bottom: 3px;
-  font-size: 11px;
+  margin-bottom: 5px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .status-equipamentos .status-box span {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   color: #2d3748;
 }
 
 /* Seção de equipamentos disponíveis */
 .equipamentos-disponiveis-section {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .equipamentos-disponiveis-section h3 {
   color: #4a5568;
   border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 6px;
-  margin-bottom: 12px;
-  font-size: 16px;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 /* Escola de equipamentos */
 .equipamentos-escola {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .equipamentos-escola h4 {
   color: #2d3748;
   background: linear-gradient(90deg, #667eea, #764ba2);
   color: white;
-  padding: 6px 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  font-size: 1em;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
 }
 
 .equipamentos-escola .equipamentos-grid {
@@ -2533,27 +2532,27 @@
 /* Grid de equipamentos disponíveis */
 .equipamentos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
 }
 
 /* Itens de equipamento */
 .equipamento-item {
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   transition: all 0.2s ease;
 }
 
 .equipamento-item:hover {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
 }
 
 .equipamento-item.disponivel {
-  border-left: 3px solid #4299e1;
+  border-left: 4px solid #4299e1;
   background: linear-gradient(135deg, #ebf8ff 0%, #f0fff4 100%);
 }
 
@@ -2562,20 +2561,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .equipamento-header h5 {
   margin: 0;
   color: #2d3748;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 600;
 }
 
 /* Grupo de botões */
 .equipamento-botoes {
   display: flex;
-  gap: 3px;
+  gap: 5px;
 }
 
 /* Botões de ação dos equipamentos */
@@ -2583,12 +2582,11 @@
 .detalhes-equipamento {
   background: none;
   border: none;
-  padding: 4px;
-  border-radius: 3px;
+  padding: 5px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #4a5568;
-  font-size: 12px;
 }
 
 .comprar-equipamento {
@@ -2609,10 +2607,9 @@
 
 /* Detalhes dos equipamentos */
 .equipamento-requisitos p {
-  margin: 3px 0;
-  font-size: 0.85em;
+  margin: 5px 0;
+  font-size: 0.9em;
   color: #4a5568;
-  line-height: 1.3;
 }
 
 .equipamento-requisitos strong {
