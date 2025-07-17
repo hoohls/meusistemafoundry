@@ -165,7 +165,7 @@ async function executarTeste({
   };
 
   // Enviar para o chat
-  await ChatMessage.create(chatData);
+  // await ChatMessage.create(chatData);
 
   return {
     roll: roll,
