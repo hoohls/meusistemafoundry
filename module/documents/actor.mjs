@@ -4,6 +4,42 @@
 export class ClubeActor extends Actor {
 
   /** @override */
+  prepareBaseData() {
+    super.prepareBaseData();
+    
+    // Garantir que atributos sejam inicializados com 0 para novos personagens
+    if (!this.system.atributos) {
+      this.system.atributos = {
+        fisico: { valor: 0 },
+        acao: { valor: 0 },
+        mental: { valor: 0 },
+        social: { valor: 0 }
+      };
+    } else {
+      // Garantir que cada atributo tenha valor 0 se não existir
+      const atributos = ['fisico', 'acao', 'mental', 'social'];
+      atributos.forEach(atributo => {
+        if (!this.system.atributos[atributo]) {
+          this.system.atributos[atributo] = { valor: 0 };
+        } else if (this.system.atributos[atributo].valor === undefined) {
+          this.system.atributos[atributo].valor = 0;
+        }
+      });
+    }
+    
+    // Garantir que progressão seja inicializada
+    if (!this.system.progressao) {
+      this.system.progressao = {
+        pontos_atributo: 0,
+        pontos_atributo_iniciais: 18,
+        pontos_atributo_gastos_iniciais: 0,
+        atributos_inicializados: false,
+        habilidades_disponiveis: 0
+      };
+    }
+  }
+
+  /** @override */
   prepareData() {
     super.prepareData();
     
@@ -61,8 +97,19 @@ export class ClubeActor extends Actor {
   _calcularValoresDerivados(data) {
     const atributos = data.atributos;
     
+    // Garantir que atributos existam e tenham valores válidos
+    if (!atributos.fisico || atributos.fisico.valor === undefined) {
+      atributos.fisico = { valor: 0 };
+    }
+    if (!atributos.mental || atributos.mental.valor === undefined) {
+      atributos.mental = { valor: 0 };
+    }
+    if (!atributos.acao || atributos.acao.valor === undefined) {
+      atributos.acao = { valor: 0 };
+    }
+    
     // Calcular PV máximo (Físico × 3 + 10)
-    const pvMax = atributos.fisico.valor * 3 + 10;
+    const pvMax = Math.max(1, atributos.fisico.valor * 3 + 10);
     data.recursos.pv.max = pvMax;
     
     // Garantir que PV atual não exceda o máximo
@@ -71,7 +118,7 @@ export class ClubeActor extends Actor {
     }
     
     // Calcular PM máximo (Mental × 2 + 5)
-    const pmMax = atributos.mental.valor * 2 + 5;
+    const pmMax = Math.max(1, atributos.mental.valor * 2 + 5);
     data.recursos.pm.max = pmMax;
     
     // Garantir que PM atual não exceda o máximo
@@ -86,6 +133,9 @@ export class ClubeActor extends Actor {
       (data.recursos.defesa.armadura || 0) + 
       (data.recursos.defesa.escudo || 0) + 
       (data.recursos.defesa.outros || 0);
+    
+    // Garantir que defesa seja pelo menos 1
+    data.recursos.defesa.valor = Math.max(1, data.recursos.defesa.valor);
     
     // Calcular movimento base (9m padrão)
     if (!data.movimento) {
@@ -154,8 +204,51 @@ export class ClubeActor extends Actor {
    * @param {Object} data - Dados do sistema do ator
    */
   _calcularCapacidadeCarga(data) {
-    // Capacidade de carga = Físico × 5 kg
-    data.capacidade_carga = data.atributos.fisico.valor * 5;
+    // Capacidade de carga = Físico × 5 kg (mínimo 1 kg)
+    data.capacidade_carga = Math.max(1, data.atributos.fisico.valor * 5);
+  }
+
+  /**
+   * Garante que dados padrão sejam definidos na criação
+   * @param {Object} data - Dados do ator
+   * @param {Object} options - Opções de criação
+   */
+  static async create(data, options = {}) {
+    // Garantir que atributos sejam inicializados com 0
+    if (data.type === "personagem") {
+      if (!data.system) data.system = {};
+      if (!data.system.atributos) {
+        data.system.atributos = {
+          fisico: { valor: 0 },
+          acao: { valor: 0 },
+          mental: { valor: 0 },
+          social: { valor: 0 }
+        };
+      } else {
+        // Garantir que cada atributo tenha valor 0 se não existir
+        const atributos = ['fisico', 'acao', 'mental', 'social'];
+        atributos.forEach(atributo => {
+          if (!data.system.atributos[atributo]) {
+            data.system.atributos[atributo] = { valor: 0 };
+          } else if (data.system.atributos[atributo].valor === undefined) {
+            data.system.atributos[atributo].valor = 0;
+          }
+        });
+      }
+      
+      // Garantir que progressão seja inicializada
+      if (!data.system.progressao) {
+        data.system.progressao = {
+          pontos_atributo: 0,
+          pontos_atributo_iniciais: 18,
+          pontos_atributo_gastos_iniciais: 0,
+          atributos_inicializados: false,
+          habilidades_disponiveis: 0
+        };
+      }
+    }
+    
+    return super.create(data, options);
   }
 
   /**

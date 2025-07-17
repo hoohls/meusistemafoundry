@@ -491,8 +491,8 @@ export class ClubeActorSheet extends ActorSheet {
    * @returns {number} Capacidade de carga em kg
    */
   _calcularCapacidadeCarga() {
-    const fisico = this.actor.system.atributos?.fisico?.valor || 10;
-    return fisico * 5; // 5kg por ponto de Físico
+    const fisico = this.actor.system.atributos?.fisico?.valor || 0;
+    return Math.max(1, fisico * 5); // 5kg por ponto de Físico (mínimo 1 kg)
   }
 
   /**
