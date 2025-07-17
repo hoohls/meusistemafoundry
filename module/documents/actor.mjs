@@ -426,13 +426,22 @@ export class ClubeActor extends Actor {
    */
   async _subirNivel(novoNivel) {
     const nivelAtual = this.system.nivel || 1;
-    const niveisSubidos = novoNivel - nivelAtual;
     
-    // Calcular novos recursos baseados nos novos atributos
+    // Calcular recompensas baseadas no sistema oficial
+    let pontosAtributo = this.system.progressao?.pontos_atributo || 0;
+    let habilidadesDisponiveis = this.system.progressao?.habilidades_disponiveis || 0;
+    
+    // Aplicar recompensas para cada nível subido
+    for (let nivel = nivelAtual + 1; nivel <= novoNivel; nivel++) {
+      const recompensas = this._calcularRecompensasNivel(nivel);
+      pontosAtributo += recompensas.pontosAtributo;
+      habilidadesDisponiveis += recompensas.habilidades;
+    }
+    
     const updateData = {
       "system.nivel": novoNivel,
-      "system.progressao.pontos_atributo": (this.system.progressao?.pontos_atributo || 0) + niveisSubidos,
-      "system.progressao.habilidades_disponiveis": (this.system.progressao?.habilidades_disponiveis || 0) + niveisSubidos
+      "system.progressao.pontos_atributo": pontosAtributo,
+      "system.progressao.habilidades_disponiveis": habilidadesDisponiveis
     };
 
     await this.update(updateData);
@@ -441,12 +450,63 @@ export class ClubeActor extends Actor {
     ui.notifications.info(`🎉 ${this.name} subiu para o nível ${novoNivel}!`);
     
     // Se subiu múltiplos níveis
-    if (niveisSubidos > 1) {
-      ui.notifications.warn(`Subiu ${niveisSubidos} níveis de uma vez! Distribua os pontos de atributo.`);
+    if (novoNivel - nivelAtual > 1) {
+      ui.notifications.warn(`Subiu ${novoNivel - nivelAtual} níveis de uma vez! Distribua as recompensas.`);
     }
     
     // Enviar mensagem no chat
     await this._anunciarSubidaNivel(nivelAtual, novoNivel);
+  }
+
+  /**
+   * Calcula as recompensas para um nível específico
+   * @param {number} nivel - Nível para calcular recompensas
+   * @returns {Object} Objeto com pontosAtributo e habilidades
+   * @private
+   */
+  _calcularRecompensasNivel(nivel) {
+    const recompensas = {
+      pontosAtributo: 0,
+      habilidades: 0
+    };
+
+         switch (nivel) {
+       case 1:
+         // Nível 1: 4 habilidades iniciais (apenas se criando personagem novo)
+         recompensas.habilidades = 0; // Não aplicar ao subir para nível 1
+         break;
+      case 2:
+      case 4:
+      case 6:
+      case 8:
+        // Níveis pares: +1 habilidade
+        recompensas.habilidades = 1;
+        break;
+      case 3:
+      case 7:
+        // Níveis 3 e 7: +1 ponto de atributo
+        recompensas.pontosAtributo = 1;
+        break;
+      case 5:
+      case 9:
+        // Níveis 5 e 9: Habilidade especial de classe
+        recompensas.habilidades = 1; // Tratada como habilidade especial
+        break;
+      case 10:
+        // Nível 10: Maestria (habilidade única)
+        recompensas.habilidades = 1; // Tratada como habilidade especial
+        break;
+      default:
+        // Níveis acima de 10 (sistema épico)
+        if (nivel % 2 === 0) {
+          recompensas.habilidades = 1;
+        } else {
+          recompensas.pontosAtributo = 1;
+        }
+        break;
+    }
+
+    return recompensas;
   }
 
   /**
@@ -456,6 +516,31 @@ export class ClubeActor extends Actor {
    * @private
    */
   async _anunciarSubidaNivel(nivelAnterior, novoNivel) {
+    // Calcular recompensas para cada nível subido
+    const recompensas = [];
+    for (let nivel = nivelAnterior + 1; nivel <= novoNivel; nivel++) {
+      const recompensa = this._calcularRecompensasNivel(nivel);
+      let descricao = "";
+      
+      if (recompensa.pontosAtributo > 0 && recompensa.habilidades > 0) {
+        descricao = `+${recompensa.pontosAtributo} ponto de atributo e +${recompensa.habilidades} habilidade`;
+      } else if (recompensa.pontosAtributo > 0) {
+        descricao = `+${recompensa.pontosAtributo} ponto de atributo`;
+      } else if (recompensa.habilidades > 0) {
+        if (nivel === 5 || nivel === 9) {
+          descricao = "Habilidade especial de classe";
+        } else if (nivel === 10) {
+          descricao = "Maestria (habilidade única)";
+        } else {
+          descricao = `+${recompensa.habilidades} habilidade`;
+        }
+      }
+      
+      if (descricao) {
+        recompensas.push(`<li><strong>Nível ${nivel}:</strong> ${descricao}</li>`);
+      }
+    }
+
     const chatData = {
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({actor: this}),
@@ -464,8 +549,7 @@ export class ClubeActor extends Actor {
           <h3>🎉 Subida de Nível!</h3>
           <p><strong>${this.name}</strong> subiu do nível <strong>${nivelAnterior}</strong> para o nível <strong>${novoNivel}</strong>!</p>
           <ul>
-            <li>+ 1 ponto de atributo para distribuir</li>
-            <li>+ 1 habilidade disponível</li>
+            ${recompensas.join('')}
             <li>PV e PM recalculados automaticamente</li>
           </ul>
         </div>

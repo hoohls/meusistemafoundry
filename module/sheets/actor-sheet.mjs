@@ -158,6 +158,7 @@ export class ClubeActorSheet extends ActorSheet {
 
     // Preparar tabela de progressão para exibição
     context.tabelaProgressao = this._prepararTabelaProgressao();
+    context.tabelaProgressaoCompleta = this._prepararTabelaProgressaoCompleta();
 
     return context;
   }
@@ -229,6 +230,58 @@ export class ClubeActorSheet extends ActorSheet {
         numero: i,
         xp_necessario: xpParaSubir,
         xp_total: xpTotal
+      });
+    }
+
+    return progressao;
+  }
+
+  /**
+   * Prepara a tabela de progressão completa com benefícios para exibição
+   * @returns {Array} Array com dados da progressão incluindo benefícios
+   */
+  _prepararTabelaProgressaoCompleta() {
+    const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270];
+    const beneficiosPorNivel = {
+      1: "4 habilidades iniciais",
+      2: "+1 habilidade",
+      3: "+1 ponto de atributo",
+      4: "+1 habilidade", 
+      5: "Habilidade especial de classe",
+      6: "+1 habilidade",
+      7: "+1 ponto de atributo",
+      8: "+1 habilidade",
+      9: "Habilidade especial de classe",
+      10: "Maestria (habilidade única)"
+    };
+    
+    const progressao = [];
+    const nivelAtual = this.actor.system.nivel || 1;
+    const xpAtual = this.actor.system.experiencia?.atual || 0;
+
+    for (let i = 1; i <= 10; i++) {
+      const xpAnterior = tabelaXP[i - 1] || 0;
+      const xpTotal = tabelaXP[i];
+      let xpParaSubir;
+      
+      if (i === 1) {
+        xpParaSubir = "-";
+      } else if (i === nivelAtual) {
+        // Para o nível atual, mostrar quanto falta para o próximo
+        xpParaSubir = xpTotal - xpAtual;
+      } else if (i < nivelAtual) {
+        // Para níveis já completados, mostrar "Completo"
+        xpParaSubir = "✓";
+      } else {
+        // Para níveis futuros, mostrar quanto XP é necessário para chegar naquele nível
+        xpParaSubir = xpTotal - xpAnterior;
+      }
+      
+      progressao.push({
+        numero: i,
+        xp_necessario: xpParaSubir,
+        xp_total: xpTotal,
+        beneficios: beneficiosPorNivel[i] || ""
       });
     }
 
