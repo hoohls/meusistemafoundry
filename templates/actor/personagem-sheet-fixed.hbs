@@ -394,6 +394,123 @@
           <textarea name="system.detalhes.historia" rows="5">{{system.detalhes.historia}}</textarea>
         </div>
 
+        {{!-- Seção de Progressão de Nível --}}
+        <div class="progressao-section">
+          <h3><i class="fas fa-arrow-up"></i> Progressão de Nível</h3>
+          
+          {{!-- Status Atual --}}
+          <div class="status-atual">
+            <div class="status-box">
+              <strong>Nível Atual:</strong> {{system.nivel}}
+            </div>
+            <div class="status-box">
+              <strong>XP Atual:</strong> {{system.experiencia.atual}} / {{proximoNivel}}
+            </div>
+            <div class="status-box">
+              <strong>Pontos de Atributo:</strong> {{#if system.progressao.pontos_atributo}}{{system.progressao.pontos_atributo}}{{else}}0{{/if}}
+            </div>
+          </div>
+
+          {{!-- Benefícios ao Subir de Nível --}}
+          <div class="beneficios-nivel">
+            <h4><i class="fas fa-gift"></i> Ao Subir de Nível Você Ganha:</h4>
+            <ul class="beneficios-lista">
+              <li><strong>+1 Ponto de Atributo</strong> - Para distribuir entre Físico, Ação, Mental ou Social</li>
+              <li><strong>+1 Habilidade</strong> - Escolha uma nova habilidade de classe ou geral</li>
+              <li><strong>PV e PM Recalculados</strong> - Baseados nos novos valores de atributos</li>
+              <li><strong>Defesa Atualizada</strong> - Se aumentou o atributo Ação</li>
+            </ul>
+          </div>
+
+          {{!-- Tabela de Progressão de XP --}}
+          <div class="tabela-xp">
+            <h4><i class="fas fa-chart-line"></i> Tabela de Progressão</h4>
+            <div class="xp-grid">
+                             <div class="xp-header">
+                 <span>Nível</span>
+                 <span>XP para Subir</span>
+                 <span>XP Total</span>
+               </div>
+              {{#each tabelaProgressao as |nivel|}}
+              <div class="xp-row {{#if (eq nivel.numero ../system.nivel)}}atual{{/if}} {{#if (lt nivel.numero ../system.nivel)}}concluido{{/if}}">
+                <span class="nivel">{{nivel.numero}}</span>
+                <span class="xp-necessario">{{nivel.xp_necessario}}</span>
+                <span class="xp-total">{{nivel.xp_total}}</span>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+
+          {{!-- Informações de Classe --}}
+          {{#if system.classe.nome}}
+          <div class="info-classe">
+            <h4><i class="fas fa-shield-alt"></i> Sua Classe: {{system.classe.nome}}</h4>
+            <div class="classe-descricao">
+              {{#if (eq system.classe.nome "guerreiro")}}
+              <p><strong>Guerreiro</strong> - Especialista em combate e proteção</p>
+              <ul>
+                <li>Foco em atributos Físico e Ação</li>
+                <li>Habilidades de combate e liderança</li>
+                <li>Especialização em armas e armaduras</li>
+                <li>Manobras especiais de combate</li>
+              </ul>
+              {{else if (eq system.classe.nome "mago")}}
+              <p><strong>Mago</strong> - Manipulador das forças arcanas</p>
+              <ul>
+                <li>Foco em atributo Mental</li>
+                <li>Acesso a todas as escolas de magia</li>
+                <li>PM adicional e magias poderosas</li>
+                <li>Habilidades de pesquisa e conhecimento</li>
+              </ul>
+              {{else if (eq system.classe.nome "ladino")}}
+              <p><strong>Ladino</strong> - Mestre da furtividade e precisão</p>
+              <ul>
+                <li>Foco em atributos Ação e Mental</li>
+                <li>Habilidades de furtividade e subterfúgio</li>
+                <li>Ataques precisos e críticos</li>
+                <li>Especialização em ferramentas e disfarces</li>
+              </ul>
+              {{else if (eq system.classe.nome "diplomata")}}
+              <p><strong>Diplomata</strong> - Expert em interações sociais</p>
+              <ul>
+                <li>Foco em atributos Social e Mental</li>
+                <li>Habilidades de persuasão e negociação</li>
+                <li>Conhecimento de idiomas e culturas</li>
+                <li>Redes de contatos e influência</li>
+              </ul>
+              {{else}}
+              <p>Classe selecionada: <strong>{{system.classe.nome}}</strong></p>
+              <p>Escolha uma classe para ver informações específicas de progressão.</p>
+              {{/if}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{!-- Dicas de Progressão --}}
+          <div class="dicas-progressao">
+            <h4><i class="fas fa-lightbulb"></i> Dicas de Progressão</h4>
+            <div class="dica-box">
+              <p><strong>Distribuição de Atributos:</strong></p>
+              <ul>
+                <li><strong>Físico:</strong> Aumenta PV (×3) e dano corpo a corpo</li>
+                <li><strong>Ação:</strong> Aumenta Defesa e precisão à distância</li>
+                <li><strong>Mental:</strong> Aumenta PM (×2) e poder de magias</li>
+                <li><strong>Social:</strong> Melhora interações e liderança</li>
+              </ul>
+            </div>
+            
+            <div class="dica-box">
+              <p><strong>Planejamento:</strong></p>
+              <ul>
+                <li>Considere o estilo de jogo que você quer</li>
+                <li>Equilibre entre ataque, defesa e utilidade</li>
+                <li>Converse com o Mestre sobre habilidades disponíveis</li>
+                <li>Pense na sinergia entre atributos e classe</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

@@ -730,6 +730,39 @@
   .condicoes-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  /* Responsividade para Seção de Progressão */
+  .status-atual {
+    grid-template-columns: 1fr;
+  }
+  
+  .xp-grid {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  
+  .xp-header, .xp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+  
+  .xp-header span, .xp-row span {
+    font-size: 12px;
+    padding: 4px;
+  }
+  
+  .progressao-section {
+    padding: 15px;
+  }
+  
+  .progressao-section h3 {
+    font-size: 16px;
+  }
+  
+  .progressao-section h4 {
+    font-size: 12px;
+  }
 }
 
 /* === Animações === */
@@ -1369,6 +1402,192 @@
 .subida-nivel li {
   margin: 4px 0;
   font-weight: bold;
+}
+
+/* === Seção de Progressão na Aba Detalhes === */
+.progressao-section {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.progressao-section h3 {
+  color: var(--cor-primaria);
+  margin: 0 0 15px 0;
+  text-align: center;
+  font-size: 18px;
+  border-bottom: 2px solid var(--cor-acento);
+  padding-bottom: 5px;
+}
+
+.progressao-section h4 {
+  color: var(--cor-secundaria);
+  margin: 15px 0 10px 0;
+  font-size: 14px;
+  border-left: 4px solid var(--cor-acento);
+  padding-left: 10px;
+}
+
+/* Status Atual */
+.status-atual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.status-box {
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-box strong {
+  color: var(--cor-primaria);
+}
+
+/* Benefícios de Nível */
+.beneficios-nivel {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4CAF50;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.beneficios-lista {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.beneficios-lista li {
+  margin: 8px 0;
+  color: #2e7d32;
+}
+
+.beneficios-lista strong {
+  color: #1b5e20;
+}
+
+/* Tabela de Progressão */
+.tabela-xp {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.xp-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.xp-header {
+  display: contents;
+}
+
+.xp-header span {
+  background: var(--cor-primaria);
+  color: white;
+  padding: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.xp-header span:first-child {
+  border-radius: 6px 0 0 0;
+}
+
+.xp-header span:last-child {
+  border-radius: 0 6px 0 0;
+}
+
+.xp-row {
+  display: contents;
+}
+
+.xp-row span {
+  background: #f8f9fa;
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.xp-row.atual span {
+  background: var(--cor-acento);
+  color: white;
+  font-weight: bold;
+}
+
+.xp-row.concluido span {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Informações de Classe */
+.info-classe {
+  background: rgba(255, 193, 7, 0.1);
+  border-left: 4px solid #FFC107;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.classe-descricao p {
+  margin: 8px 0;
+  color: #856404;
+  font-weight: bold;
+}
+
+.classe-descricao ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.classe-descricao li {
+  margin: 5px 0;
+  color: #6c5700;
+}
+
+/* Dicas de Progressão */
+.dicas-progressao {
+  margin-top: 20px;
+}
+
+.dica-box {
+  background: rgba(0, 123, 255, 0.1);
+  border-left: 4px solid #007bff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.dica-box p {
+  margin: 8px 0;
+  color: #004085;
+  font-weight: bold;
+}
+
+.dica-box ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.dica-box li {
+  margin: 5px 0;
+  color: #0056b3;
+}
+
+.dica-box strong {
+  color: #003d82;
 }
 
 .clube-dos-taberneiros-foundry.item .magia-description h3 i {

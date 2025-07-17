@@ -173,7 +173,15 @@
     "XP_NECESSARIO": "XP Necessário",
     "PROXIMO_NIVEL": "Próximo Nível",
     "PONTOS_ATRIBUTO": "Pontos de Atributo",
-    "HABILIDADES_DISPONIVEIS": "Habilidades Disponíveis"
+    "HABILIDADES_DISPONIVEIS": "Habilidades Disponíveis",
+    "PROGRESSAO_NIVEL": "Progressão de Nível",
+    "STATUS_ATUAL": "Status Atual",
+    "BENEFICIOS_NIVEL": "Ao Subir de Nível Você Ganha",
+    "TABELA_PROGRESSAO": "Tabela de Progressão",
+    "INFO_CLASSE": "Informações da Classe",
+    "DICAS_PROGRESSAO": "Dicas de Progressão",
+    "DISTRIBUICAO_ATRIBUTOS": "Distribuição de Atributos",
+    "PLANEJAMENTO": "Planejamento"
   },
   "DIALOGS": {
     "CONFIRMAR": "Confirmar",

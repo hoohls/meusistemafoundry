@@ -156,6 +156,9 @@ export class ClubeActorSheet extends ActorSheet {
     // Modificadores de condições
     context.modificadoresCondicoes = this._calcularModificadoresCondicoes(system.condicoes);
 
+    // Preparar tabela de progressão para exibição
+    context.tabelaProgressao = this._prepararTabelaProgressao();
+
     return context;
   }
 
@@ -194,6 +197,42 @@ export class ClubeActorSheet extends ActorSheet {
     }
 
     return modificadores;
+  }
+
+  /**
+   * Prepara a tabela de progressão para exibição
+   * @returns {Array} Array com dados da progressão
+   */
+  _prepararTabelaProgressao() {
+    const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+    const progressao = [];
+    const nivelAtual = this.actor.system.nivel || 1;
+    const xpAtual = this.actor.system.experiencia?.atual || 0;
+
+    for (let i = 1; i < Math.min(tabelaXP.length, 11); i++) {
+      const xpAnterior = tabelaXP[i - 1] || 0;
+      const xpTotal = tabelaXP[i];
+      let xpParaSubir;
+      
+      if (i === nivelAtual) {
+        // Para o nível atual, mostrar quanto falta para o próximo
+        xpParaSubir = xpTotal - xpAtual;
+      } else if (i < nivelAtual) {
+        // Para níveis já completados, mostrar "Completo"
+        xpParaSubir = "✓";
+      } else {
+        // Para níveis futuros, mostrar quanto XP é necessário para chegar naquele nível
+        xpParaSubir = xpTotal - xpAnterior;
+      }
+      
+      progressao.push({
+        numero: i,
+        xp_necessario: xpParaSubir,
+        xp_total: xpTotal
+      });
+    }
+
+    return progressao;
   }
 
   /**
