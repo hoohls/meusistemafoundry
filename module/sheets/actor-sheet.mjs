@@ -969,7 +969,7 @@ export class ClubeActorSheet extends ActorSheet {
       case 'armadura':
         systemData = {
           ...systemData,
-          ca: 13,
+          protecao: 1,
           max_dex: null,
           penalidade: 0,
           tipo_armadura: "leve"

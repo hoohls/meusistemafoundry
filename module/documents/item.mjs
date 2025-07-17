@@ -49,6 +49,11 @@ export class ClubeItem extends Item {
   _prepareArmaduraData() {
     const data = this.system;
     
+    // Garantir que proteção seja usada como modificador de defesa
+    if (data.protecao !== undefined) {
+      data.mod_defesa = data.protecao;
+    }
+    
     // Calcular proteção efetiva
     this._calcularProtecaoArmadura(data);
   }
