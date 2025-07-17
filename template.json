@@ -1,0 +1,30 @@
+{
+  "Actor": {
+    "types": ["personagem"],
+    "character": {
+      "prototypeToken": {
+        "actorLink": true,
+        "displayBars": 20,
+        "bar1": {
+          "attribute": "system.pv.value"
+        },
+        "bar2": {
+          "attribute": "system.pm.value"
+        }
+      }
+    }
+  },
+  "Item": {
+    "types": ["item", "magia"],
+    "item": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "magia": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    }
+  }
+} 
