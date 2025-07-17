@@ -1020,7 +1020,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onConjurarMagia(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemId = element.closest(".magia-item").dataset.itemId;
     const magia = this.actor.items.get(itemId);
 
     await this.actor.conjurarMagia(magia);
@@ -1033,7 +1033,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onUsarHabilidade(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemId = element.closest(".habilidade-item").dataset.itemId;
     const habilidade = this.actor.items.get(itemId);
 
     await habilidade.usar(this.actor);
@@ -1046,7 +1046,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onUsarItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemId = element.closest(".item-inventario").dataset.itemId;
     const item = this.actor.items.get(itemId);
 
     await item.usar(this.actor);
@@ -1059,7 +1059,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onEquiparItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemId = element.closest(".item-inventario").dataset.itemId;
     
     // Verificar se é um item simples
     if (itemId.startsWith('simple-')) {
@@ -1084,7 +1084,7 @@ export class ClubeActorSheet extends ActorSheet {
   async _onDesequiparItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemId = element.closest(".item-inventario").dataset.itemId;
     
     // Verificar se é um item simples
     if (itemId.startsWith('simple-')) {
