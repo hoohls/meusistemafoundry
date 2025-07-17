@@ -91,6 +91,28 @@ export class ClubeActorSheet extends ActorSheet {
       context.system.nivel = 1;
     }
 
+    // Inicializar progressão de atributos para compatibilidade
+    if (!context.system.progressao) {
+      context.system.progressao = {
+        pontos_atributo: 0,
+        pontos_atributo_iniciais: 18,
+        pontos_atributo_gastos_iniciais: 0,
+        atributos_inicializados: false,
+        habilidades_disponiveis: 0
+      };
+    } else {
+      // Garantir que campos necessários existam
+      if (context.system.progressao.pontos_atributo_iniciais === undefined) {
+        context.system.progressao.pontos_atributo_iniciais = 18;
+      }
+      if (context.system.progressao.pontos_atributo_gastos_iniciais === undefined) {
+        context.system.progressao.pontos_atributo_gastos_iniciais = 0;
+      }
+      if (context.system.progressao.atributos_inicializados === undefined) {
+        context.system.progressao.atributos_inicializados = false;
+      }
+    }
+
     // Inicializar estrutura de equipamentos
     if (!context.system.equipamentos) {
       context.system.equipamentos = {
@@ -138,6 +160,9 @@ export class ClubeActorSheet extends ActorSheet {
    */
   async _getPersonagemData(context) {
     const system = context.system;
+    
+    // Adicionar dados de pontos de atributos
+    context.statusPontosAtributos = this.actor.getStatusPontosAtributos();
     
     // Tabela de progressão de XP
     const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270];
@@ -503,6 +528,11 @@ export class ClubeActorSheet extends ActorSheet {
 
     // Editar atributos com clique
     html.find(".editar-atributo").click(this._onEditarAtributo.bind(this));
+
+    // Gerenciar pontos de atributos
+    html.find(".adicionar-ponto-atributo").click(this._onAdicionarPontoAtributo.bind(this));
+    html.find(".remover-ponto-atributo").click(this._onRemoverPontoAtributo.bind(this));
+    html.find(".finalizar-distribuicao-inicial").click(this._onFinalizarDistribuicaoInicial.bind(this));
 
     // Gerenciar recursos (PV/PM)
     html.find(".ajustar-pv").click(this._onAjustarPV.bind(this));
@@ -2472,5 +2502,34 @@ export class ClubeActorSheet extends ActorSheet {
     });
 
     dialog.render(true);
+  }
+
+  /**
+   * Adiciona um ponto a um atributo
+   * @param {Event} event - Evento de clique
+   */
+  async _onAdicionarPontoAtributo(event) {
+    event.preventDefault();
+    const atributo = event.currentTarget.dataset.atributo;
+    await this.actor.adicionarPontoAtributo(atributo);
+  }
+
+  /**
+   * Remove um ponto de um atributo (apenas durante distribuição inicial)
+   * @param {Event} event - Evento de clique
+   */
+  async _onRemoverPontoAtributo(event) {
+    event.preventDefault();
+    const atributo = event.currentTarget.dataset.atributo;
+    await this.actor.removerPontoAtributo(atributo);
+  }
+
+  /**
+   * Finaliza a distribuição inicial de pontos de atributos
+   * @param {Event} event - Evento de clique
+   */
+  async _onFinalizarDistribuicaoInicial(event) {
+    event.preventDefault();
+    await this.actor.finalizarDistribuicaoInicial();
   }
 } 

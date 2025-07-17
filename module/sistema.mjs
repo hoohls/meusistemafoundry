@@ -391,6 +391,16 @@ function registerHandlebarsHelpers() {
     return a === b;
   });
 
+  // Helper para maior que
+  Handlebars.registerHelper('gt', function(a, b) {
+    return a > b;
+  });
+
+  // Helper para menor que
+  Handlebars.registerHelper('lt', function(a, b) {
+    return a < b;
+  });
+
   // Helper para concatenação de strings
   Handlebars.registerHelper('concat', function() {
     return Array.prototype.slice.call(arguments, 0, -1).join('');

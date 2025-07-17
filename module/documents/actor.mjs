@@ -772,4 +772,121 @@ export class ClubeActor extends Actor {
 
     return categorias;
   }
+
+  /**
+   * Verifica se os atributos foram inicializados e se há pontos para distribuir
+   * @returns {Object} Informações sobre distribuição de pontos
+   */
+  getStatusPontosAtributos() {
+    const progressao = this.system.progressao || {};
+    const atributosInicializados = progressao.atributos_inicializados || false;
+    const pontosIniciais = progressao.pontos_atributo_iniciais || 18;
+    const pontosGastosIniciais = progressao.pontos_atributo_gastos_iniciais || 0;
+    const pontosPorNivel = progressao.pontos_atributo || 0;
+    
+    return {
+      atributosInicializados,
+      pontosDisponiveisIniciais: pontosIniciais - pontosGastosIniciais,
+      pontosPorNivel,
+      temPontosDisponiveis: (!atributosInicializados && (pontosIniciais - pontosGastosIniciais) > 0) || pontosPorNivel > 0
+    };
+  }
+
+  /**
+   * Adiciona um ponto a um atributo específico
+   * @param {string} atributo - Nome do atributo (fisico, acao, mental, social)
+   * @returns {Promise<boolean>} Se foi possível adicionar o ponto
+   */
+  async adicionarPontoAtributo(atributo) {
+    const statusPontos = this.getStatusPontosAtributos();
+    const valorAtual = this.system.atributos[atributo]?.valor || 3;
+    
+    // Verificar se há pontos disponíveis
+    if (!statusPontos.temPontosDisponiveis) {
+      ui.notifications.warn("Não há pontos de atributo disponíveis.");
+      return false;
+    }
+    
+    // Verificar limite máximo
+    const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
+    if (valorAtual >= limiteMaximo) {
+      const tipoLimite = statusPontos.atributosInicializados ? "máximo do sistema" : "inicial";
+      ui.notifications.warn(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} já está no limite ${tipoLimite} (${limiteMaximo}).`);
+      return false;
+    }
+    
+    // Determinar de onde vem o ponto
+    const updateData = {};
+    updateData[`system.atributos.${atributo}.valor`] = valorAtual + 1;
+    
+    if (!statusPontos.atributosInicializados && statusPontos.pontosDisponiveisIniciais > 0) {
+      // Usar pontos iniciais
+      updateData["system.progressao.pontos_atributo_gastos_iniciais"] = 
+        (this.system.progressao?.pontos_atributo_gastos_iniciais || 0) + 1;
+    } else if (statusPontos.pontosPorNivel > 0) {
+      // Usar pontos ganhos por nível
+      updateData["system.progressao.pontos_atributo"] = statusPontos.pontosPorNivel - 1;
+    } else {
+      ui.notifications.warn("Não há pontos de atributo disponíveis.");
+      return false;
+    }
+    
+    await this.update(updateData);
+    ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} aumentado para ${valorAtual + 1}.`);
+    return true;
+  }
+
+  /**
+   * Remove um ponto de um atributo específico (apenas durante distribuição inicial)
+   * @param {string} atributo - Nome do atributo
+   * @returns {Promise<boolean>} Se foi possível remover o ponto
+   */
+  async removerPontoAtributo(atributo) {
+    const statusPontos = this.getStatusPontosAtributos();
+    const valorAtual = this.system.atributos[atributo]?.valor || 3;
+    
+    // Só permitir remoção durante distribuição inicial
+    if (statusPontos.atributosInicializados) {
+      ui.notifications.warn("Não é possível reduzir atributos após a inicialização.");
+      return false;
+    }
+    
+    // Verificar limite mínimo
+    if (valorAtual <= 3) {
+      ui.notifications.warn(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} já está no valor mínimo (3).`);
+      return false;
+    }
+    
+    const updateData = {};
+    updateData[`system.atributos.${atributo}.valor`] = valorAtual - 1;
+    updateData["system.progressao.pontos_atributo_gastos_iniciais"] = 
+      Math.max(0, (this.system.progressao?.pontos_atributo_gastos_iniciais || 0) - 1);
+    
+    await this.update(updateData);
+    ui.notifications.info(`${game.i18n.localize(`ATRIBUTOS.${atributo.toUpperCase()}`)} reduzido para ${valorAtual - 1}.`);
+    return true;
+  }
+
+  /**
+   * Finaliza a distribuição inicial de pontos de atributos
+   * @returns {Promise<boolean>} Se foi possível finalizar
+   */
+  async finalizarDistribuicaoInicial() {
+    const statusPontos = this.getStatusPontosAtributos();
+    
+    if (statusPontos.atributosInicializados) {
+      ui.notifications.warn("Os atributos já foram inicializados.");
+      return false;
+    }
+    
+    if (statusPontos.pontosDisponiveisIniciais > 0) {
+      ui.notifications.warn(`Você ainda tem ${statusPontos.pontosDisponiveisIniciais} pontos para distribuir.`);
+      return false;
+    }
+    
+    await this.update({"system.progressao.atributos_inicializados": true});
+    ui.notifications.info("Distribuição inicial de atributos finalizada!");
+    return true;
+  }
+
 } 

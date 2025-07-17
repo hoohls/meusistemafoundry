@@ -64,12 +64,53 @@
         {{!-- Atributos --}}
         <div class="atributos-section">
           <h3>{{localize 'ATRIBUTOS.ATRIBUTOS'}}</h3>
+          
+          {{!-- Informações sobre pontos de atributos --}}
+          {{#if statusPontosAtributos.temPontosDisponiveis}}
+          <div class="pontos-atributos-info">
+            {{#unless statusPontosAtributos.atributosInicializados}}
+              <p><strong>Pontos Iniciais Disponíveis:</strong> {{statusPontosAtributos.pontosDisponiveisIniciais}}/18</p>
+              <p><small>Máximo inicial por atributo: 8 pontos</small></p>
+            {{/unless}}
+            {{#if statusPontosAtributos.pontosPorNivel}}
+              <p><strong>Pontos por Nível:</strong> {{statusPontosAtributos.pontosPorNivel}}</p>
+            {{/if}}
+          </div>
+          {{/if}}
+          
           <div class="atributos-grid">
             {{#each system.atributos as |atributo key|}}
             <div class="atributo">
               <label>{{localizeAtributo key}}</label>
               <div class="atributo-value">
-                <input type="number" name="system.atributos.{{key}}.valor" value="{{atributo.valor}}" min="3" max="18"/>
+                {{!-- Botão para diminuir (apenas durante distribuição inicial) --}}
+                {{#if statusPontosAtributos.temPontosDisponiveis}}
+                  {{#unless statusPontosAtributos.atributosInicializados}}
+                    {{#if (gt atributo.valor 3)}}
+                    <button type="button" class="remover-ponto-atributo" data-atributo="{{key}}" title="Remover ponto">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    {{else}}
+                    <span class="btn-disabled">-</span>
+                    {{/if}}
+                  {{/unless}}
+                {{/if}}
+                
+                <input type="number" name="system.atributos.{{key}}.valor" value="{{atributo.valor}}" min="3" max="18" readonly/>
+                
+                {{!-- Botão para aumentar --}}
+                {{#if statusPontosAtributos.temPontosDisponiveis}}
+                  {{#if (or statusPontosAtributos.pontosPorNivel (and (not statusPontosAtributos.atributosInicializados) (gt statusPontosAtributos.pontosDisponiveisIniciais 0)))}}
+                    {{#if (lt atributo.valor (if statusPontosAtributos.atributosInicializados 18 8))}}
+                    <button type="button" class="adicionar-ponto-atributo" data-atributo="{{key}}" title="Adicionar ponto">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    {{else}}
+                    <span class="btn-disabled">+</span>
+                    {{/if}}
+                  {{/if}}
+                {{/if}}
+                
                 <button type="button" class="rolar-atributo" data-atributo="{{key}}" data-nd="9" title="Rolar teste">
                   <i class="fas fa-dice-d6"></i>
                 </button>
@@ -77,6 +118,15 @@
             </div>
             {{/each}}
           </div>
+          
+          {{!-- Botão para finalizar distribuição inicial --}}
+          {{#unless statusPontosAtributos.atributosInicializados}}
+            {{#if (eq statusPontosAtributos.pontosDisponiveisIniciais 0)}}
+            <div class="finalizar-distribuicao">
+              <button type="button" class="finalizar-distribuicao-inicial">Finalizar Distribuição de Atributos</button>
+            </div>
+            {{/if}}
+          {{/unless}}
         </div>
 
         {{!-- Recursos --}}

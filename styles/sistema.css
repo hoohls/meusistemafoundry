@@ -296,6 +296,88 @@
   background: var(--cor-primaria);
 }
 
+/* === Pontos de Atributos === */
+.pontos-atributos-info {
+  background: #e8f5e8;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.pontos-atributos-info p {
+  margin: 4px 0;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.pontos-atributos-info small {
+  color: #666;
+  font-weight: normal;
+  font-style: italic;
+}
+
+.adicionar-ponto-atributo, .remover-ponto-atributo {
+  background: var(--cor-sucesso);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adicionar-ponto-atributo:hover {
+  background: #1b5e20;
+}
+
+.remover-ponto-atributo {
+  background: var(--cor-erro);
+}
+
+.remover-ponto-atributo:hover {
+  background: #b71c1c;
+}
+
+.btn-disabled {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e0e0;
+  color: #9e9e9e;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.finalizar-distribuicao {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.finalizar-distribuicao-inicial {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.finalizar-distribuicao-inicial:hover {
+  background: var(--cor-secundaria);
+}
+
 /* === Recursos === */
 .recursos-grid {
   display: grid;

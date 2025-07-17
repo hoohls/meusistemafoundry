@@ -103,6 +103,9 @@
       },
       "progressao": {
         "pontos_atributo": 0,
+        "pontos_atributo_iniciais": 18,
+        "pontos_atributo_gastos_iniciais": 0,
+        "atributos_inicializados": false,
         "habilidades_disponiveis": 0
       }
     },
