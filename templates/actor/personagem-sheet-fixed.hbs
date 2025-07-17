@@ -20,11 +20,14 @@
                 <button type="button" class="testar-xp" title="Testar Sistema XP">
                   <i class="fas fa-bug"></i>
                 </button>
+                <button type="button" class="corrigir-sistema" title="Corrigir Sistema">
+                  <i class="fas fa-wrench"></i>
+                </button>
               </div>
             </div>
             <div class="xp-bar">
-              <div class="xp-progress" style="width: {{porcentagemXP}}%"></div>
-              <span class="xp-text">{{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{proximoNivel}} XP</span>
+              <div class="xp-progress" style="width: {{calcularPorcentagemXP actor}}%"></div>
+              <span class="xp-text">{{#if system.experiencia.atual}}{{system.experiencia.atual}}{{else}}0{{/if}} / {{getXPProximoNivel actor}} XP</span>
             </div>
           </div>
         </div>

@@ -632,6 +632,13 @@ export class ClubeActor extends Actor {
     if (novoNivel > nivelAtual) {
       await this._subirNivel(novoNivel);
     }
+    
+    // Atualizar XP necessário para o próximo nível
+    const proximoNivel = Math.min(novoNivel + 1, tabelaXP.length - 1);
+    const xpNecessaria = tabelaXP[proximoNivel];
+    if (this.system.experiencia.necessaria !== xpNecessaria) {
+      await this.update({"system.experiencia.necessaria": xpNecessaria});
+    }
   }
 
   /**
@@ -650,6 +657,16 @@ export class ClubeActor extends Actor {
         pontos_atributo_gastos_iniciais: 0,
         atributos_inicializados: false,
         habilidades_disponiveis: 0
+      };
+    }
+    
+    // Garantir que atributos existam
+    if (!this.system.atributos) {
+      this.system.atributos = {
+        fisico: { valor: 0 },
+        acao: { valor: 0 },
+        mental: { valor: 0 },
+        social: { valor: 0 }
       };
     }
     
@@ -1333,11 +1350,12 @@ export class ClubeActor extends Actor {
     
     if (!statusPontos.atributosInicializados && statusPontos.pontosDisponiveisIniciais > 0) {
       // Usar pontos iniciais
-      updateData["system.progressao.pontos_atributo_gastos_iniciais"] = 
-        (this.system.progressao?.pontos_atributo_gastos_iniciais || 0) + 1;
+      const pontosGastosAtuais = this.system.progressao?.pontos_atributo_gastos_iniciais || 0;
+      updateData["system.progressao.pontos_atributo_gastos_iniciais"] = pontosGastosAtuais + 1;
     } else if (statusPontos.pontosPorNivel > 0) {
       // Usar pontos ganhos por nível
-      updateData["system.progressao.pontos_atributo"] = statusPontos.pontosPorNivel - 1;
+      const pontosAtuais = this.system.progressao?.pontos_atributo || 0;
+      updateData["system.progressao.pontos_atributo"] = pontosAtuais - 1;
     } else {
       ui.notifications.warn("Não há pontos de atributo disponíveis.");
       return false;
@@ -1399,6 +1417,155 @@ export class ClubeActor extends Actor {
     await this.update({"system.progressao.atributos_inicializados": true});
     ui.notifications.info("Distribuição inicial de atributos finalizada!");
     return true;
+  }
+
+  /**
+   * Calcula a porcentagem de XP para o próximo nível
+   * @returns {number} Porcentagem de 0 a 100
+   */
+  calcularPorcentagemXP() {
+    try {
+      // Garantir que estruturas existam
+      if (!this.system.experiencia) {
+        this.system.experiencia = { atual: 0, necessaria: 10 };
+      }
+      if (!this.system.nivel) {
+        this.system.nivel = 1;
+      }
+      
+      const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+      const nivelAtual = this.system.nivel || 1;
+      const xpAtual = this.system.experiencia.atual || 0;
+      
+      // Se já está no nível máximo
+      if (nivelAtual >= tabelaXP.length - 1) {
+        return 100;
+      }
+      
+      // Calcular XP necessário para o próximo nível
+      const xpNecessaria = tabelaXP[nivelAtual];
+      const xpProximoNivel = tabelaXP[nivelAtual + 1];
+      const xpParaProximoNivel = xpProximoNivel - xpNecessaria;
+      const xpGanha = xpAtual - xpNecessaria;
+      
+      if (xpParaProximoNivel <= 0) {
+        return 100;
+      }
+      
+      const porcentagem = Math.min(100, Math.max(0, (xpGanha / xpParaProximoNivel) * 100));
+      return Math.round(porcentagem);
+    } catch (error) {
+      console.error("Erro ao calcular porcentagem de XP:", error);
+      return 0;
+    }
+  }
+
+  /**
+   * Obtém o XP necessário para o próximo nível
+   * @returns {number} XP necessário
+   */
+  getXPProximoNivel() {
+    try {
+      const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+      const nivelAtual = this.system.nivel || 1;
+      
+      if (nivelAtual >= tabelaXP.length - 1) {
+        return this.system.experiencia?.atual || 0;
+      }
+      
+      return tabelaXP[nivelAtual + 1];
+    } catch (error) {
+      console.error("Erro ao obter XP do próximo nível:", error);
+      return 10;
+    }
+  }
+
+  /**
+   * Corrige problemas de inicialização do sistema
+   * @returns {Promise<boolean>} Se foi possível corrigir
+   */
+  async corrigirInicializacao() {
+    try {
+      const updateData = {};
+      let precisaAtualizar = false;
+
+      // Garantir que atributos existam
+      if (!this.system.atributos) {
+        this.system.atributos = {
+          fisico: { valor: 0 },
+          acao: { valor: 0 },
+          mental: { valor: 0 },
+          social: { valor: 0 }
+        };
+        updateData["system.atributos"] = this.system.atributos;
+        precisaAtualizar = true;
+      }
+
+      // Garantir que experiência exista
+      if (!this.system.experiencia) {
+        this.system.experiencia = {
+          atual: 0,
+          necessaria: 10
+        };
+        updateData["system.experiencia"] = this.system.experiencia;
+        precisaAtualizar = true;
+      }
+
+      // Garantir que nível exista
+      if (!this.system.nivel) {
+        this.system.nivel = 1;
+        updateData["system.nivel"] = 1;
+        precisaAtualizar = true;
+      }
+
+      // Garantir que progressão exista
+      if (!this.system.progressao) {
+        this.system.progressao = {
+          pontos_atributo: 0,
+          pontos_atributo_iniciais: 18,
+          pontos_atributo_gastos_iniciais: 0,
+          atributos_inicializados: false,
+          habilidades_disponiveis: 0
+        };
+        updateData["system.progressao"] = this.system.progressao;
+        precisaAtualizar = true;
+      }
+
+      // Garantir que recursos existam
+      if (!this.system.recursos) {
+        this.system.recursos = {
+          pv: { valor: 10, max: 10 },
+          pm: { valor: 5, max: 5 },
+          defesa: { valor: 10, base: 10, armadura: 0, escudo: 0, outros: 0 }
+        };
+        updateData["system.recursos"] = this.system.recursos;
+        precisaAtualizar = true;
+      }
+
+      // Garantir que condições existam
+      if (!this.system.condicoes) {
+        this.system.condicoes = {
+          ferido: false,
+          gravemente_ferido: false,
+          inconsciente: false
+        };
+        updateData["system.condicoes"] = this.system.condicoes;
+        precisaAtualizar = true;
+      }
+
+      if (precisaAtualizar) {
+        await this.update(updateData);
+        ui.notifications.info("Sistema corrigido com sucesso!");
+        return true;
+      } else {
+        ui.notifications.info("Sistema já está correto!");
+        return false;
+      }
+    } catch (error) {
+      console.error("Erro ao corrigir inicialização:", error);
+      ui.notifications.error("Erro ao corrigir sistema: " + error.message);
+      return false;
+    }
   }
 
   /**

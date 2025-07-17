@@ -424,6 +424,57 @@ function registerHandlebarsHelpers() {
     return atributosInicializados ? 18 : 8;
   });
 
+  // Helper para calcular porcentagem de XP
+  Handlebars.registerHelper('calcularPorcentagemXP', function(actor) {
+    if (!actor || !actor.system) return 0;
+    
+    try {
+      const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+      const nivelAtual = actor.system.nivel || 1;
+      const xpAtual = actor.system.experiencia?.atual || 0;
+      
+      // Se já está no nível máximo
+      if (nivelAtual >= tabelaXP.length - 1) {
+        return 100;
+      }
+      
+      // Calcular XP necessário para o próximo nível
+      const xpNecessaria = tabelaXP[nivelAtual];
+      const xpProximoNivel = tabelaXP[nivelAtual + 1];
+      const xpParaProximoNivel = xpProximoNivel - xpNecessaria;
+      const xpGanha = xpAtual - xpNecessaria;
+      
+      if (xpParaProximoNivel <= 0) {
+        return 100;
+      }
+      
+      const porcentagem = Math.min(100, Math.max(0, (xpGanha / xpParaProximoNivel) * 100));
+      return Math.round(porcentagem);
+    } catch (error) {
+      console.error("Erro ao calcular porcentagem de XP:", error);
+      return 0;
+    }
+  });
+
+  // Helper para obter XP do próximo nível
+  Handlebars.registerHelper('getXPProximoNivel', function(actor) {
+    if (!actor || !actor.system) return 10;
+    
+    try {
+      const tabelaXP = [0, 10, 25, 45, 70, 100, 135, 175, 220, 270, 325, 385, 450, 520, 595, 675, 760, 850, 945, 1045];
+      const nivelAtual = actor.system.nivel || 1;
+      
+      if (nivelAtual >= tabelaXP.length - 1) {
+        return actor.system.experiencia?.atual || 0;
+      }
+      
+      return tabelaXP[nivelAtual + 1];
+    } catch (error) {
+      console.error("Erro ao obter XP do próximo nível:", error);
+      return 10;
+    }
+  });
+
   // Helper para operações matemáticas
   Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
     const operators = {

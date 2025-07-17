@@ -723,6 +723,7 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
     html.find(".testar-xp").click(this._onTestarXP.bind(this));
+    html.find(".corrigir-sistema").click(this._onCorrigirSistema.bind(this));
 
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
@@ -1770,6 +1771,16 @@ export class ClubeActorSheet extends ActorSheet {
       console.error("Erro ao testar sistema de XP:", error);
       ui.notifications.error("Erro ao testar sistema de XP: " + error.message);
     }
+  }
+
+  /**
+   * Corrige problemas de inicialização do sistema
+   * @param {Event} event - Evento de clique
+   */
+  async _onCorrigirSistema(event) {
+    event.preventDefault();
+    await this.actor.corrigirInicializacao();
+    this.render(true);
   }
 
   /**
