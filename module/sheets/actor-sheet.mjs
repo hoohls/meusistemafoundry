@@ -149,6 +149,7 @@ export class ClubeActorSheet extends ActorSheet {
       // Preparar dados específicos para personagens
       if (this.actor.type === "personagem") {
         await this._getPersonagemData(context);
+        await this._prepararDadosEquipamentos(context);
       }
       
       return context;
@@ -734,6 +735,10 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".detalhes-habilidade").click(this._onDetalhesHabilidade.bind(this));
     html.find(".detalhes-habilidade-conhecida").click(this._onDetalhesHabilidadeConhecida.bind(this));
     html.find(".habilidades-filtro").change(this._onFiltrarHabilidades.bind(this));
+
+    // Gerenciar equipamentos
+    html.find(".comprar-equipamento").click(this._onComprarEquipamento.bind(this));
+    html.find(".detalhes-equipamento").click(this._onDetalhesEquipamento.bind(this));
 
     // Arrastar e soltar itens
     html.find(".item-list .item").each((i, li) => {
@@ -1802,6 +1807,100 @@ export class ClubeActorSheet extends ActorSheet {
   }
 
   /**
+   * Prepara dados dos equipamentos para exibição
+   * @param {Object} context - Contexto da planilha
+   */
+  async _prepararDadosEquipamentos(context) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    
+    // Preparar equipamentos disponíveis por categoria
+    context.equipamentosArmasDisponiveis = this._prepararEquipamentosCategoria('armas', SISTEMA.equipamentos.armas);
+    context.equipamentosArmadurasDisponiveis = this._prepararEquipamentosCategoria('armaduras', SISTEMA.equipamentos.armaduras);
+    context.equipamentosEscudosDisponiveis = this._prepararEquipamentosCategoria('escudos', SISTEMA.equipamentos.escudos);
+    context.equipamentosEquipamentosDisponiveis = this._prepararEquipamentosCategoria('equipamentos', SISTEMA.equipamentos.equipamentos);
+    context.equipamentosConsumiveisDisponiveis = this._prepararEquipamentosCategoria('consumiveis', SISTEMA.equipamentos.consumiveis);
+  }
+
+  /**
+   * Prepara equipamentos disponíveis de uma categoria específica
+   * @param {string} categoria - Nome da categoria
+   * @param {Object} equipamentosCategoria - Equipamentos da categoria
+   * @returns {Object}
+   */
+  _prepararEquipamentosCategoria(categoria, equipamentosCategoria) {
+    const equipamentosDisponiveis = {};
+    
+    for (const [id, equipamento] of Object.entries(equipamentosCategoria)) {
+      // Verificar pré-requisitos
+      const atendeRequisitos = this.actor._verificarPreRequisitosEquipamento ? this.actor._verificarPreRequisitosEquipamento(equipamento) : true;
+      
+      // Localizar nome e descrição
+      let nomeLocalizado = game.i18n.localize(equipamento.nome);
+      let descricaoLocalizada = game.i18n.localize(equipamento.descricao);
+      
+      // Fallback para nomes
+      if (nomeLocalizado === equipamento.nome || nomeLocalizado.startsWith("EQUIPAMENTOS.")) {
+        const nomesLimpos = {
+          espadaCurta: "Espada Curta",
+          espadaLonga: "Espada Longa",
+          machaxo: "Machado",
+          arcoCurto: "Arco Curto",
+          cajado: "Cajado",
+          couro: "Armadura de Couro",
+          malha: "Armadura de Malha",
+          placa: "Armadura de Placas",
+          vestes: "Vestes Mágicas",
+          escudoPequeno: "Escudo Pequeno",
+          escudoGrande: "Escudo Grande",
+          mochila: "Mochila",
+          corda: "Corda",
+          lampiao: "Lampião",
+          kitMedico: "Kit Médico",
+          pocaoVida: "Poção de Vida",
+          pocaoMana: "Poção de Mana",
+          antidoto: "Antídoto"
+        };
+        nomeLocalizado = nomesLimpos[id] || id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+      }
+      
+      // Fallback para descrições
+      if (descricaoLocalizada === equipamento.descricao || descricaoLocalizada.startsWith("EQUIPAMENTOS.")) {
+        const descricoesBasicas = {
+          espadaCurta: "Uma espada curta e ágil, ideal para combate corpo a corpo",
+          espadaLonga: "Uma espada longa e versátil, arma clássica dos guerreiros",
+          machaxo: "Um machado pesado e poderoso para causar dano devastador",
+          arcoCurto: "Um arco curto para ataques à distância",
+          cajado: "Um cajado simples, arma básica para magos",
+          couro: "Armadura leve feita de couro tratado",
+          malha: "Armadura de malha metálica, oferece boa proteção",
+          placa: "Armadura pesada de placas metálicas, máxima proteção",
+          vestes: "Vestes encantadas que protegem magos",
+          escudoPequeno: "Um escudo pequeno e ágil",
+          escudoGrande: "Um escudo grande que oferece excelente proteção",
+          mochila: "Uma mochila para carregar equipamentos",
+          corda: "Uma corda resistente para escaladas e amarrações",
+          lampiao: "Um lampião para iluminar áreas escuras",
+          kitMedico: "Kit com bandagens e medicamentos básicos",
+          pocaoVida: "Poção que restaura pontos de vida",
+          pocaoMana: "Poção que restaura pontos de magia",
+          antidoto: "Remédio que remove efeitos de veneno"
+        };
+        descricaoLocalizada = descricoesBasicas[id] || `Equipamento ${nomeLocalizado}`;
+      }
+      
+      equipamentosDisponiveis[id] = {
+        ...equipamento,
+        nome: nomeLocalizado,
+        descricao: descricaoLocalizada,
+        atendeRequisitos: atendeRequisitos,
+        podeComprar: atendeRequisitos && (this.actor._verificarDinheiroSuficiente ? this.actor._verificarDinheiroSuficiente(equipamento.preco) : true)
+      };
+    }
+    
+    return equipamentosDisponiveis;
+  }
+
+  /**
    * Prepara habilidades conhecidas com nomes e efeitos corretos
    * @param {Object} sistemaHabilidades - Todas as habilidades do sistema
    * @returns {Object} Habilidades conhecidas processadas
@@ -2413,7 +2512,7 @@ export class ClubeActorSheet extends ActorSheet {
     const raca = habilidadeData.raca;
     
     // Verificar se atende pré-requisitos
-    const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade(habilidadeData);
+    const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade ? this.actor._verificarPreRequisitosHabilidade(habilidadeData) : true;
     
     // Montar lista de pré-requisitos
     let preReqText = "";
@@ -2474,7 +2573,7 @@ export class ClubeActorSheet extends ActorSheet {
         adicionar: {
           icon: '<i class="fas fa-plus"></i>',
           label: "Adicionar Habilidade",
-          condition: atendeRequisitos && this.actor._calcularPontosHabilidadeDisponiveis() > 0 && !this.actor.system.habilidades?.[habilidadeId],
+          condition: atendeRequisitos && (this.actor._calcularPontosHabilidadeDisponiveis ? this.actor._calcularPontosHabilidadeDisponiveis() > 0 : true) && !this.actor.system.habilidades?.[habilidadeId],
           callback: async () => {
             await this.actor.adicionarHabilidade(habilidadeId, categoria);
           }
@@ -2496,46 +2595,29 @@ export class ClubeActorSheet extends ActorSheet {
    */
   async _onDetalhesHabilidadeConhecida(event) {
     event.preventDefault();
+    const habilidadeId = event.currentTarget.dataset.habilidade;
     
-    const element = event.currentTarget;
-    const habilidadeId = element.dataset.habilidade;
-    
-    if (!habilidadeId) {
-      ui.notifications.error("ID da habilidade inválido");
-      return;
-    }
-
-    // Buscar dados da habilidade conhecida
-    const habilidadeConhecida = this.actor.system.habilidades?.[habilidadeId];
-    if (!habilidadeConhecida) {
-      ui.notifications.error("Habilidade não encontrada no personagem");
-      return;
-    }
-
-    // Buscar dados completos da habilidade
     const { SISTEMA } = await import("../helpers/settings.mjs");
-    let habilidadeData = null;
-    let categoria = habilidadeConhecida.categoria;
     
-    // Procurar a habilidade nas diferentes categorias
-    for (const [cat, habilidades] of Object.entries(SISTEMA.habilidades)) {
+    // Buscar dados da habilidade
+    let habilidadeData = null;
+    for (const [categoria, habilidades] of Object.entries(SISTEMA.habilidades)) {
       if (habilidades[habilidadeId]) {
         habilidadeData = habilidades[habilidadeId];
-        categoria = cat;
         break;
       }
     }
     
     if (!habilidadeData) {
-      ui.notifications.error("Dados completos da habilidade não encontrados");
+      ui.notifications.error("Habilidade não encontrada");
       return;
     }
-
-    // Preparar informações da habilidade (usando mesmo fallback do método original)
+    
+    // Localizar nome e efeito
     let nome = game.i18n.localize(habilidadeData.nome);
     let efeito = game.i18n.localize(habilidadeData.efeito);
     
-    // Usar fallback se localização falhar
+    // Fallback para nomes
     if (nome === habilidadeData.nome || nome.startsWith("HABILIDADES.")) {
       const nomesLimpos = {
         ataquePoderoso: "Ataque Poderoso",
@@ -2589,9 +2671,10 @@ export class ClubeActorSheet extends ActorSheet {
         navegacao: "Navegação",
         idiomas: "Idiomas"
       };
-      nome = nomesLimpos[habilidadeId] || habilidadeId;
+      nome = nomesLimpos[habilidadeId] || id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
     
+    // Fallback para efeitos
     if (efeito === habilidadeData.efeito || efeito.startsWith("HABILIDADES.")) {
       const efeitosBasicos = {
         ataquePoderoso: "Adiciona +2 ao dano em ataques corpo a corpo",
@@ -2617,10 +2700,10 @@ export class ClubeActorSheet extends ActorSheet {
         desarmarArmadilhas: "Pode desarmar dispositivos complexos",
         tiroCerteiro: "+2 ataque com armas à distância",
         escaladaAprimorada: "+2 em testes de escalada",
-        passoSombrio: "Movimento furtivo rápido",
-        ataqueLetal: "Críticos em 11-12 nos dados",
-        mestreSombras: "Invisibilidade natural em sombras",
-        reflexosAprimorados: "+3 Iniciativa",
+        passoSombrio: "Pode se mover silenciosamente",
+        ataqueLetal: "Ataques críticos causam dano extra",
+        mestreSombras: "Pode se esconder em sombras",
+        reflexosAprimorados: "+2 em testes de reflexos",
         venenos: "Conhecimento e uso de venenos",
         persuasaoIrresistivel: "+2 em testes de persuasão",
         lideranca: "Aliados ganham +1 quando inspirados",
@@ -2647,95 +2730,257 @@ export class ClubeActorSheet extends ActorSheet {
       };
       efeito = efeitosBasicos[habilidadeId] || `Efeito especial de ${nome}`;
     }
-
     const nivelMin = habilidadeData.nivelMin;
     const preRequisitos = habilidadeData.preRequisito || {};
     const classesSugeridas = habilidadeData.classesSugeridas || [];
     const raca = habilidadeData.raca;
     
+    // Verificar se atende pré-requisitos
+    const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade ? this.actor._verificarPreRequisitosHabilidade(habilidadeData) : true;
+    
     // Montar lista de pré-requisitos
     let preReqText = "";
     if (Object.keys(preRequisitos).length > 0) {
-      const reqList = Object.entries(preRequisitos).map(([attr, valor]) => 
-        `${attr.charAt(0).toUpperCase() + attr.slice(1)}: ${valor}`
+      const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => 
+        `${game.i18n.localize(`ATRIBUTOS.${attr.toUpperCase()}`)} ${valor}`
       );
-      preReqText = reqList.join(", ");
-    } else {
-      preReqText = "Nenhum";
+      preReqText = preReqList.join(", ");
     }
     
-    // Criar conteúdo do diálogo
-    const content = `
-      <div class="habilidade-detalhes">
-        <h2 style="color: #28a745; margin-bottom: 15px;">✓ ${nome}</h2>
-        <p style="color: #28a745; font-weight: bold; margin-bottom: 15px;">Habilidade Conhecida</p>
-        
-        <div class="habilidade-info-grid">
-          <div class="info-item">
-            <strong>Categoria:</strong> ${categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-          </div>
-          
-          <div class="info-item">
-            <strong>Nível Mínimo:</strong> ${nivelMin}
-          </div>
-          
-          <div class="info-item">
-            <strong>Pré-requisitos:</strong> ${preReqText}
-          </div>
-          
-          ${raca ? `<div class="info-item"><strong>Restrita à raça:</strong> ${raca.charAt(0).toUpperCase() + raca.slice(1)}</div>` : ""}
-          
-          ${classesSugeridas.length > 0 ? `<div class="info-item"><strong>Classes sugeridas:</strong> ${classesSugeridas.join(", ")}</div>` : ""}
+    // Montar lista de classes sugeridas
+    let classesText = "";
+    if (classesSugeridas.length > 0 && !classesSugeridas.includes("todas")) {
+      const classesList = classesSugeridas.map(classe => 
+        game.i18n.localize(`CLASSES.${classe.toUpperCase()}`)
+      );
+      classesText = classesList.join(", ");
+    }
+    
+    // Mostrar dialog com detalhes
+    new Dialog({
+      title: `Detalhes: ${nome}`,
+      content: `
+        <div class="habilidade-detalhes">
+          <p><strong>Efeito:</strong> ${efeito}</p>
+          <p><strong>Nível Mínimo:</strong> ${nivelMin}</p>
+          ${preReqText ? `<p><strong>Pré-requisitos:</strong> ${preReqText}</p>` : ''}
+          ${classesText ? `<p><strong>Classes Sugeridas:</strong> ${classesText}</p>` : ''}
+          ${raca ? `<p><strong>Raça:</strong> ${game.i18n.localize(`RACAS.${raca.toUpperCase()}`)}</p>` : ''}
+          <p><strong>Nível Adquirido:</strong> ${this.actor.system.habilidades[habilidadeId].nivelAdquirido}</p>
         </div>
         
-        <div style="margin-top: 20px;">
-          <h3 style="color: #28a745;">Efeito:</h3>
-          <p style="background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745; line-height: 1.5;">
-            ${efeito}
-          </p>
-        </div>
-      </div>
-    `;
-
-    // Mostrar diálogo
-    const dialog = new Dialog({
-      title: `Habilidade Conhecida: ${nome}`,
-      content: content,
-      buttons: {
-        remover: {
-          icon: '<i class="fas fa-trash"></i>',
-          label: "Remover Habilidade",
-          callback: async () => {
-            const confirmDialog = new Dialog({
-              title: "Confirmar Remoção",
-              content: `<p>Tem certeza que deseja remover a habilidade <strong>${nome}</strong>?</p>`,
-              buttons: {
-                sim: {
-                  icon: '<i class="fas fa-check"></i>',
-                  label: "Sim, remover",
-                  callback: async () => {
-                    await this.actor.removerHabilidade(habilidadeId);
-                  }
-                },
-                nao: {
-                  icon: '<i class="fas fa-times"></i>',
-                  label: "Cancelar"
-                }
-              },
-              default: "nao"
-            });
-            confirmDialog.render(true);
+        <style>
+          .habilidade-detalhes p {
+            margin: 8px 0;
+            line-height: 1.4;
           }
-        },
-        fechar: {
+          .habilidade-detalhes strong {
+            color: #8B4513;
+          }
+        </style>
+      `,
+      buttons: {
+        close: {
           icon: '<i class="fas fa-times"></i>',
-          label: "Fechar"
+          label: "Fechar",
+          callback: () => {}
         }
       },
-      default: "fechar"
-    });
+      default: "close"
+    }).render(true);
+  }
 
-    dialog.render(true);
+  /**
+   * Compra um equipamento
+   * @param {Event} event - Evento de clique
+   */
+  async _onComprarEquipamento(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    const equipamentoId = element.dataset.equipamento;
+    const categoria = element.dataset.categoria;
+    
+    await this.actor.comprarEquipamento(equipamentoId, categoria);
+  }
+
+  /**
+   * Mostra detalhes de um equipamento
+   * @param {Event} event - Evento de clique
+   */
+  async _onDetalhesEquipamento(event) {
+    event.preventDefault();
+    const equipamentoId = event.currentTarget.dataset.equipamento;
+    const categoria = event.currentTarget.dataset.categoria;
+    
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    
+    // Buscar dados do equipamento
+    const equipamentoData = SISTEMA.equipamentos[categoria]?.[equipamentoId];
+    
+    if (!equipamentoData) {
+      ui.notifications.error("Equipamento não encontrado");
+      return;
+    }
+    
+    // Localizar nome e descrição
+    let nome = game.i18n.localize(equipamentoData.nome);
+    let descricao = game.i18n.localize(equipamentoData.descricao);
+    
+    // Fallback para nomes
+    if (nome === equipamentoData.nome || nome.startsWith("EQUIPAMENTOS.")) {
+      const nomesLimpos = {
+        espadaCurta: "Espada Curta",
+        espadaLonga: "Espada Longa",
+        machaxo: "Machado",
+        arcoCurto: "Arco Curto",
+        cajado: "Cajado",
+        couro: "Armadura de Couro",
+        malha: "Armadura de Malha",
+        placa: "Armadura de Placas",
+        vestes: "Vestes Mágicas",
+        escudoPequeno: "Escudo Pequeno",
+        escudoGrande: "Escudo Grande",
+        mochila: "Mochila",
+        corda: "Corda",
+        lampiao: "Lampião",
+        kitMedico: "Kit Médico",
+        pocaoVida: "Poção de Vida",
+        pocaoMana: "Poção de Mana",
+        antidoto: "Antídoto"
+      };
+      nome = nomesLimpos[equipamentoId] || equipamentoId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+    }
+    
+    // Fallback para descrições
+    if (descricao === equipamentoData.descricao || descricao.startsWith("EQUIPAMENTOS.")) {
+      const descricoesBasicas = {
+        espadaCurta: "Uma espada curta e ágil, ideal para combate corpo a corpo",
+        espadaLonga: "Uma espada longa e versátil, arma clássica dos guerreiros",
+        machaxo: "Um machado pesado e poderoso para causar dano devastador",
+        arcoCurto: "Um arco curto para ataques à distância",
+        cajado: "Um cajado simples, arma básica para magos",
+        couro: "Armadura leve feita de couro tratado",
+        malha: "Armadura de malha metálica, oferece boa proteção",
+        placa: "Armadura pesada de placas metálicas, máxima proteção",
+        vestes: "Vestes encantadas que protegem magos",
+        escudoPequeno: "Um escudo pequeno e ágil",
+        escudoGrande: "Um escudo grande que oferece excelente proteção",
+        mochila: "Uma mochila para carregar equipamentos",
+        corda: "Uma corda resistente para escaladas e amarrações",
+        lampiao: "Um lampião para iluminar áreas escuras",
+        kitMedico: "Kit com bandagens e medicamentos básicos",
+        pocaoVida: "Poção que restaura pontos de vida",
+        pocaoMana: "Poção que restaura pontos de magia",
+        antidoto: "Remédio que remove efeitos de veneno"
+      };
+      descricao = descricoesBasicas[equipamentoId] || `Equipamento ${nome}`;
+    }
+    
+    const nivelMin = equipamentoData.nivelMin;
+    const preRequisitos = equipamentoData.preRequisito || {};
+    const classesSugeridas = equipamentoData.classesSugeridas || [];
+    const preco = equipamentoData.preco;
+    const peso = equipamentoData.peso;
+    
+    // Verificar se atende pré-requisitos
+    const atendeRequisitos = this.actor._verificarPreRequisitosEquipamento ? this.actor._verificarPreRequisitosEquipamento(equipamentoData) : true;
+    const podeComprar = atendeRequisitos && (this.actor._verificarDinheiroSuficiente ? this.actor._verificarDinheiroSuficiente(preco) : true);
+    
+    // Montar lista de pré-requisitos
+    let preReqText = "";
+    if (Object.keys(preRequisitos).length > 0) {
+      const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => 
+        `${game.i18n.localize(`ATRIBUTOS.${attr.toUpperCase()}`)} ${valor}`
+      );
+      preReqText = preReqList.join(", ");
+    }
+    
+    // Montar lista de classes sugeridas
+    let classesText = "";
+    if (classesSugeridas.length > 0 && !classesSugeridas.includes("todas")) {
+      const classesList = classesSugeridas.map(classe => 
+        game.i18n.localize(`CLASSES.${classe.toUpperCase()}`)
+      );
+      classesText = classesList.join(", ");
+    }
+    
+    // Informações específicas por tipo
+    let infoEspecifica = "";
+    switch (equipamentoData.tipo) {
+      case 'arma':
+        infoEspecifica = `
+          <p><strong>Dano:</strong> ${equipamentoData.dano}</p>
+          <p><strong>Alcance:</strong> ${game.i18n.localize(`COMBATE.${equipamentoData.alcance.toUpperCase()}`)}</p>
+          <p><strong>Tipo de Dano:</strong> ${equipamentoData.tipo_dano}</p>
+        `;
+        break;
+      case 'armadura':
+        infoEspecifica = `
+          <p><strong>Proteção:</strong> ${equipamentoData.protecao}</p>
+          <p><strong>Bônus Defesa:</strong> +${equipamentoData.mod_defesa}</p>
+          <p><strong>Tipo:</strong> ${equipamentoData.tipo_armadura}</p>
+        `;
+        break;
+      case 'escudo':
+        infoEspecifica = `
+          <p><strong>Proteção:</strong> ${equipamentoData.protecao}</p>
+          <p><strong>Bônus Defesa:</strong> +${equipamentoData.mod_defesa}</p>
+        `;
+        break;
+      case 'consumivel':
+        infoEspecifica = `
+          <p><strong>Efeito:</strong> ${equipamentoData.efeito}</p>
+          <p><strong>Usos:</strong> ${equipamentoData.usos}</p>
+        `;
+        break;
+    }
+    
+    // Mostrar dialog com detalhes
+    new Dialog({
+      title: `Detalhes: ${nome}`,
+      content: `
+        <div class="equipamento-detalhes">
+          <p><strong>Descrição:</strong> ${descricao}</p>
+          <p><strong>Preço:</strong> ${preco} moedas de ouro</p>
+          <p><strong>Peso:</strong> ${peso} kg</p>
+          <p><strong>Nível Mínimo:</strong> ${nivelMin}</p>
+          ${preReqText ? `<p><strong>Pré-requisitos:</strong> ${preReqText}</p>` : ''}
+          ${classesText ? `<p><strong>Classes Sugeridas:</strong> ${classesText}</p>` : ''}
+          ${infoEspecifica}
+          <div class="status-compra">
+            <p><strong>Status:</strong> 
+              ${!atendeRequisitos ? '<span style="color: red;">Não atende pré-requisitos</span>' : 
+                !podeComprar ? '<span style="color: orange;">Dinheiro insuficiente</span>' : 
+                '<span style="color: green;">Pode comprar</span>'}
+            </p>
+          </div>
+        </div>
+        
+        <style>
+          .equipamento-detalhes p {
+            margin: 8px 0;
+            line-height: 1.4;
+          }
+          .equipamento-detalhes strong {
+            color: #8B4513;
+          }
+          .status-compra {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+          }
+        </style>
+      `,
+      buttons: {
+        close: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Fechar",
+          callback: () => {}
+        }
+      },
+      default: "close"
+    }).render(true);
   }
 
   /**

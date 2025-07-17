@@ -1891,4 +1891,192 @@ export class ClubeActor extends Actor {
     return comparacao;
   }
 
+  /**
+   * Compra um equipamento
+   * @param {string} equipamentoId - ID do equipamento
+   * @param {string} categoria - Categoria do equipamento
+   */
+  async comprarEquipamento(equipamentoId, categoria) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    
+    // Verificar se o equipamento existe
+    const equipamentoData = SISTEMA.equipamentos[categoria]?.[equipamentoId];
+    if (!equipamentoData) {
+      ui.notifications.error("Equipamento não encontrado");
+      return;
+    }
+
+    // Verificar pré-requisitos
+    if (!this._verificarPreRequisitosEquipamento(equipamentoData)) {
+      ui.notifications.error("Você não atende aos pré-requisitos para este equipamento");
+      return;
+    }
+
+    // Verificar se tem dinheiro suficiente
+    if (!this._verificarDinheiroSuficiente(equipamentoData.preco)) {
+      ui.notifications.error(game.i18n.localize("EQUIPAMENTOS.DINHEIRO_INSUFICIENTE"));
+      return;
+    }
+
+    // Deduzir dinheiro
+    await this._deduzirDinheiro(equipamentoData.preco);
+
+    // Criar o item
+    const itemData = this._criarDadosItem(equipamentoData);
+    const novoItem = await Item.create(itemData, {parent: this});
+    
+    ui.notifications.info(game.i18n.localize("EQUIPAMENTOS.EQUIPAMENTO_COMPRADO"));
+  }
+
+  /**
+   * Verifica pré-requisitos de um equipamento
+   * @param {Object} equipamentoData - Dados do equipamento
+   * @returns {boolean} Se atende aos pré-requisitos
+   */
+  _verificarPreRequisitosEquipamento(equipamentoData) {
+    // Verificar nível mínimo
+    if (equipamentoData.nivelMin && this.system.nivel < equipamentoData.nivelMin) {
+      return false;
+    }
+
+    // Verificar pré-requisitos de atributos
+    if (equipamentoData.preRequisito) {
+      for (const [atributo, valorMinimo] of Object.entries(equipamentoData.preRequisito)) {
+        if (this.system.atributos[atributo].valor < valorMinimo) {
+          return false;
+        }
+      }
+    }
+
+    // Verificar classe (se especificada)
+    if (equipamentoData.classesSugeridas && !equipamentoData.classesSugeridas.includes("todas")) {
+      const classeAtual = this.system.classe;
+      if (!equipamentoData.classesSugeridas.includes(classeAtual)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Verifica se tem dinheiro suficiente
+   * @param {number} preco - Preço do equipamento
+   * @returns {boolean} Se tem dinheiro suficiente
+   */
+  _verificarDinheiroSuficiente(preco) {
+    const dinheiro = this.system.equipamentos?.dinheiro || { ouro: 0, prata: 0, cobre: 0 };
+    const totalOuro = dinheiro.ouro + (dinheiro.prata / 10) + (dinheiro.cobre / 100);
+    return totalOuro >= preco;
+  }
+
+  /**
+   * Deduz dinheiro do personagem
+   * @param {number} preco - Preço a ser deduzido
+   */
+  async _deduzirDinheiro(preco) {
+    const dinheiro = this.system.equipamentos?.dinheiro || { ouro: 0, prata: 0, cobre: 0 };
+    let totalOuro = dinheiro.ouro + (dinheiro.prata / 10) + (dinheiro.cobre / 100);
+    
+    totalOuro -= preco;
+    
+    // Converter de volta para moedas
+    const novoOuro = Math.floor(totalOuro);
+    const novaPrata = Math.floor((totalOuro - novoOuro) * 10);
+    const novoCobre = Math.floor(((totalOuro - novoOuro) * 10 - novaPrata) * 10);
+    
+    await this.update({
+      "system.equipamentos.dinheiro.ouro": novoOuro,
+      "system.equipamentos.dinheiro.prata": novaPrata,
+      "system.equipamentos.dinheiro.cobre": novoCobre
+    });
+  }
+
+  /**
+   * Cria dados do item baseado no equipamento
+   * @param {Object} equipamentoData - Dados do equipamento
+   * @returns {Object} Dados do item
+   */
+  _criarDadosItem(equipamentoData) {
+    const nome = game.i18n.localize(equipamentoData.nome);
+    const descricao = game.i18n.localize(equipamentoData.descricao);
+    
+    let systemData = {
+      descricao: descricao,
+      quantidade: 1,
+      peso: equipamentoData.peso,
+      preco: equipamentoData.preco,
+      raridade: "comum",
+      equipado: false
+    };
+
+    // Propriedades específicas por tipo
+    switch (equipamentoData.tipo) {
+      case 'arma':
+        systemData = {
+          ...systemData,
+          dano: equipamentoData.dano,
+          alcance: equipamentoData.alcance,
+          tipo_dano: equipamentoData.tipo_dano,
+          propriedades: ""
+        };
+        break;
+      
+      case 'armadura':
+        systemData = {
+          ...systemData,
+          protecao: equipamentoData.protecao,
+          mod_defesa: equipamentoData.mod_defesa,
+          tipo_armadura: equipamentoData.tipo_armadura
+        };
+        break;
+      
+      case 'escudo':
+        systemData = {
+          ...systemData,
+          protecao: equipamentoData.protecao,
+          mod_defesa: equipamentoData.mod_defesa
+        };
+        break;
+      
+      case 'consumivel':
+        systemData = {
+          ...systemData,
+          efeito: equipamentoData.efeito,
+          usos: equipamentoData.usos
+        };
+        break;
+    }
+
+    return {
+      name: nome,
+      type: equipamentoData.tipo,
+      system: systemData
+    };
+  }
+
+  /**
+   * Obtém equipamentos disponíveis por categoria
+   * @param {string} categoria - Categoria dos equipamentos
+   * @returns {Object}
+   */
+  async getEquipamentosDisponiveis(categoria) {
+    const { SISTEMA } = await import("../helpers/settings.mjs");
+    const equipamentosCategoria = SISTEMA.equipamentos[categoria] || {};
+    const equipamentosDisponiveis = {};
+
+    for (const [id, equipamento] of Object.entries(equipamentosCategoria)) {
+      // Não mostrar se não atende pré-requisitos
+      if (!this._verificarPreRequisitosEquipamento(equipamento)) continue;
+      
+      equipamentosDisponiveis[id] = {
+        ...equipamento,
+        nome: game.i18n.localize(equipamento.nome),
+        descricao: game.i18n.localize(equipamento.descricao)
+      };
+    }
+
+    return equipamentosDisponiveis;
+  }
+
 } 

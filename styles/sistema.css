@@ -1939,6 +1939,13 @@
   gap: 15px;
 }
 
+/* Grid de equipamentos disponíveis */
+.equipamentos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
 /* Itens de habilidade */
 .habilidade-item {
   border: 1px solid var(--cor-borda);
@@ -1957,6 +1964,33 @@
   background: linear-gradient(135deg, #e8f5e8, #f0fff0);
   border-color: var(--cor-sucesso);
   border-left: 4px solid var(--cor-sucesso);
+}
+
+/* Itens de equipamento */
+.equipamento-item {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.equipamento-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.equipamento-item.disponivel {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.equipamento-item.disponivel:not(.acessivel) {
+  background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
+  opacity: 0.7;
+}
+
+.equipamento-item.disponivel:not(.acessivel) .comprar-equipamento {
+  display: none;
 }
 
 /* Botões específicos para habilidades conhecidas */
@@ -1999,8 +2033,24 @@
   font-size: 16px;
 }
 
+/* Header do equipamento */
+.equipamento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.equipamento-header h5 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  color: var(--cor-primaria);
+  font-size: 14px;
+}
+
 /* Grupo de botões */
-.habilidade-botoes {
+.habilidade-botoes,
+.equipamento-botoes {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -2009,97 +2059,117 @@
 /* Botões de ação das habilidades */
 .adicionar-habilidade,
 .remover-habilidade,
-.detalhes-habilidade {
-  padding: 4px 8px;
+.detalhes-habilidade,
+.detalhes-habilidade-conhecida {
+  background: var(--cor-primaria);
+  color: white;
   border: none;
+  padding: 6px 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 24px;
-  height: 24px;
 }
 
-.adicionar-habilidade {
-  background: var(--cor-sucesso);
+/* Botões de ação dos equipamentos */
+.comprar-equipamento,
+.detalhes-equipamento {
+  background: var(--cor-primaria);
   color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
 }
 
-.adicionar-habilidade:hover {
-  background: #1e7e1e;
+.comprar-equipamento {
+  background: #28a745;
+}
+
+.comprar-equipamento:hover {
+  background: #218838;
   transform: scale(1.05);
 }
 
-.adicionar-habilidade:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
+.detalhes-equipamento {
+  background: #007bff;
+}
+
+.detalhes-equipamento:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.adicionar-habilidade:hover,
+.detalhes-habilidade:hover,
+.detalhes-habilidade-conhecida:hover {
+  background: var(--cor-secundaria);
+  transform: scale(1.05);
 }
 
 .remover-habilidade {
   background: var(--cor-erro);
-  color: white;
 }
 
 .remover-habilidade:hover {
-  background: #c41e3a;
+  background: #B22222;
   transform: scale(1.05);
 }
 
-.detalhes-habilidade {
-  background: #17a2b8;
-  color: white;
-}
-
-.detalhes-habilidade:hover {
-  background: #138496;
-  transform: scale(1.05);
-}
-
-.detalhes-habilidade:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Informações da habilidade */
+/* Informações das habilidades */
 .habilidade-info,
 .habilidade-requisitos {
-  margin-bottom: 8px;
-}
-
-.habilidade-categoria {
   font-size: 12px;
   color: #666;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 0 0 5px 0;
-}
-
-.habilidade-requisitos p {
-  margin: 0 0 3px 0;
-  font-size: 12px;
-  color: #555;
-}
-
-.habilidade-efeito {
-  font-size: 13px;
-  color: var(--cor-texto);
   line-height: 1.4;
-  margin: 0;
+}
+
+.habilidade-info p,
+.habilidade-requisitos p {
+  margin: 4px 0;
+}
+
+.habilidade-info small {
+  color: #999;
   font-style: italic;
 }
 
-/* Indicadores de requisitos */
-.requisito-atendido {
-  color: var(--cor-sucesso);
+/* Informações dos equipamentos */
+.equipamento-info {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
 }
 
-.requisito-nao-atendido {
-  color: var(--cor-erro);
+.equipamento-info p {
+  margin: 4px 0;
+}
+
+.equipamento-info strong {
+  color: var(--cor-primaria);
+}
+
+/* Categorias de equipamentos */
+.categoria-section.armas {
+  border-left: 4px solid #dc3545;
+}
+
+.categoria-section.armaduras {
+  border-left: 4px solid #6f42c1;
+}
+
+.categoria-section.escudos {
+  border-left: 4px solid #fd7e14;
+}
+
+.categoria-section.equipamentos {
+  border-left: 4px solid #20c997;
+}
+
+.categoria-section.consumiveis {
+  border-left: 4px solid #e83e8c;
 }
 
 /* Responsividade para habilidades */

@@ -58,9 +58,10 @@
   {{!-- Abas de Navegação --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="principal">Principal</a>
-    <a class="item" data-tab="magias">Magias</a>
-    <a class="item" data-tab="equipamentos">Equipamentos</a>
     <a class="item" data-tab="habilidades">Habilidades</a>
+    <a class="item" data-tab="equipamentos">{{localize 'EQUIPAMENTOS.EQUIPAMENTOS_DISPONIVEIS'}}</a>
+    <a class="item" data-tab="magias">Magias</a>
+    <a class="item" data-tab="inventario">{{localize 'EQUIPAMENTOS.INVENTARIO'}}</a>
     <a class="item" data-tab="detalhes">Detalhes</a>
   </nav>
 
@@ -588,31 +589,24 @@
         {{!-- Habilidades Conhecidas --}}
         <div class="habilidades-conhecidas">
           <h3>Habilidades Conhecidas</h3>
-          
-          {{#if habilidadesConhecidasProcessadas}}
           <div class="habilidades-grid">
             {{#each habilidadesConhecidasProcessadas as |habilidade key|}}
-            <div class="habilidade-item conhecida" data-habilidade="{{key}}" data-categoria="{{habilidade.categoria}}">
+            <div class="habilidade-item conhecida" data-habilidade="{{key}}">
               <div class="habilidade-header">
                 <h5>{{habilidade.nome}}</h5>
                 <div class="habilidade-botoes">
-                  <button type="button" class="detalhes-habilidade-conhecida" data-habilidade="{{key}}" title="Ver informações completas">
+                  <button type="button" class="detalhes-habilidade-conhecida" data-habilidade="{{key}}" title="Ver detalhes">
                     <i class="fas fa-info-circle"></i>
-                  </button>
-                  <button type="button" class="remover-habilidade" data-habilidade="{{key}}" title="Remover habilidade">
-                    <i class="fas fa-trash"></i>
                   </button>
                 </div>
               </div>
-              <div class="habilidade-efeito">
-                {{habilidade.efeito}}
+              <div class="habilidade-info">
+                <p>{{habilidade.efeito}}</p>
+                <p><small>Nível {{habilidade.nivelAdquirido}}</small></p>
               </div>
             </div>
             {{/each}}
           </div>
-          {{else}}
-          <p class="no-habilidades">Nenhuma habilidade conhecida ainda.</p>
-          {{/if}}
         </div>
 
         {{!-- Habilidades Disponíveis --}}
@@ -652,8 +646,6 @@
                 {{/each}}
               </div>
             </div>
-
-
 
             {{!-- Habilidades de Furtividade --}}
             <div class="categoria-section furtividade" data-categoria="furtividade">
@@ -741,6 +733,202 @@
                     {{#if habilidade.preRequisito}}
                     <p>Pré-requisitos: 
                       {{#each habilidade.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{!-- Aba Equipamentos --}}
+    <div class="tab" data-group="primary" data-tab="equipamentos">
+      <div class="equipamentos-content">
+        
+        {{!-- Equipamentos Disponíveis --}}
+        <div class="equipamentos-disponiveis">
+          <h3>{{localize 'EQUIPAMENTOS.EQUIPAMENTOS_DISPONIVEIS'}}</h3>
+          
+          <div class="categorias-equipamentos">
+            
+            {{!-- Armas --}}
+            <div class="categoria-section armas" data-categoria="armas">
+              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ARMAS'}}</h4>
+              <div class="equipamentos-grid">
+                {{#each equipamentosArmasDisponiveis as |equipamento key|}}
+                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                  <div class="equipamento-header">
+                    <h5>{{equipamento.nome}}</h5>
+                    <div class="equipamento-botoes">
+                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Ver detalhes">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      {{#if equipamento.podeComprar}}
+                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="equipamento-info">
+                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
+                    {{#if equipamento.preRequisito}}
+                    <p><strong>Pré-requisitos:</strong> 
+                      {{#each equipamento.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Armaduras --}}
+            <div class="categoria-section armaduras" data-categoria="armaduras">
+              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ARMADURAS'}}</h4>
+              <div class="equipamentos-grid">
+                {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
+                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                  <div class="equipamento-header">
+                    <h5>{{equipamento.nome}}</h5>
+                    <div class="equipamento-botoes">
+                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Ver detalhes">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      {{#if equipamento.podeComprar}}
+                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="equipamento-info">
+                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
+                    {{#if equipamento.preRequisito}}
+                    <p><strong>Pré-requisitos:</strong> 
+                      {{#each equipamento.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Escudos --}}
+            <div class="categoria-section escudos" data-categoria="escudos">
+              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.ESCUDOS'}}</h4>
+              <div class="equipamentos-grid">
+                {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
+                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                  <div class="equipamento-header">
+                    <h5>{{equipamento.nome}}</h5>
+                    <div class="equipamento-botoes">
+                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Ver detalhes">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      {{#if equipamento.podeComprar}}
+                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="equipamento-info">
+                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
+                    {{#if equipamento.preRequisito}}
+                    <p><strong>Pré-requisitos:</strong> 
+                      {{#each equipamento.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Equipamentos Gerais --}}
+            <div class="categoria-section equipamentos" data-categoria="equipamentos">
+              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.EQUIPAMENTOS'}}</h4>
+              <div class="equipamentos-grid">
+                {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
+                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                  <div class="equipamento-header">
+                    <h5>{{equipamento.nome}}</h5>
+                    <div class="equipamento-botoes">
+                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Ver detalhes">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      {{#if equipamento.podeComprar}}
+                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="equipamento-info">
+                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
+                    {{#if equipamento.preRequisito}}
+                    <p><strong>Pré-requisitos:</strong> 
+                      {{#each equipamento.preRequisito as |valor atributo|}}
+                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                      {{/each}}
+                    </p>
+                    {{/if}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+
+            {{!-- Consumíveis --}}
+            <div class="categoria-section consumiveis" data-categoria="consumiveis">
+              <h4>{{localize 'EQUIPAMENTOS.CATEGORIAS.CONSUMIVEIS'}}</h4>
+              <div class="equipamentos-grid">
+                {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
+                <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+                  <div class="equipamento-header">
+                    <h5>{{equipamento.nome}}</h5>
+                    <div class="equipamento-botoes">
+                      <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Ver detalhes">
+                        <i class="fas fa-info-circle"></i>
+                      </button>
+                      {{#if equipamento.podeComprar}}
+                      <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="equipamento-info">
+                    <p><strong>{{localize 'EQUIPAMENTOS.PRECO'}}:</strong> {{equipamento.preco}} ouro</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.PESO'}}:</strong> {{equipamento.peso}} kg</p>
+                    <p><strong>{{localize 'EQUIPAMENTOS.NIVEL_MINIMO'}}:</strong> {{equipamento.nivelMin}}</p>
+                    {{#if equipamento.preRequisito}}
+                    <p><strong>Pré-requisitos:</strong> 
+                      {{#each equipamento.preRequisito as |valor atributo|}}
                       {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
                       {{/each}}
                     </p>

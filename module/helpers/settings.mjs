@@ -532,3 +532,234 @@ SISTEMA.habilidades = {
     }
   }
 }; 
+
+// Base de dados de equipamentos disponíveis para compra
+SISTEMA.equipamentos = {
+  armas: {
+    espadaCurta: {
+      nome: "EQUIPAMENTOS.ESPADA_CURTA",
+      tipo: "arma",
+      nivelMin: 1,
+      preRequisito: { fisico: 4 },
+      classesSugeridas: ["guerreiro", "ladino"],
+      preco: 10,
+      peso: 1,
+      dano: "1d6",
+      alcance: "corpo_a_corpo",
+      tipo_dano: "cortante",
+      descricao: "EQUIPAMENTOS.ESPADA_CURTA_DESC"
+    },
+    espadaLonga: {
+      nome: "EQUIPAMENTOS.ESPADA_LONGA",
+      tipo: "arma",
+      nivelMin: 2,
+      preRequisito: { fisico: 6 },
+      classesSugeridas: ["guerreiro"],
+      preco: 25,
+      peso: 1.5,
+      dano: "1d8",
+      alcance: "corpo_a_corpo",
+      tipo_dano: "cortante",
+      descricao: "EQUIPAMENTOS.ESPADA_LONGA_DESC"
+    },
+    machado: {
+      nome: "EQUIPAMENTOS.MACHAXO",
+      tipo: "arma",
+      nivelMin: 1,
+      preRequisito: { fisico: 5 },
+      classesSugeridas: ["guerreiro"],
+      preco: 15,
+      peso: 2,
+      dano: "1d8",
+      alcance: "corpo_a_corpo",
+      tipo_dano: "cortante",
+      descricao: "EQUIPAMENTOS.MACHAXO_DESC"
+    },
+    arcoCurto: {
+      nome: "EQUIPAMENTOS.ARCO_CURTO",
+      tipo: "arma",
+      nivelMin: 1,
+      preRequisito: { acao: 5 },
+      classesSugeridas: ["guerreiro", "ladino"],
+      preco: 20,
+      peso: 1,
+      dano: "1d6",
+      alcance: "distancia",
+      tipo_dano: "perfurante",
+      descricao: "EQUIPAMENTOS.ARCO_CURTO_DESC"
+    },
+    cajado: {
+      nome: "EQUIPAMENTOS.CAJADO",
+      tipo: "arma",
+      nivelMin: 1,
+      preRequisito: { fisico: 3 },
+      classesSugeridas: ["mago"],
+      preco: 5,
+      peso: 1,
+      dano: "1d4",
+      alcance: "corpo_a_corpo",
+      tipo_dano: "concussao",
+      descricao: "EQUIPAMENTOS.CAJADO_DESC"
+    }
+  },
+  armaduras: {
+    couro: {
+      nome: "EQUIPAMENTOS.ARMADURA_COURO",
+      tipo: "armadura",
+      nivelMin: 1,
+      preRequisito: { fisico: 4 },
+      classesSugeridas: ["guerreiro", "ladino"],
+      preco: 20,
+      peso: 3,
+      protecao: 1,
+      mod_defesa: 1,
+      tipo_armadura: "leve",
+      descricao: "EQUIPAMENTOS.ARMADURA_COURO_DESC"
+    },
+    malha: {
+      nome: "EQUIPAMENTOS.ARMADURA_MALHA",
+      tipo: "armadura",
+      nivelMin: 3,
+      preRequisito: { fisico: 6 },
+      classesSugeridas: ["guerreiro"],
+      preco: 75,
+      peso: 8,
+      protecao: 2,
+      mod_defesa: 2,
+      tipo_armadura: "media",
+      descricao: "EQUIPAMENTOS.ARMADURA_MALHA_DESC"
+    },
+    placa: {
+      nome: "EQUIPAMENTOS.ARMADURA_PLACA",
+      tipo: "armadura",
+      nivelMin: 5,
+      preRequisito: { fisico: 8 },
+      classesSugeridas: ["guerreiro"],
+      preco: 200,
+      peso: 15,
+      protecao: 3,
+      mod_defesa: 3,
+      tipo_armadura: "pesada",
+      descricao: "EQUIPAMENTOS.ARMADURA_PLACA_DESC"
+    },
+    vestes: {
+      nome: "EQUIPAMENTOS.VESTES_MAGICAS",
+      tipo: "armadura",
+      nivelMin: 1,
+      preRequisito: { mental: 5 },
+      classesSugeridas: ["mago"],
+      preco: 30,
+      peso: 1,
+      protecao: 0,
+      mod_defesa: 1,
+      tipo_armadura: "leve",
+      descricao: "EQUIPAMENTOS.VESTES_MAGICAS_DESC"
+    }
+  },
+  escudos: {
+    escudoPequeno: {
+      nome: "EQUIPAMENTOS.ESCUDO_PEQUENO",
+      tipo: "escudo",
+      nivelMin: 1,
+      preRequisito: { fisico: 4 },
+      classesSugeridas: ["guerreiro"],
+      preco: 15,
+      peso: 2,
+      protecao: 1,
+      mod_defesa: 1,
+      descricao: "EQUIPAMENTOS.ESCUDO_PEQUENO_DESC"
+    },
+    escudoGrande: {
+      nome: "EQUIPAMENTOS.ESCUDO_GRANDE",
+      tipo: "escudo",
+      nivelMin: 3,
+      preRequisito: { fisico: 6 },
+      classesSugeridas: ["guerreiro"],
+      preco: 35,
+      peso: 4,
+      protecao: 2,
+      mod_defesa: 2,
+      descricao: "EQUIPAMENTOS.ESCUDO_GRANDE_DESC"
+    }
+  },
+  equipamentos: {
+    mochila: {
+      nome: "EQUIPAMENTOS.MOCHILA",
+      tipo: "equipamento",
+      nivelMin: 1,
+      preRequisito: {},
+      classesSugeridas: ["todas"],
+      preco: 5,
+      peso: 0.5,
+      descricao: "EQUIPAMENTOS.MOCHILA_DESC"
+    },
+    corda: {
+      nome: "EQUIPAMENTOS.CORDA",
+      tipo: "equipamento",
+      nivelMin: 1,
+      preRequisito: {},
+      classesSugeridas: ["todas"],
+      preco: 2,
+      peso: 1,
+      descricao: "EQUIPAMENTOS.CORDA_DESC"
+    },
+    lampiao: {
+      nome: "EQUIPAMENTOS.LAMPIAO",
+      tipo: "equipamento",
+      nivelMin: 1,
+      preRequisito: {},
+      classesSugeridas: ["todas"],
+      preco: 8,
+      peso: 1,
+      descricao: "EQUIPAMENTOS.LAMPIAO_DESC"
+    },
+    kitMedico: {
+      nome: "EQUIPAMENTOS.KIT_MEDICO",
+      tipo: "equipamento",
+      nivelMin: 2,
+      preRequisito: { mental: 4 },
+      classesSugeridas: ["todas"],
+      preco: 25,
+      peso: 2,
+      descricao: "EQUIPAMENTOS.KIT_MEDICO_DESC"
+    }
+  },
+  consumiveis: {
+    pocaoVida: {
+      nome: "EQUIPAMENTOS.POCAO_VIDA",
+      tipo: "consumivel",
+      nivelMin: 1,
+      preRequisito: {},
+      classesSugeridas: ["todas"],
+      preco: 15,
+      peso: 0.5,
+      efeito: "Recupera 1d6+1 PV",
+      usos: 1,
+      descricao: "EQUIPAMENTOS.POCAO_VIDA_DESC"
+    },
+    pocaoMana: {
+      nome: "EQUIPAMENTOS.POCAO_MANA",
+      tipo: "consumivel",
+      nivelMin: 2,
+      preRequisito: { mental: 5 },
+      classesSugeridas: ["mago"],
+      preco: 20,
+      peso: 0.5,
+      efeito: "Recupera 1d4+1 PM",
+      usos: 1,
+      descricao: "EQUIPAMENTOS.POCAO_MANA_DESC"
+    },
+    antidoto: {
+      nome: "EQUIPAMENTOS.ANTIDOTO",
+      tipo: "consumivel",
+      nivelMin: 1,
+      preRequisito: {},
+      classesSugeridas: ["todas"],
+      preco: 12,
+      peso: 0.5,
+      efeito: "Remove efeitos de veneno",
+      usos: 1,
+      descricao: "EQUIPAMENTOS.ANTIDOTO_DESC"
+    }
+  }
+}; 
