@@ -226,6 +226,17 @@
     "MAGIA": "Magia",
     "HABILIDADE": "Habilidade"
   },
+  "ITEM": {
+    "TYPES": {
+      "ARMA": "Arma",
+      "ARMADURA": "Armadura",
+      "ESCUDO": "Escudo",
+      "EQUIPAMENTO": "Equipamento",
+      "CONSUMIVEL": "Consumível",
+      "MAGIA": "Magia",
+      "HABILIDADE": "Habilidade"
+    }
+  },
   "HABILIDADES": {
     "ATAQUE_PODEROSO": "Ataque Poderoso",
     "ATAQUE_PODEROSO_EFEITO": "Adiciona +2 ao dano em ataques corpo a corpo",

@@ -39,6 +39,13 @@ Hooks.once('init', function() {
     label: "EQUIPAMENTOS.EQUIPAMENTO"
   });
 
+  // Configurar tipos de itens válidos
+  CONFIG.Item.documentClass = ClubeItem;
+  CONFIG.Item.types = ClubeItem.types;
+  
+  // Definir tipos de itens válidos para validação
+  CONFIG.Item.validTypes = ["arma", "armadura", "escudo", "equipamento", "consumivel", "magia", "habilidade"];
+
   // Registrar configurações do sistema
   registerSystemSettings();
 

@@ -15,13 +15,38 @@
     }
   },
   "Item": {
-    "types": ["item", "magia"],
-    "item": {
+    "types": ["arma", "armadura", "escudo", "equipamento", "consumivel", "magia", "habilidade"],
+    "arma": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "armadura": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "escudo": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "equipamento": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "consumivel": {
       "prototypeToken": {
         "actorLink": true
       }
     },
     "magia": {
+      "prototypeToken": {
+        "actorLink": true
+      }
+    },
+    "habilidade": {
       "prototypeToken": {
         "actorLink": true
       }

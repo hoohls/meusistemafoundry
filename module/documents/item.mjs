@@ -4,8 +4,131 @@
 export class ClubeItem extends Item {
 
   /** @override */
+  static get types() {
+    return {
+      arma: "Arma",
+      armadura: "Armadura", 
+      escudo: "Escudo",
+      equipamento: "Equipamento",
+      consumivel: "Consumível",
+      magia: "Magia",
+      habilidade: "Habilidade"
+    };
+  }
+
+  /** @override */
+  static get defaultTypes() {
+    return {
+      arma: {
+        name: "Nova Arma",
+        img: "icons/weapons/swords/sword-broadsword-steel.webp",
+        system: {
+          tipo: "corpo_a_corpo",
+          dano: { base: "1d6" },
+          propriedades: {
+            alcance: false,
+            arremesso: false,
+            duas_maos: false,
+            leve: false,
+            pesada: false
+          },
+          qualidade: "comum",
+          peso: 1,
+          preco: 10
+        }
+      },
+      armadura: {
+        name: "Nova Armadura",
+        img: "icons/equipment/chest/breastplate-steel-grey.webp",
+        system: {
+          protecao: 1,
+          mod_defesa: 1,
+          propriedades: {
+            leve: false,
+            media: false,
+            pesada: false
+          },
+          qualidade: "comum",
+          peso: 5,
+          preco: 50
+        }
+      },
+      escudo: {
+        name: "Novo Escudo",
+        img: "icons/equipment/shield/shield-wooden-buckler.webp",
+        system: {
+          protecao: 1,
+          mod_defesa: 1,
+          propriedades: {
+            leve: false,
+            pesado: false
+          },
+          qualidade: "comum",
+          peso: 2,
+          preco: 15
+        }
+      },
+      equipamento: {
+        name: "Novo Equipamento",
+        img: "icons/svg/item-bag.svg",
+        system: {
+          tipo: "geral",
+          peso: 0.5,
+          preco: 5,
+          descricao: ""
+        }
+      },
+      consumivel: {
+        name: "Novo Consumível",
+        img: "icons/consumables/potions/potion-bottle-corked-red.webp",
+        system: {
+          tipo: "pocao",
+          usos: 1,
+          usos_max: 1,
+          efeito: "",
+          descricao: ""
+        }
+      },
+      magia: {
+        name: "Nova Magia",
+        img: "icons/magic/symbols/runes-arcade.webp",
+        system: {
+          escola: "evocacao",
+          nivel: 1,
+          custo_pm: 1,
+          alcance: "toque",
+          duracao: "instantanea",
+          componentes: {
+            verbal: true,
+            somatico: true,
+            material: false
+          },
+          descricao: ""
+        }
+      },
+      habilidade: {
+        name: "Nova Habilidade",
+        img: "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+        system: {
+          categoria: "combate",
+          nivel_minimo: 1,
+          prerequisitos: {},
+          efeito: "",
+          descricao: ""
+        }
+      }
+    };
+  }
+
+  /** @override */
   prepareData() {
     super.prepareData();
+    
+    // Garantir que o tipo seja válido
+    if (!CONFIG.Item.validTypes.includes(this.type)) {
+      console.warn(`Tipo de item inválido: ${this.type}. Tipos válidos:`, CONFIG.Item.validTypes);
+      return;
+    }
     
     // Preparar dados específicos por tipo
     switch (this.type) {
@@ -26,6 +149,9 @@ export class ClubeItem extends Item {
         break;
       case "consumivel":
         this._prepareConsumivelData();
+        break;
+      case "equipamento":
+        this._prepareEquipamentoData();
         break;
     }
   }
@@ -102,6 +228,18 @@ export class ClubeItem extends Item {
   }
 
   /**
+   * Prepara dados específicos para equipamentos
+   */
+  _prepareEquipamentoData() {
+    const data = this.system;
+    
+    // Verificar se é equipamento equipável
+    if (data.equipavel !== undefined) {
+      data.pode_equipar = true;
+    }
+  }
+
+  /**
    * Calcula dano total de uma arma
    * @param {Object} data - Dados do sistema do item
    */
@@ -167,6 +305,11 @@ export class ClubeItem extends Item {
     
     const atorData = this.actor.system;
     
+    // Garantir que dados básicos existam
+    if (!data.custo_pm) data.custo_pm = 1;
+    if (!data.nivel_minimo) data.nivel_minimo = 1;
+    if (!data.nivel) data.nivel = 1;
+    
     // Verificar PM suficientes
     data.pode_conjurar = atorData.recursos.pm.valor >= data.custo_pm;
     
@@ -190,6 +333,9 @@ export class ClubeItem extends Item {
     if (!this.actor) return;
     
     const atorData = this.actor.system;
+    
+    // Garantir que dados básicos existam
+    if (!data.nivel_minimo) data.nivel_minimo = 1;
     
     // Verificar nível mínimo
     data.pode_usar = atorData.nivel >= data.nivel_minimo;
@@ -215,6 +361,11 @@ export class ClubeItem extends Item {
    * @param {Object} data - Dados do sistema do item
    */
   _verificarUsosConsumivel(data) {
+    // Garantir que usos exista
+    if (!data.usos) {
+      data.usos = { atual: 1, max: 1 };
+    }
+    
     // Verificar se ainda tem usos
     data.pode_usar = data.usos.atual > 0;
     
@@ -493,5 +644,28 @@ export class ClubeItem extends Item {
     }
     
     return tooltip;
+  }
+
+  /**
+   * Cria um item com dados padrão baseado no tipo
+   * @param {Object} data - Dados do item
+   * @param {Object} options - Opções de criação
+   * @returns {Promise<ClubeItem>} Item criado
+   */
+  static async create(data, options = {}) {
+    // Garantir que dados padrão sejam aplicados
+    const tipo = data.type;
+    const defaultData = this.defaultTypes[tipo];
+    
+    if (defaultData && !data.system) {
+      data.system = defaultData.system;
+    }
+    
+    // Garantir que o tipo seja válido
+    if (!CONFIG.Item.validTypes.includes(tipo)) {
+      console.warn(`Tipo de item inválido: ${tipo}. Tipos válidos:`, CONFIG.Item.validTypes);
+    }
+    
+    return super.create(data, options);
   }
 } 
