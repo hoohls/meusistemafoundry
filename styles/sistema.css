@@ -2472,7 +2472,7 @@
 
 .status-equipamentos .status-box {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  border: 1px solid var(--cor-borda);
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   padding: 12px 15px;
   flex: 1;
@@ -2481,7 +2481,7 @@
 }
 
 .status-equipamentos .status-box strong {
-  color: var(--cor-primaria);
+  color: #4a5568;
   display: block;
   margin-bottom: 5px;
   font-size: 12px;
@@ -2492,51 +2492,40 @@
 .status-equipamentos .status-box span {
   font-size: 16px;
   font-weight: bold;
-  color: var(--cor-texto);
+  color: #2d3748;
 }
 
 /* Seção de equipamentos disponíveis */
 .equipamentos-disponiveis-section {
-  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .equipamentos-disponiveis-section h3 {
-  color: var(--cor-primaria);
-  border-bottom: 2px solid var(--cor-acento);
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
   padding-bottom: 8px;
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.equipamentos-disponiveis-section h3 i {
-  margin-right: 8px;
-  color: var(--cor-acento);
+  margin-bottom: 15px;
 }
 
 /* Escola de equipamentos */
 .equipamentos-escola {
   margin-bottom: 25px;
-  background: white;
-  border: 1px solid var(--cor-borda);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .equipamentos-escola h4 {
-  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: #2d3748;
+  background: linear-gradient(90deg, #667eea, #764ba2);
   color: white;
-  margin: 0;
-  padding: 12px 15px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.equipamentos-escola h4 i {
-  margin-right: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
 }
 
 .equipamentos-escola .equipamentos-grid {
-  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
 }
 
 /* Grid de equipamentos disponíveis */
@@ -2548,29 +2537,22 @@
 
 /* Itens de equipamento */
 .equipamento-item {
-  border: 1px solid var(--cor-borda);
-  border-radius: 8px;
-  padding: 12px;
   background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   transition: all 0.2s ease;
 }
 
 .equipamento-item:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
 }
 
 .equipamento-item.disponivel {
-  background: linear-gradient(135deg, #f8f9fa, #ffffff);
-}
-
-.equipamento-item.disponivel:not(.acessivel) {
-  background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
-  opacity: 0.7;
-}
-
-.equipamento-item.disponivel:not(.acessivel) .comprar-equipamento {
-  display: none;
+  border-left: 4px solid #4299e1;
+  background: linear-gradient(135deg, #ebf8ff 0%, #f0fff4 100%);
 }
 
 /* Header do equipamento */
@@ -2583,63 +2565,54 @@
 
 .equipamento-header h5 {
   margin: 0;
-  font-family: var(--fonte-titulo);
-  color: var(--cor-primaria);
-  font-size: 14px;
-  font-weight: bold;
+  color: #2d3748;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
 /* Grupo de botões */
 .equipamento-botoes {
   display: flex;
   gap: 5px;
-  align-items: center;
 }
 
 /* Botões de ação dos equipamentos */
 .comprar-equipamento,
 .detalhes-equipamento {
-  background: var(--cor-primaria);
-  color: white;
+  background: none;
   border: none;
-  padding: 6px 8px;
+  padding: 5px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 11px;
   transition: all 0.2s ease;
+  color: #4a5568;
 }
 
 .comprar-equipamento {
-  background: #28a745;
+  color: #48bb78;
 }
 
 .comprar-equipamento:hover {
-  background: #218838;
-  transform: scale(1.05);
+  background: #c6f6d5;
 }
 
 .detalhes-equipamento {
-  background: #007bff;
+  color: #4299e1;
 }
 
 .detalhes-equipamento:hover {
-  background: #0056b3;
-  transform: scale(1.05);
+  background: #bee3f8;
 }
 
 /* Detalhes dos equipamentos */
-.equipamento-detalhes {
-  font-size: 12px;
-  color: #666;
-  line-height: 1.4;
+.equipamento-requisitos p {
+  margin: 5px 0;
+  font-size: 0.9em;
+  color: #4a5568;
 }
 
-.equipamento-detalhes p {
-  margin: 4px 0;
-}
-
-.equipamento-detalhes strong {
-  color: var(--cor-primaria);
+.equipamento-requisitos strong {
+  color: #4a5568;
 }
 
 /* Seção vazia */

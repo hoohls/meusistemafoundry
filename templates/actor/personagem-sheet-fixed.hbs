@@ -439,15 +439,15 @@
 
         {{!-- Equipamentos Disponíveis --}}
         <div class="equipamentos-disponiveis-section">
-          <h3><i class="fas fa-shopping-cart"></i> Equipamentos Disponíveis</h3>
+          <h3><i class="fas fa-plus-circle"></i> Equipamentos Disponíveis</h3>
           
           {{!-- Armas --}}
           {{#if equipamentosArmasDisponiveis}}
           <div class="equipamentos-escola">
-            <h4><i class="fas fa-sword"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ARMAS'}}</h4>
+            <h4>Armas</h4>
             <div class="equipamentos-grid">
               {{#each equipamentosArmasDisponiveis as |equipamento key|}}
-              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
                   <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
@@ -456,12 +456,12 @@
                     </button>
                     {{#if equipamento.podeComprar}}
                     <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento">
-                      <i class="fas fa-shopping-cart"></i>
+                      <i class="fas fa-plus"></i>
                     </button>
                     {{/if}}
                   </div>
                 </div>
-                <div class="equipamento-detalhes">
+                <div class="equipamento-requisitos">
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Dano:</strong> {{equipamento.dano}}</p>
                   {{#if equipamento.preRequisito}}
@@ -481,10 +481,10 @@
           {{!-- Armaduras --}}
           {{#if equipamentosArmadurasDisponiveis}}
           <div class="equipamentos-escola">
-            <h4><i class="fas fa-shield-alt"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ARMADURAS'}}</h4>
+            <h4>Armaduras</h4>
             <div class="equipamentos-grid">
               {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
-              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
                   <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
@@ -493,12 +493,12 @@
                     </button>
                     {{#if equipamento.podeComprar}}
                     <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento">
-                      <i class="fas fa-shopping-cart"></i>
+                      <i class="fas fa-plus"></i>
                     </button>
                     {{/if}}
                   </div>
                 </div>
-                <div class="equipamento-detalhes">
+                <div class="equipamento-requisitos">
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
                   {{#if equipamento.preRequisito}}
@@ -518,10 +518,10 @@
           {{!-- Escudos --}}
           {{#if equipamentosEscudosDisponiveis}}
           <div class="equipamentos-escola">
-            <h4><i class="fas fa-shield"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.ESCUDOS'}}</h4>
+            <h4>Escudos</h4>
             <div class="equipamentos-grid">
               {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
-              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
                   <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
@@ -530,12 +530,12 @@
                     </button>
                     {{#if equipamento.podeComprar}}
                     <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento">
-                      <i class="fas fa-shopping-cart"></i>
+                      <i class="fas fa-plus"></i>
                     </button>
                     {{/if}}
                   </div>
                 </div>
-                <div class="equipamento-detalhes">
+                <div class="equipamento-requisitos">
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
                   {{#if equipamento.preRequisito}}
@@ -555,10 +555,10 @@
           {{!-- Equipamentos Gerais --}}
           {{#if equipamentosEquipamentosDisponiveis}}
           <div class="equipamentos-escola">
-            <h4><i class="fas fa-toolbox"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.EQUIPAMENTOS'}}</h4>
+            <h4>Equipamentos Gerais</h4>
             <div class="equipamentos-grid">
               {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
-              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
                   <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
@@ -567,12 +567,12 @@
                     </button>
                     {{#if equipamento.podeComprar}}
                     <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento">
-                      <i class="fas fa-shopping-cart"></i>
+                      <i class="fas fa-plus"></i>
                     </button>
                     {{/if}}
                   </div>
                 </div>
-                <div class="equipamento-detalhes">
+                <div class="equipamento-requisitos">
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}}</p>
                   {{#if equipamento.preRequisito}}
@@ -592,10 +592,10 @@
           {{!-- Consumíveis --}}
           {{#if equipamentosConsumiveisDisponiveis}}
           <div class="equipamentos-escola">
-            <h4><i class="fas fa-flask"></i> {{localize 'EQUIPAMENTOS.CATEGORIAS.CONSUMIVEIS'}}</h4>
+            <h4>Consumíveis</h4>
             <div class="equipamentos-grid">
               {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
-              <div class="equipamento-item disponivel {{#unless equipamento.atendeRequisitos}}inacessivel{{/unless}}" data-equipamento="{{key}}">
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
                   <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
@@ -604,12 +604,12 @@
                     </button>
                     {{#if equipamento.podeComprar}}
                     <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento">
-                      <i class="fas fa-shopping-cart"></i>
+                      <i class="fas fa-plus"></i>
                     </button>
                     {{/if}}
                   </div>
                 </div>
-                <div class="equipamento-detalhes">
+                <div class="equipamento-requisitos">
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Efeito:</strong> {{equipamento.efeito}}</p>
                   {{#if equipamento.preRequisito}}
