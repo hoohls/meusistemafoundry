@@ -1683,95 +1683,9 @@ export class ClubeActor extends Actor {
     }
   }
 
-  /**
-   * Testa especificamente o atributo Mental para identificar problemas
-   * @returns {Object} Resultado do teste
-   */
-  testarAtributoMental() {
-    console.log("=== TESTE ESPECÍFICO DO ATRIBUTO MENTAL ===");
-    
-    const resultado = {
-      valorAtual: this.system.atributos?.mental?.valor || 0,
-      pmAtual: this.system.recursos?.pm?.valor || 0,
-      pmMaximo: this.system.recursos?.pm?.max || 0,
-      progressao: this.system.progressao || {},
-      statusPontos: this.getStatusPontosAtributos(),
-      podeAdicionar: false,
-      limiteMaximo: 0,
-      problemas: []
-    };
-    
-    // Verificar se pode adicionar ponto
-    const statusPontos = resultado.statusPontos;
-    const valorAtual = resultado.valorAtual;
-    const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
-    
-    resultado.limiteMaximo = limiteMaximo;
-    resultado.podeAdicionar = valorAtual < limiteMaximo && statusPontos.temPontosDisponiveis;
-    
-    // Verificar problemas específicos
-    if (valorAtual >= 5) {
-      resultado.problemas.push("Atributo Mental está no nível 5 ou superior - possível área de problema");
-    }
-    
-    if (resultado.pmAtual > resultado.pmMaximo) {
-      resultado.problemas.push("PM atual maior que PM máximo - inconsistência detectada");
-    }
-    
-    if (!statusPontos.temPontosDisponiveis) {
-      resultado.problemas.push("Não há pontos disponíveis para distribuir");
-    }
-    
-    if (valorAtual >= limiteMaximo) {
-      resultado.problemas.push("Atributo já está no limite máximo");
-    }
-    
-    // Simular o que aconteceria se adicionasse um ponto
-    if (resultado.podeAdicionar) {
-      const novoValor = valorAtual + 1;
-      const novoPmMax = novoValor * 2 + 5;
-      resultado.simulacao = {
-        novoValor: novoValor,
-        novoPmMax: novoPmMax,
-        pmSeraAjustado: resultado.pmAtual > novoPmMax
-      };
-    }
-    
-    console.log("Resultado do teste:", resultado);
-    return resultado;
-  }
 
-  /**
-   * Método de teste para verificar o estado atual dos atributos e pontos
-   * @returns {Object} Estado atual do personagem
-   */
-  testarEstadoAtributos() {
-    console.log("=== TESTE DE ESTADO DOS ATRIBUTOS ===");
-    console.log("Dados completos do sistema:", this.system);
-    console.log("Atributos:", this.system.atributos);
-    console.log("Progressão:", this.system.progressao);
-    console.log("Experiência:", this.system.experiencia);
-    console.log("Nível:", this.system.nivel);
-    
-    const statusPontos = this.getStatusPontosAtributos();
-    console.log("Status dos pontos:", statusPontos);
-    
-    // Verificar cada atributo individualmente
-    const atributos = ['fisico', 'acao', 'mental', 'social'];
-    atributos.forEach(atributo => {
-      const valor = this.system.atributos[atributo]?.valor || 0;
-      const limiteMaximo = statusPontos.atributosInicializados ? 18 : 8;
-      const podeAdicionar = valor < limiteMaximo && statusPontos.temPontosDisponiveis;
-      
-      console.log(`${atributo.toUpperCase()}: valor=${valor}, limite=${limiteMaximo}, podeAdicionar=${podeAdicionar}`);
-    });
-    
-    return {
-      atributos: this.system.atributos,
-      progressao: this.system.progressao,
-      statusPontos: statusPontos
-    };
-  }
+
+
 
   /**
    * Corrige problemas de inicialização do sistema
@@ -1861,24 +1775,7 @@ export class ClubeActor extends Actor {
     }
   }
 
-  /**
-   * Método de teste para verificar se o sistema de XP está funcionando
-   * @returns {Object} Status do sistema de XP
-   */
-  testarSistemaXP() {
-    console.log("=== Teste do Sistema de XP ===");
-    console.log("Estrutura do sistema:", this.system);
-    console.log("Experiência:", this.system.experiencia);
-    console.log("Nível:", this.system.nivel);
-    console.log("Progressão:", this.system.progressao);
-    
-    return {
-      experiencia: this.system.experiencia,
-      nivel: this.system.nivel,
-      progressao: this.system.progressao,
-      atributos: this.system.atributos
-    };
-  }
+
 
   /**
    * Corrige problemas específicos com o atributo Mental

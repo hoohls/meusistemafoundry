@@ -713,11 +713,6 @@ export class ClubeActorSheet extends ActorSheet {
     html.find(".adicionar-ponto-atributo").click(this._onAdicionarPontoAtributo.bind(this));
     html.find(".remover-ponto-atributo").click(this._onRemoverPontoAtributo.bind(this));
     html.find(".finalizar-distribuicao-inicial").click(this._onFinalizarDistribuicaoInicial.bind(this));
-    html.find(".testar-atributos").click(this._onTestarAtributos.bind(this));
-    html.find(".testar-mental").click(this._onTestarMental.bind(this));
-    html.find(".comparar-fisico-mental").click(this._onCompararFisicoMental.bind(this));
-    html.find(".corrigir-mental").click(this._onCorrigirMental.bind(this));
-    html.find(".reinicializar-dados").click(this._onReinicializarDados.bind(this));
 
     // Gerenciar recursos (PV/PM)
     html.find(".ajustar-pv").click(this._onAjustarPV.bind(this));
@@ -2772,66 +2767,7 @@ export class ClubeActorSheet extends ActorSheet {
     await this.actor.finalizarDistribuicaoInicial();
   }
 
-  /**
-   * Testa o estado atual dos atributos (debug)
-   * @param {Event} event - Evento de clique
-   */
-  async _onTestarAtributos(event) {
-    event.preventDefault();
-    const resultado = this.actor.testarEstadoAtributos();
-    ui.notifications.info("Teste de atributos executado. Verifique o console para detalhes.");
-  }
 
-  /**
-   * Testa especificamente o atributo Mental
-   * @param {Event} event - Evento de clique
-   */
-  async _onTestarMental(event) {
-    event.preventDefault();
-    const resultado = this.actor.testarAtributoMental();
-    
-    // Mostrar resultado em uma notificação mais detalhada
-    let mensagem = `Mental: ${resultado.valorAtual} | PM: ${resultado.pmAtual}/${resultado.pmMaximo}`;
-    if (resultado.problemas.length > 0) {
-      mensagem += `\nProblemas: ${resultado.problemas.join(', ')}`;
-    }
-    if (resultado.simulacao) {
-      mensagem += `\nSimulação: Mental ${resultado.simulacao.novoValor}, PM Max ${resultado.simulacao.novoPmMax}`;
-    }
-    
-    ui.notifications.info(mensagem);
-    console.log("Teste específico do Mental executado. Verifique o console para detalhes completos.");
-  }
-
-  /**
-   * Corrige problemas com o atributo Mental
-   * @param {Event} event - Evento de clique
-   */
-  async _onCorrigirMental(event) {
-    event.preventDefault();
-    await this.actor.corrigirAtributoMental();
-    this.render(true);
-  }
-
-  /**
-   * Reinicializa os dados do personagem
-   * @param {Event} event - Evento de clique
-   */
-  async _onReinicializarDados(event) {
-    event.preventDefault();
-    
-    const confirmacao = await Dialog.confirm({
-      title: "Reinicializar Dados",
-      content: "<p>Tem certeza que deseja reinicializar todos os dados do personagem? Esta ação não pode ser desfeita.</p>",
-      yes: () => true,
-      no: () => false
-    });
-    
-    if (confirmacao) {
-      await this.actor.reinicializarDados();
-      this.render(true);
-    }
-  }
 
   /**
    * Adiciona uma magia ao personagem
@@ -2969,25 +2905,5 @@ export class ClubeActorSheet extends ActorSheet {
     }
   }
 
-  /**
-   * Compara o comportamento do Físico vs Mental
-   * @param {Event} event - Evento de clique
-   */
-  async _onCompararFisicoMental(event) {
-    event.preventDefault();
-    const comparacao = this.actor.compararFisicoMental();
-    
-    // Mostrar resultado em uma notificação
-    let mensagem = `Físico: ${comparacao.fisico.valor} | PV: ${comparacao.fisico.pvAtual}/${comparacao.fisico.pvMax}`;
-    mensagem += `\nMental: ${comparacao.mental.valor} | PM: ${comparacao.mental.pmAtual}/${comparacao.mental.pmMax}`;
-    
-    if (comparacao.problemas.length > 0) {
-      mensagem += `\nProblemas: ${comparacao.problemas.join(', ')}`;
-    } else {
-      mensagem += `\n✅ Todos os valores estão consistentes`;
-    }
-    
-    ui.notifications.info(mensagem);
-    console.log("Comparação Físico vs Mental executada. Verifique o console para detalhes completos.");
-  }
+
 } 
