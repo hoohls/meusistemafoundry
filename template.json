@@ -84,12 +84,7 @@
         "nivel": 1,
         "habilidades": []
       },
-      "habilidades": {
-        "classe": [],
-        "raca": [],
-        "gerais": [],
-        "customizadas": []
-      },
+      "habilidades": {},
       "equipamentos": {
         "dinheiro": {
           "moedas_prata": 100,

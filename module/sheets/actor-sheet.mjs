@@ -1548,10 +1548,14 @@ export class ClubeActorSheet extends ActorSheet {
       // Verificar pré-requisitos
       const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade(habilidade);
       
+      // Localizar nome e efeito
+      const nomeLocalizado = game.i18n.localize(habilidade.nome);
+      const efeitoLocalizado = game.i18n.localize(habilidade.efeito);
+      
       habilidadesDisponiveis[id] = {
         ...habilidade,
-        nome: game.i18n.localize(habilidade.nome),
-        efeito: game.i18n.localize(habilidade.efeito),
+        nome: nomeLocalizado,
+        efeito: efeitoLocalizado,
         disponivel: atendeRequisitos,
         motivo: atendeRequisitos ? "" : this._obterMotivoIndisponibilidade(habilidade)
       };
@@ -1615,6 +1619,7 @@ export class ClubeActorSheet extends ActorSheet {
    */
   async _onRemoverHabilidade(event) {
     event.preventDefault();
+    
     const element = event.currentTarget;
     const habilidadeId = element.dataset.habilidade;
     

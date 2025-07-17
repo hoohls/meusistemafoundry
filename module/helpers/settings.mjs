@@ -171,363 +171,363 @@ SISTEMA.atributos = {
 SISTEMA.habilidades = {
   combate: {
     ataquePoderoso: {
-      nome: "sistema.habilidade.ataquePoderoso",
+      nome: "HABILIDADES.ATAQUE_PODEROSO",
       nivelMin: 1,
       preRequisito: { fisico: 5 },
-      efeito: "sistema.habilidade.ataquePoderoso.efeito",
+      efeito: "HABILIDADES.ATAQUE_PODEROSO_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     defesaAprimorada: {
-      nome: "sistema.habilidade.defesaAprimorada", 
+      nome: "HABILIDADES.DEFESA_APRIMORADA", 
       nivelMin: 1,
       preRequisito: { acao: 5 },
-      efeito: "sistema.habilidade.defesaAprimorada.efeito",
+      efeito: "HABILIDADES.DEFESA_APRIMORADA_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     especializacaoArma: {
-      nome: "sistema.habilidade.especializacaoArma",
+      nome: "HABILIDADES.ESPECIALIZACAO_ARMA",
       nivelMin: 2,
       preRequisito: { fisico: 6 },
-      efeito: "sistema.habilidade.especializacaoArma.efeito", 
+      efeito: "HABILIDADES.ESPECIALIZACAO_ARMA_EFEITO", 
       classesSugeridas: ["guerreiro"]
     },
     ataqueDuplo: {
-      nome: "sistema.habilidade.ataqueDuplo",
+      nome: "HABILIDADES.ATAQUE_DUPLO",
       nivelMin: 4,
       preRequisito: { acao: 7 },
-      efeito: "sistema.habilidade.ataqueDuplo.efeito",
+      efeito: "HABILIDADES.ATAQUE_DUPLO_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     resistencia: {
-      nome: "sistema.habilidade.resistencia",
+      nome: "HABILIDADES.RESISTENCIA",
       nivelMin: 1,
       preRequisito: { fisico: 6 },
-      efeito: "sistema.habilidade.resistencia.efeito",
+      efeito: "HABILIDADES.RESISTENCIA_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     liderancaCombate: {
-      nome: "sistema.habilidade.liderancaCombate",
+      nome: "HABILIDADES.LIDERANCA_COMBATE",
       nivelMin: 3,
       preRequisito: { social: 6 },
-      efeito: "sistema.habilidade.liderancaCombate.efeito",
+      efeito: "HABILIDADES.LIDERANCA_COMBATE_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     contraAtaque: {
-      nome: "sistema.habilidade.contraAtaque",
+      nome: "HABILIDADES.CONTRA_ATAQUE",
       nivelMin: 5,
       preRequisito: { acao: 8 },
-      efeito: "sistema.habilidade.contraAtaque.efeito",
+      efeito: "HABILIDADES.CONTRA_ATAQUE_EFEITO",
       classesSugeridas: ["guerreiro"]
     },
     berserker: {
-      nome: "sistema.habilidade.berserker",
+      nome: "HABILIDADES.BERSERKER",
       nivelMin: 6,
       preRequisito: { fisico: 8 },
-      efeito: "sistema.habilidade.berserker.efeito",
+      efeito: "HABILIDADES.BERSERKER_EFEITO",
       classesSugeridas: ["guerreiro"]
     }
   },
   magicas: {
     rajadaArcana: {
-      nome: "sistema.habilidade.rajadaArcana",
+      nome: "HABILIDADES.RAJADA_ARCANA",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.rajadaArcana.efeito",
+      efeito: "HABILIDADES.RAJADA_ARCANA_EFEITO",
       classesSugeridas: ["mago"]
     },
     escudoMagico: {
-      nome: "sistema.habilidade.escudoMagico",
+      nome: "HABILIDADES.ESCUDO_MAGICO",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.escudoMagico.efeito",
+      efeito: "HABILIDADES.ESCUDO_MAGICO_EFEITO",
       classesSugeridas: ["mago"]
     },
     misseisMagicos: {
-      nome: "sistema.habilidade.misseisMagicos",
+      nome: "HABILIDADES.MISSEIS_MAGICOS",
       nivelMin: 2,
       preRequisito: { mental: 6 },
-      efeito: "sistema.habilidade.misseisMagicos.efeito",
+      efeito: "HABILIDADES.MISSEIS_MAGICOS_EFEITO",
       classesSugeridas: ["mago"]
     },
     detectarMagia: {
-      nome: "sistema.habilidade.detectarMagia",
+      nome: "HABILIDADES.DETECTAR_MAGIA",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.detectarMagia.efeito",
+      efeito: "HABILIDADES.DETECTAR_MAGIA_EFEITO",
       classesSugeridas: ["mago"]
     },
     contraMagia: {
-      nome: "sistema.habilidade.contraMagia",
+      nome: "HABILIDADES.CONTRA_MAGIA",
       nivelMin: 3,
       preRequisito: { mental: 7 },
-      efeito: "sistema.habilidade.contraMagia.efeito",
+      efeito: "HABILIDADES.CONTRA_MAGIA_EFEITO",
       classesSugeridas: ["mago"]
     },
     bolaFogo: {
-      nome: "sistema.habilidade.bolaFogo",
+      nome: "HABILIDADES.BOLA_FOGO",
       nivelMin: 4,
       preRequisito: { mental: 8 },
-      efeito: "sistema.habilidade.bolaFogo.efeito",
+      efeito: "HABILIDADES.BOLA_FOGO_EFEITO",
       classesSugeridas: ["mago"]
     },
     invisibilidade: {
-      nome: "sistema.habilidade.invisibilidade",
+      nome: "HABILIDADES.INVISIBILIDADE",
       nivelMin: 3,
       preRequisito: { mental: 7 },
-      efeito: "sistema.habilidade.invisibilidade.efeito",
+      efeito: "HABILIDADES.INVISIBILIDADE_EFEITO",
       classesSugeridas: ["mago"]
     },
     voo: {
-      nome: "sistema.habilidade.voo",
+      nome: "HABILIDADES.VOO",
       nivelMin: 5,
       preRequisito: { mental: 8 },
-      efeito: "sistema.habilidade.voo.efeito",
+      efeito: "HABILIDADES.VOO_EFEITO",
       classesSugeridas: ["mago"]
     },
     teletransporte: {
-      nome: "sistema.habilidade.teletransporte",
+      nome: "HABILIDADES.TELETRANSPORTE",
       nivelMin: 6,
       preRequisito: { mental: 9 },
-      efeito: "sistema.habilidade.teletransporte.efeito",
+      efeito: "HABILIDADES.TELETRANSPORTE_EFEITO",
       classesSugeridas: ["mago"]
     },
     curaCompleta: {
-      nome: "sistema.habilidade.curaCompleta",
+      nome: "HABILIDADES.CURA_COMPLETA",
       nivelMin: 7,
       preRequisito: { mental: 9 },
-      efeito: "sistema.habilidade.curaCompleta.efeito",
+      efeito: "HABILIDADES.CURA_COMPLETA_EFEITO",
       classesSugeridas: ["mago"]
     }
   },
   furtividade: {
     ataqueFurtivo: {
-      nome: "sistema.habilidade.ataqueFurtivo",
+      nome: "HABILIDADES.ATAQUE_FURTIVO",
       nivelMin: 1,
       preRequisito: { acao: 5 },
-      efeito: "sistema.habilidade.ataqueFurtivo.efeito",
+      efeito: "HABILIDADES.ATAQUE_FURTIVO_EFEITO",
       classesSugeridas: ["ladino"]
     },
     furtividadeAprimorada: {
-      nome: "sistema.habilidade.furtividadeAprimorada",
+      nome: "HABILIDADES.FURTIVIDADE_APRIMORADA",
       nivelMin: 1,
       preRequisito: { acao: 5 },
-      efeito: "sistema.habilidade.furtividadeAprimorada.efeito",
+      efeito: "HABILIDADES.FURTIVIDADE_APRIMORADA_EFEITO",
       classesSugeridas: ["ladino"]
     },
     desarmarArmadilhas: {
-      nome: "sistema.habilidade.desarmarArmadilhas",
+      nome: "HABILIDADES.DESARMAR_ARMADILHAS",
       nivelMin: 2,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.desarmarArmadilhas.efeito",
+      efeito: "HABILIDADES.DESARMAR_ARMADILHAS_EFEITO",
       classesSugeridas: ["ladino"]
     },
     tiroCerteiro: {
-      nome: "sistema.habilidade.tiroCerteiro",
+      nome: "HABILIDADES.TIRO_CERTEIRO",
       nivelMin: 1,
       preRequisito: { acao: 6 },
-      efeito: "sistema.habilidade.tiroCerteiro.efeito",
+      efeito: "HABILIDADES.TIRO_CERTEIRO_EFEITO",
       classesSugeridas: ["ladino"]
     },
     escaladaAprimorada: {
-      nome: "sistema.habilidade.escaladaAprimorada",
+      nome: "HABILIDADES.ESCALADA_APRIMORADA",
       nivelMin: 1,
       preRequisito: { fisico: 5 },
-      efeito: "sistema.habilidade.escaladaAprimorada.efeito",
+      efeito: "HABILIDADES.ESCALADA_APRIMORADA_EFEITO",
       classesSugeridas: ["ladino"]
     },
     passoSombrio: {
-      nome: "sistema.habilidade.passoSombrio",
+      nome: "HABILIDADES.PASSO_SOMBRIO",
       nivelMin: 3,
       preRequisito: { acao: 7 },
-      efeito: "sistema.habilidade.passoSombrio.efeito",
+      efeito: "HABILIDADES.PASSO_SOMBRIO_EFEITO",
       classesSugeridas: ["ladino"]
     },
     ataqueLetal: {
-      nome: "sistema.habilidade.ataqueLetal",
+      nome: "HABILIDADES.ATAQUE_LETAL",
       nivelMin: 5,
       preRequisito: { acao: 8 },
-      efeito: "sistema.habilidade.ataqueLetal.efeito",
+      efeito: "HABILIDADES.ATAQUE_LETAL_EFEITO",
       classesSugeridas: ["ladino"]
     },
     mestreSombras: {
-      nome: "sistema.habilidade.mestreSombras",
+      nome: "HABILIDADES.MESTRE_SOMBRAS",
       nivelMin: 6,
       preRequisito: { acao: 8 },
-      efeito: "sistema.habilidade.mestreSombras.efeito",
+      efeito: "HABILIDADES.MESTRE_SOMBRAS_EFEITO",
       classesSugeridas: ["ladino"]
     },
     reflexosAprimorados: {
-      nome: "sistema.habilidade.reflexosAprimorados",
+      nome: "HABILIDADES.REFLEXOS_APRIMORADOS",
       nivelMin: 4,
       preRequisito: { acao: 7 },
-      efeito: "sistema.habilidade.reflexosAprimorados.efeito",
+      efeito: "HABILIDADES.REFLEXOS_APRIMORADOS_EFEITO",
       classesSugeridas: ["ladino"]
     },
     venenos: {
-      nome: "sistema.habilidade.venenos",
+      nome: "HABILIDADES.VENENOS",
       nivelMin: 3,
       preRequisito: { mental: 6 },
-      efeito: "sistema.habilidade.venenos.efeito",
+      efeito: "HABILIDADES.VENENOS_EFEITO",
       classesSugeridas: ["ladino"]
     }
   },
   sociais: {
     persuasaoIrresistivel: {
-      nome: "sistema.habilidade.persuasaoIrresistivel",
+      nome: "HABILIDADES.PERSUASAO_IRRESISTIVEL",
       nivelMin: 1,
       preRequisito: { social: 5 },
-      efeito: "sistema.habilidade.persuasaoIrresistivel.efeito",
+      efeito: "HABILIDADES.PERSUASAO_IRRESISTIVEL_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     lideranca: {
-      nome: "sistema.habilidade.lideranca",
+      nome: "HABILIDADES.LIDERANCA",
       nivelMin: 1,
       preRequisito: { social: 6 },
-      efeito: "sistema.habilidade.lideranca.efeito",
+      efeito: "HABILIDADES.LIDERANCA_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     coletaInformacoes: {
-      nome: "sistema.habilidade.coletaInformacoes",
+      nome: "HABILIDADES.COLETA_INFORMACOES",
       nivelMin: 1,
       preRequisito: { social: 5 },
-      efeito: "sistema.habilidade.coletaInformacoes.efeito",
+      efeito: "HABILIDADES.COLETA_INFORMACOES_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     intimidacao: {
-      nome: "sistema.habilidade.intimidacao",
+      nome: "HABILIDADES.INTIMIDACAO",
       nivelMin: 1,
       preRequisito: { social: 5 },
-      efeito: "sistema.habilidade.intimidacao.efeito",
+      efeito: "HABILIDADES.INTIMIDACAO_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     redeContatos: {
-      nome: "sistema.habilidade.redeContatos",
+      nome: "HABILIDADES.REDE_CONTATOS",
       nivelMin: 2,
       preRequisito: { social: 6 },
-      efeito: "sistema.habilidade.redeContatos.efeito",
+      efeito: "HABILIDADES.REDE_CONTATOS_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     diplomacia: {
-      nome: "sistema.habilidade.diplomacia",
+      nome: "HABILIDADES.DIPLOMACIA",
       nivelMin: 3,
       preRequisito: { social: 7 },
-      efeito: "sistema.habilidade.diplomacia.efeito",
+      efeito: "HABILIDADES.DIPLOMACIA_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     inspiracao: {
-      nome: "sistema.habilidade.inspiracao",
+      nome: "HABILIDADES.INSPIRACAO",
       nivelMin: 4,
       preRequisito: { social: 8 },
-      efeito: "sistema.habilidade.inspiracao.efeito",
+      efeito: "HABILIDADES.INSPIRACAO_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     comando: {
-      nome: "sistema.habilidade.comando",
+      nome: "HABILIDADES.COMANDO",
       nivelMin: 5,
       preRequisito: { social: 8 },
-      efeito: "sistema.habilidade.comando.efeito",
+      efeito: "HABILIDADES.COMANDO_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     carismaSobrenatural: {
-      nome: "sistema.habilidade.carismaSobrenatural",
+      nome: "HABILIDADES.CARISMA_SOBRENATURAL",
       nivelMin: 6,
       preRequisito: { social: 9 },
-      efeito: "sistema.habilidade.carismaSobrenatural.efeito",
+      efeito: "HABILIDADES.CARISMA_SOBRENATURAL_EFEITO",
       classesSugeridas: ["diplomata"]
     },
     mestreNegociador: {
-      nome: "sistema.habilidade.mestreNegociador",
+      nome: "HABILIDADES.MESTRE_NEGOCIADOR",
       nivelMin: 7,
       preRequisito: { social: 9 },
-      efeito: "sistema.habilidade.mestreNegociador.efeito",
+      efeito: "HABILIDADES.MESTRE_NEGOCIADOR_EFEITO",
       classesSugeridas: ["diplomata"]
     }
   },
   gerais: {
     // Habilidades raciais
     versatilidade: {
-      nome: "sistema.habilidade.versatilidade",
+      nome: "HABILIDADES.VERSATILIDADE",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.versatilidade.efeito",
+      efeito: "HABILIDADES.VERSATILIDADE_EFEITO",
       raca: "humano"
     },
     magiaNatureza: {
-      nome: "sistema.habilidade.magiaNatureza",
+      nome: "HABILIDADES.MAGIA_NATUREZA",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.magiaNatureza.efeito",
+      efeito: "HABILIDADES.MAGIA_NATUREZA_EFEITO",
       raca: "elfo"
     },
     resistenciaAna: {
-      nome: "sistema.habilidade.resistenciaAna",
+      nome: "HABILIDADES.RESISTENCIA_ANA",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.resistenciaAna.efeito",
+      efeito: "HABILIDADES.RESISTENCIA_ANA_EFEITO",
       raca: "anao"
     },
     sorteHalfling: {
-      nome: "sistema.habilidade.sorteHalfling",
+      nome: "HABILIDADES.SORTE_HALFLING",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.sorteHalfling.efeito",
+      efeito: "HABILIDADES.SORTE_HALFLING_EFEITO",
       raca: "halfling"
     },
     magiaInstavel: {
-      nome: "sistema.habilidade.magiaInstavel",
+      nome: "HABILIDADES.MAGIA_INSTAVEL",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.magiaInstavel.efeito",
+      efeito: "HABILIDADES.MAGIA_INSTAVEL_EFEITO",
       raca: "tiefling"
     },
     astuciaComercial: {
-      nome: "sistema.habilidade.astuciaComercial",
+      nome: "HABILIDADES.ASTUCIA_COMERCIAL",
       nivelMin: 1,
       preRequisito: {},
-      efeito: "sistema.habilidade.astuciaComercial.efeito",
+      efeito: "HABILIDADES.ASTUCIA_COMERCIAL_EFEITO",
       raca: "goblin"
     },
     // Habilidades gerais
     primeirosSocorros: {
-      nome: "sistema.habilidade.primeirosSocorros",
+      nome: "HABILIDADES.PRIMEIROS_SOCORROS",
       nivelMin: 1,
       preRequisito: { mental: 4 },
-      efeito: "sistema.habilidade.primeirosSocorros.efeito",
+      efeito: "HABILIDADES.PRIMEIROS_SOCORROS_EFEITO",
       classesSugeridas: ["todas"]
     },
     sobrevivencia: {
-      nome: "sistema.habilidade.sobrevivencia",
+      nome: "HABILIDADES.SOBREVIVENCIA",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.sobrevivencia.efeito",
+      efeito: "HABILIDADES.SOBREVIVENCIA_EFEITO",
       classesSugeridas: ["todas"]
     },
     criacaoPocoes: {
-      nome: "sistema.habilidade.criacaoPocoes",
+      nome: "HABILIDADES.CRIACAO_POCOES",
       nivelMin: 2,
       preRequisito: { mental: 6 },
-      efeito: "sistema.habilidade.criacaoPocoes.efeito",
+      efeito: "HABILIDADES.CRIACAO_POCOES_EFEITO",
       classesSugeridas: ["todas"]
     },
     montaria: {
-      nome: "sistema.habilidade.montaria",
+      nome: "HABILIDADES.MONTARIA",
       nivelMin: 1,
       preRequisito: { acao: 5 },
-      efeito: "sistema.habilidade.montaria.efeito",
+      efeito: "HABILIDADES.MONTARIA_EFEITO",
       classesSugeridas: ["todas"]
     },
     navegacao: {
-      nome: "sistema.habilidade.navegacao",
+      nome: "HABILIDADES.NAVEGACAO",
       nivelMin: 2,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.navegacao.efeito",
+      efeito: "HABILIDADES.NAVEGACAO_EFEITO",
       classesSugeridas: ["todas"]
     },
     idiomas: {
-      nome: "sistema.habilidade.idiomas",
+      nome: "HABILIDADES.IDIOMAS",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "sistema.habilidade.idiomas.efeito",
+      efeito: "HABILIDADES.IDIOMAS_EFEITO",
       classesSugeridas: ["todas"]
     }
   }

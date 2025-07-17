@@ -711,7 +711,8 @@ export class ClubeActor extends Actor {
       pontosTotal++;
     }
     
-    return pontosTotal - habilidadesConhecidas;
+    const pontosDisponiveis = pontosTotal - habilidadesConhecidas;
+    return Math.max(0, pontosDisponiveis);
   }
 
   /**
