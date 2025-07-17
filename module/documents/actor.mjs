@@ -1415,7 +1415,15 @@ export class ClubeActor extends Actor {
     
     // Determinar de onde vem o ponto
     const updateData = {};
-    updateData[`system.atributos.${atributo}.valor`] = valorAtual + 1;
+    const novoValor = valorAtual + 1;
+    updateData[`system.atributos.${atributo}.valor`] = novoValor;
+
+    // Proteção extra: nunca permitir que o valor volte para 0 ao aumentar
+    if (novoValor < valorAtual) {
+      console.error(`[BUG] Tentativa de aumentar o atributo ${atributo}, mas o valor diminuiu! Valor anterior: ${valorAtual}, novo valor: ${novoValor}`);
+      ui.notifications.error(`Erro ao aumentar o atributo ${atributo}: valor inválido detectado!`);
+      return false;
+    }
     
     // Se for Físico, calcular novo PV máximo
     if (atributo === 'fisico') {
