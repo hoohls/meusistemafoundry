@@ -559,8 +559,8 @@ export class ClubeActorSheet extends ActorSheet {
   }
 
   /**
-   * Organiza as magias disponíveis por escola (como habilidades)
-   * @returns {Object} Objeto com magias disponíveis organizadas por escola
+   * Organiza as magias disponíveis por escola
+   * @returns {Object} Magias organizadas por escola
    */
   _organizarMagiasDisponiveisPorEscola() {
     const escolas = {
@@ -574,14 +574,11 @@ export class ClubeActorSheet extends ActorSheet {
       'transmutacao': 'Transmutação'
     };
 
-    const magiasDisponiveis = {
-      'Evocação': [],
-      'Abjuração': [],
-      'Transmutação': [],
-      'Ilusão': [],
-      'Divinação': [],
-      'Necromancia': []
-    };
+    // Inicializar magiasDisponiveis com todas as escolas
+    const magiasDisponiveis = {};
+    Object.values(escolas).forEach(nomeEscola => {
+      magiasDisponiveis[nomeEscola] = [];
+    });
 
     // Lista básica de magias disponíveis por escola
     const magiasBasicas = {
@@ -605,7 +602,7 @@ export class ClubeActorSheet extends ActorSheet {
         { id: 'imagem_espelhada', nome: 'Imagem Espelhada', nivel: 1, custo_pm: 2, prerequisitos: 'Mental 6' },
         { id: 'sugestao', nome: 'Sugestão', nivel: 2, custo_pm: 4, prerequisitos: 'Mental 7' }
       ],
-      'divinacao': [
+      'adivinhacao': [
         { id: 'detectar_magia', nome: 'Detectar Magia', nivel: 1, custo_pm: 1, prerequisitos: 'Mental 6' },
         { id: 'adivinhar', nome: 'Adivinhar', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' },
         { id: 'localizar_objeto', nome: 'Localizar Objeto', nivel: 2, custo_pm: 3, prerequisitos: 'Mental 7' }
@@ -628,19 +625,21 @@ export class ClubeActorSheet extends ActorSheet {
     // Adicionar magias disponíveis que o personagem não conhece
     Object.keys(magiasBasicas).forEach(escola => {
       const nomeEscola = escolas[escola];
-      magiasBasicas[escola].forEach(magia => {
-        if (!magiasConhecidas.has(magia.nome.toLowerCase())) {
-          // Verificar se o personagem atende aos pré-requisitos
-          const mental = this.actor.system.atributos?.mental?.valor || 0;
-          const nivel = this.actor.system.nivel || 1;
-          
-          const prerequisitoMental = parseInt(magia.prerequisitos.match(/Mental (\d+)/)?.[1] || 0);
-          
-          if (mental >= prerequisitoMental && nivel >= magia.nivel) {
-            magiasDisponiveis[nomeEscola].push(magia);
+      if (nomeEscola && magiasDisponiveis[nomeEscola]) {
+        magiasBasicas[escola].forEach(magia => {
+          if (!magiasConhecidas.has(magia.nome.toLowerCase())) {
+            // Verificar se o personagem atende aos pré-requisitos
+            const mental = this.actor.system.atributos?.mental?.valor || 0;
+            const nivel = this.actor.system.nivel || 1;
+            
+            const prerequisitoMental = parseInt(magia.prerequisitos.match(/Mental (\d+)/)?.[1] || 0);
+            
+            if (mental >= prerequisitoMental && nivel >= magia.nivel) {
+              magiasDisponiveis[nomeEscola].push(magia);
+            }
           }
-        }
-      });
+        });
+      }
     });
 
     return magiasDisponiveis;
@@ -727,8 +726,6 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
-    html.find(".testar-xp").click(this._onTestarXP.bind(this));
-    html.find(".corrigir-sistema").click(this._onCorrigirSistema.bind(this));
 
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
