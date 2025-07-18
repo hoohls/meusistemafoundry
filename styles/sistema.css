@@ -2630,4 +2630,43 @@
 .empty-section p {
   margin: 0;
   font-size: 14px;
+}
+
+/* === Status do Inventário === */
+.inventario-content {
+  padding: 20px;
+}
+
+.status-inventario {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.status-inventario .status-box {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid var(--cor-acento);
+  border-radius: 6px;
+  padding: 10px 15px;
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+}
+
+.status-inventario .status-box strong {
+  color: var(--cor-primaria);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.status-inventario .status-box span {
+  color: var(--cor-texto);
+  font-size: 14px;
+}
+
+.status-inventario .sobrecarregado {
+  color: var(--cor-erro) !important;
+  font-weight: bold;
+  animation: pulse 1s infinite;
 } 
