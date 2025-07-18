@@ -155,22 +155,47 @@ export class ClubeActor extends Actor {
       };
     }
     
-    // Calcular PV máximo (Físico × 3 + 10)
-    const pvMax = Math.max(1, atributos.fisico.valor * 3 + 10);
-    data.recursos.pv.max = pvMax;
+    // Calcular PV máximo base (Físico × 3 + 10)
+    const pvMaxBase = Math.max(1, atributos.fisico.valor * 3 + 10);
     
-    // Garantir que PV atual não exceda o máximo
-    if (data.recursos.pv.valor > pvMax) {
-      data.recursos.pv.valor = pvMax;
+    // Preservar bônus de equipamentos se existirem
+    const pvMaxAtual = data.recursos.pv.max || pvMaxBase;
+    
+    // Se o PV máximo atual é maior que o base, provavelmente há bônus aplicados
+    // Nesse caso, manter o valor atual
+    if (pvMaxAtual > pvMaxBase) {
+      // Manter o valor atual (que inclui bônus)
+      data.recursos.pv.max = pvMaxAtual;
+    } else {
+      // Aplicar o valor base
+      data.recursos.pv.max = pvMaxBase;
     }
     
-    // Calcular PM máximo (Mental × 2 + 5)
-    const pmMax = Math.max(1, atributos.mental.valor * 2 + 5);
-    data.recursos.pm.max = pmMax;
+    // Garantir que PV atual não exceda o máximo
+    if (data.recursos.pv.valor > data.recursos.pv.max) {
+      data.recursos.pv.valor = data.recursos.pv.max;
+    }
+    
+    // Calcular PM máximo base (Mental × 2 + 5)
+    const pmMaxBase = Math.max(1, atributos.mental.valor * 2 + 5);
+    
+    // Preservar bônus de equipamentos se existirem
+    const pmMaxAtual = data.recursos.pm.max || pmMaxBase;
+    const pmMaxSemBonus = pmMaxBase;
+    
+    // Se o PM máximo atual é maior que o base, provavelmente há bônus aplicados
+    // Nesse caso, manter o valor atual
+    if (pmMaxAtual > pmMaxBase) {
+      // Manter o valor atual (que inclui bônus)
+      data.recursos.pm.max = pmMaxAtual;
+    } else {
+      // Aplicar o valor base
+      data.recursos.pm.max = pmMaxBase;
+    }
     
     // Garantir que PM atual não exceda o máximo
-    if (data.recursos.pm.valor > pmMax) {
-      data.recursos.pm.valor = pmMax;
+    if (data.recursos.pm.valor > data.recursos.pm.max) {
+      data.recursos.pm.valor = data.recursos.pm.max;
     }
     
     // Calcular Defesa (10 + Ação + modificadores)

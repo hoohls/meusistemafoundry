@@ -966,6 +966,8 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar recursos (PV/PM)
     html.find(".ajustar-pv").click(this._onAjustarPV.bind(this));
     html.find(".ajustar-pm").click(this._onAjustarPM.bind(this));
+    html.find(".editar-pv-maximo").click(this._onEditarPVMaximo.bind(this));
+    html.find(".editar-pm-maximo").click(this._onEditarPMMaximo.bind(this));
 
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
@@ -1434,6 +1436,70 @@ export class ClubeActorSheet extends ActorSheet {
     } else {
       await this.actor.gastarPM(valor);
     }
+  }
+
+  /**
+   * Edita o valor máximo de PV
+   * @param {Event} event - Evento de clique
+   */
+  async _onEditarPVMaximo(event) {
+    event.preventDefault();
+    
+    const valorAtual = this.actor.system.recursos.pv.max || 10;
+    const novoValor = await this._promptValor("Editar PV Máximo", `Valor atual: ${valorAtual}. Novo valor:`);
+    
+    if (novoValor === null) return;
+    
+    if (novoValor < 1) {
+      ui.notifications.warn("PV máximo deve ser pelo menos 1");
+      return;
+    }
+    
+    await this.actor.update({
+      "system.recursos.pv.max": novoValor
+    });
+    
+    // Garantir que PV atual não exceda o novo máximo
+    const pvAtual = this.actor.system.recursos.pv.valor || 0;
+    if (pvAtual > novoValor) {
+      await this.actor.update({
+        "system.recursos.pv.valor": novoValor
+      });
+    }
+    
+    ui.notifications.info(`PV máximo alterado para ${novoValor}`);
+  }
+
+  /**
+   * Edita o valor máximo de PM
+   * @param {Event} event - Evento de clique
+   */
+  async _onEditarPMMaximo(event) {
+    event.preventDefault();
+    
+    const valorAtual = this.actor.system.recursos.pm.max || 5;
+    const novoValor = await this._promptValor("Editar PM Máximo", `Valor atual: ${valorAtual}. Novo valor:`);
+    
+    if (novoValor === null) return;
+    
+    if (novoValor < 1) {
+      ui.notifications.warn("PM máximo deve ser pelo menos 1");
+      return;
+    }
+    
+    await this.actor.update({
+      "system.recursos.pm.max": novoValor
+    });
+    
+    // Garantir que PM atual não exceda o novo máximo
+    const pmAtual = this.actor.system.recursos.pm.valor || 0;
+    if (pmAtual > novoValor) {
+      await this.actor.update({
+        "system.recursos.pm.valor": novoValor
+      });
+    }
+    
+    ui.notifications.info(`PM máximo alterado para ${novoValor}`);
   }
 
   /**
