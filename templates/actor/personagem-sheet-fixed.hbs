@@ -17,9 +17,6 @@
                 <button type="button" class="ajustar-xp" title="Ajustar XP">
                   <i class="fas fa-cog"></i>
                 </button>
-                <button type="button" class="corrigir-dados" title="Corrigir Dados (Debug)">
-                  <i class="fas fa-wrench"></i>
-                </button>
               </div>
             </div>
             <div class="xp-bar">
@@ -456,7 +453,7 @@
               {{#each equipamentosArmasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
@@ -489,7 +486,7 @@
               {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
@@ -522,7 +519,7 @@
               {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
@@ -555,7 +552,7 @@
               {{#each equipamentosVarinhasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
@@ -589,7 +586,7 @@
               {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
@@ -622,7 +619,7 @@
               {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}}</h5>
+                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>

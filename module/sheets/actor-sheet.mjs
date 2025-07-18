@@ -884,7 +884,7 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
-    html.find(".corrigir-dados").click(this._onCorrigirDados.bind(this));
+
 
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
