@@ -732,7 +732,8 @@ export class ClubeActor extends Actor {
         break;
       case 5:
       case 9:
-        // Níveis 5 e 9: Habilidade especial de classe
+        // Níveis 5 e 9: +1 ponto de atributo + Habilidade especial de classe
+        recompensas.pontosAtributo = 1;
         recompensas.habilidades = 1; // Tratada como habilidade especial
         break;
       case 10:

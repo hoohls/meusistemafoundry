@@ -333,11 +333,11 @@ export class ClubeActorSheet extends ActorSheet {
       2: "+1 habilidade",
       3: "+1 ponto de atributo",
       4: "+1 habilidade", 
-      5: "Habilidade especial de classe",
+      5: "+1 ponto de atributo + Habilidade especial de classe",
       6: "+1 habilidade",
       7: "+1 ponto de atributo",
       8: "+1 habilidade",
-      9: "Habilidade especial de classe",
+      9: "+1 ponto de atributo + Habilidade especial de classe",
       10: "Maestria (habilidade única)"
     };
     
