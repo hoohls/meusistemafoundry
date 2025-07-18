@@ -391,6 +391,11 @@ export class ClubeActorSheet extends ActorSheet {
 
     // Organizar itens do Foundry
     for (let item of this.actor.items) {
+      // Aplicar simplificação de nome se necessário
+      if (item.name && item.name.includes('_')) {
+        item.name = this._simplificarNome(item.name);
+      }
+      
       const tipo = item.type || 'equipamentos';
       if (tipo === 'arma') itens.armas.push(item);
       else if (tipo === 'armadura') itens.armaduras.push(item);
@@ -443,6 +448,11 @@ export class ClubeActorSheet extends ActorSheet {
     // Verificar itens do Foundry
     for (let item of this.actor.items) {
       if (item.system.equipado) {
+        // Aplicar simplificação de nome se necessário
+        if (item.name && item.name.includes('_')) {
+          item.name = this._simplificarNome(item.name);
+        }
+        
         if (item.type === 'arma' && !equipados.arma_principal) {
           equipados.arma_principal = item;
         } else if (item.type === 'armadura' && !equipados.armadura) {
@@ -485,31 +495,56 @@ export class ClubeActorSheet extends ActorSheet {
   _simplificarNome(nome) {
     if (!nome) return "Item sem nome";
     
+    // Mapeamento de nomes para simplificação
+    const nomesLimpos = {
+      // Chaves de localização
+      "equipamentos.cajado": "Cajado",
+      "equipamentos.roupas_acolchadas": "Roupas Acolchadas",
+      "equipamentos.espada_curta": "Espada Curta",
+      "equipamentos.espada_longa": "Espada Longa",
+      "equipamentos.machado": "Machado",
+      "equipamentos.arco_curto": "Arco Curto",
+      "equipamentos.armadura_couro": "Armadura de Couro",
+      "equipamentos.armadura_malha": "Armadura de Malha",
+      "equipamentos.armadura_placa": "Armadura de Placas",
+      "equipamentos.vestes_magicas": "Vestes Mágicas",
+      "equipamentos.escudo_pequeno": "Escudo Pequeno",
+      "equipamentos.escudo_grande": "Escudo Grande",
+      "equipamentos.mochila": "Mochila",
+      "equipamentos.corda": "Corda",
+      "equipamentos.lampiao": "Lampião",
+      "equipamentos.kit_medico": "Kit Médico",
+      "equipamentos.pocao_vida": "Poção de Vida",
+      "equipamentos.pocao_mana": "Poção de Mana",
+      "equipamentos.antidoto": "Antídoto",
+      
+      // Nomes diretos com underscore
+      "roupas_acolchadas": "Roupas Acolchadas",
+      "roupas_acol": "Roupas Acolchadas",
+      "espada_curta": "Espada Curta",
+      "espada_longa": "Espada Longa",
+      "arco_curto": "Arco Curto",
+      "armadura_couro": "Armadura de Couro",
+      "armadura_malha": "Armadura de Malha",
+      "armadura_placa": "Armadura de Placas",
+      "vestes_magicas": "Vestes Mágicas",
+      "escudo_pequeno": "Escudo Pequeno",
+      "escudo_grande": "Escudo Grande",
+      "kit_medico": "Kit Médico",
+      "pocao_vida": "Poção de Vida",
+      "pocao_mana": "Poção de Mana"
+    };
+    
     // Se o nome for uma chave de localização, extrair um nome simples
     if (nome.startsWith("EQUIPAMENTOS.")) {
-      const chave = nome.replace("EQUIPAMENTOS.", "");
-      const nomesLimpos = {
-        cajado: "Cajado",
-        roupas_acol: "Roupas Acolchoadas",
-        espadaCurta: "Espada Curta",
-        espadaLonga: "Espada Longa",
-        machado: "Machado",
-        arcoCurto: "Arco Curto",
-        couro: "Armadura de Couro",
-        malha: "Armadura de Malha",
-        placa: "Armadura de Placas",
-        vestes: "Vestes Mágicas",
-        escudoPequeno: "Escudo Pequeno",
-        escudoGrande: "Escudo Grande",
-        mochila: "Mochila",
-        corda: "Corda",
-        lampiao: "Lampião",
-        kitMedico: "Kit Médico",
-        pocaoVida: "Poção de Vida",
-        pocaoMana: "Poção de Mana",
-        antidoto: "Antídoto"
-      };
-      return nomesLimpos[chave.toLowerCase()] || chave.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+      const chave = nome.replace("EQUIPAMENTOS.", "").toLowerCase();
+      return nomesLimpos[`equipamentos.${chave}`] || nomesLimpos[chave] || chave.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+    }
+    
+    // Se o nome contém underscore, tentar simplificar
+    if (nome.includes('_')) {
+      const chave = nome.toLowerCase();
+      return nomesLimpos[chave] || nome.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
     
     return nome;
