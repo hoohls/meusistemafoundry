@@ -517,7 +517,6 @@ export class ClubeActorSheet extends ActorSheet {
       "equipamentos.pocao_vida": "Poção de Vida",
       "equipamentos.pocao_mana": "Poção de Mana",
       "equipamentos.antidoto": "Antídoto",
-      
       // Nomes diretos com underscore
       "roupas_acolchadas": "Roupas Acolchadas",
       "roupas_acol": "Roupas Acolchadas",
@@ -540,14 +539,28 @@ export class ClubeActorSheet extends ActorSheet {
       const chave = nome.replace("EQUIPAMENTOS.", "").toLowerCase();
       return nomesLimpos[`equipamentos.${chave}`] || nomesLimpos[chave] || chave.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
-    
     // Se o nome contém underscore, tentar simplificar
     if (nome.includes('_')) {
       const chave = nome.toLowerCase();
       return nomesLimpos[chave] || nome.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
-    
-    return nome;
+    // Se o nome está em caixa alta e sem espaços, tenta separar por palavras conhecidas
+    if (/^[A-Z]+$/.test(nome)) {
+      // Lista de palavras conhecidas para armaduras, armas, etc
+      const palavras = [
+        "ROUPAS", "ACOLCHADAS", "ESPADA", "CURTA", "LONGA", "MACHADO", "ARCO", "CURTO", "ARMADURA", "COURO", "MALHA", "PLACAS", "VESTES", "MAGICAS", "ESCUDO", "PEQUENO", "GRANDE", "MOCHILA", "CORDA", "LAMPIAO", "KIT", "MEDICO", "POCAO", "VIDA", "MANA", "ANTIDOTO"
+      ];
+      let resultado = nome;
+      palavras.forEach(palavra => {
+        resultado = resultado.replace(palavra, palavra.charAt(0) + palavra.slice(1).toLowerCase() + ' ');
+      });
+      resultado = resultado.replace(/\s+/g, ' ').trim();
+      // Capitaliza cada palavra
+      resultado = resultado.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return resultado;
+    }
+    // Fallback: só capitaliza a primeira letra
+    return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
   }
 
   /**
