@@ -495,9 +495,136 @@ export class ClubeActorSheet extends ActorSheet {
   _simplificarNome(nome) {
     if (!nome) return "Item sem nome";
     
-    // Mapeamento de nomes para simplificação
+    // Mapeamento completo de nomes para simplificação
     const nomesLimpos = {
-      // Chaves de localização
+      // Armas Simples
+      punhal: "Punhal",
+      adaga: "Adaga",
+      adagaElfica: "Adaga Élfica",
+      clava: "Clava",
+      machadoMao: "Machado de Mão",
+      cimitarra: "Cimitarra",
+      rapiera: "Rapiera",
+      espadaCurta: "Espada Curta",
+      espadaElfica: "Espada Élfica",
+      lanca: "Lança",
+      espadaLonga: "Espada Longa",
+      machado: "Machado",
+      marteloGuerra: "Martelo de Guerra",
+      bordao: "Bordão",
+      lancaLonga: "Lança Longa",
+      machadoGrande: "Machado Grande",
+      montante: "Montante",
+      
+      // Armas de Arremesso
+      pedra: "Pedra",
+      dardo: "Dardo",
+      azagaia: "Azagaia",
+      
+      // Armas de Distância
+      arcoSimples: "Arco Simples",
+      arcoCurto: "Arco Curto",
+      arcoLongo: "Arco Longo",
+      bestaMao: "Besta de Mão",
+      bestaLeve: "Besta Leve",
+      
+      // Cajados
+      cajado: "Cajado",
+      cajadoSimples: "Cajado Simples",
+      cajadoCarvalho: "Cajado de Carvalho",
+      cajadoElfico: "Cajado Élfico",
+      cajadoCristal: "Cajado de Cristal",
+      cajadoRunico: "Cajado Rúnico",
+      
+      // Roupas e Armaduras Leves
+      roupasComuns: "Roupas Comuns",
+      roupasAcolchoadas: "Roupas Acolchoadas",
+      couroMacio: "Couro Macio",
+      couro: "Armadura de Couro",
+      couroCravejado: "Couro Cravejado",
+      couroElfico: "Couro Élfico",
+      gibaoPeles: "Gibão de Peles",
+      
+      // Armaduras de Malha
+      camisaoMalha: "Camisão de Malha",
+      malha: "Armadura de Malha",
+      brigantina: "Brigantina",
+      cotaCompleta: "Cota Completa",
+      
+      // Armaduras Pesadas
+      placasParciais: "Placas Parciais",
+      placa: "Armadura de Placas",
+      
+      // Vestes Mágicas
+      vestes: "Vestes Mágicas",
+      vestes_arcanas: "Vestes Arcanas",
+      manto_conjurador: "Manto do Conjurador",
+      tunica_sombras: "Túnica das Sombras",
+      manto_absorcao: "Manto de Absorção",
+      vestes_arcanista: "Vestes do Arcanista",
+      
+      // Escudos
+      broquel: "Broquel",
+      escudoPequeno: "Escudo Pequeno",
+      escudoMedio: "Escudo Médio",
+      escudoGrande: "Escudo Grande",
+      escudoTorre: "Escudo Torre",
+      
+      // Varinhas
+      varinhaMissois: "Varinha de Mísseis",
+      varinhaCura: "Varinha de Cura",
+      varinhaFogo: "Varinha de Fogo",
+      varinhaGelo: "Varinha de Gelo",
+      varinhaRaio: "Varinha de Raio",
+      
+      // Equipamentos
+      mochila: "Mochila",
+      corda: "Corda",
+      lampiao: "Lampião",
+      kitMedico: "Kit Médico",
+      
+      // Poções de Cura
+      pocaoVida: "Poção de Vida",
+      pocao_menor: "Poção Menor",
+      pocao_cura: "Poção de Cura",
+      pocao_completa: "Poção Completa",
+      
+      // Poções de Atributos
+      pocao_forca: "Poção de Força",
+      pocao_agilidade: "Poção de Agilidade",
+      pocao_inteligencia: "Poção de Inteligência",
+      pocao_carisma: "Poção de Carisma",
+      
+      // Poções de Mana
+      pocaoMana: "Poção de Mana",
+      pocao_pm_menor: "Poção de PM Menor",
+      pocao_pm_media: "Poção de PM Média",
+      pocao_pm_maior: "Poção de PM Maior",
+      pocao_pm_superior: "Poção de PM Superior",
+      
+      // Elixires Mágicos
+      elixir_arcano: "Elixir Arcano",
+      pocao_foco_mental: "Poção de Foco Mental",
+      essencia_magica: "Essência Mágica",
+      nectar_dos_magos: "Néctar dos Magos",
+      pocao_concentracao: "Poção de Concentração",
+      elixir_resistencia: "Elixir de Resistência",
+      
+      // Outros
+      antidoto: "Antídoto",
+      oleo_magico: "Óleo Mágico",
+      
+      // Anéis
+      anel_protecao_1: "Anel de Proteção +1",
+      anel_forca_1: "Anel de Força +1",
+      anel_agilidade_1: "Anel de Agilidade +1",
+      anel_inteligencia_1: "Anel de Inteligência +1",
+      anel_carisma_1: "Anel de Carisma +1",
+      anel_regeneracao: "Anel de Regeneração",
+      anel_invisibilidade: "Anel de Invisibilidade",
+      anel_voo: "Anel de Voo",
+      
+      // Chaves de localização (para compatibilidade)
       "equipamentos.cajado": "Cajado",
       "equipamentos.roupas_acolchadas": "Roupas Acolchadas",
       "equipamentos.espada_curta": "Espada Curta",
@@ -516,22 +643,7 @@ export class ClubeActorSheet extends ActorSheet {
       "equipamentos.kit_medico": "Kit Médico",
       "equipamentos.pocao_vida": "Poção de Vida",
       "equipamentos.pocao_mana": "Poção de Mana",
-      "equipamentos.antidoto": "Antídoto",
-      // Nomes diretos com underscore
-      "roupas_acolchadas": "Roupas Acolchadas",
-      "roupas_acol": "Roupas Acolchadas",
-      "espada_curta": "Espada Curta",
-      "espada_longa": "Espada Longa",
-      "arco_curto": "Arco Curto",
-      "armadura_couro": "Armadura de Couro",
-      "armadura_malha": "Armadura de Malha",
-      "armadura_placa": "Armadura de Placas",
-      "vestes_magicas": "Vestes Mágicas",
-      "escudo_pequeno": "Escudo Pequeno",
-      "escudo_grande": "Escudo Grande",
-      "kit_medico": "Kit Médico",
-      "pocao_vida": "Poção de Vida",
-      "pocao_mana": "Poção de Mana"
+      "equipamentos.antidoto": "Antídoto"
     };
     
     // Se o nome for uma chave de localização, extrair um nome simples
@@ -539,26 +651,154 @@ export class ClubeActorSheet extends ActorSheet {
       const chave = nome.replace("EQUIPAMENTOS.", "").toLowerCase();
       return nomesLimpos[`equipamentos.${chave}`] || nomesLimpos[chave] || chave.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
+    
     // Se o nome contém underscore, tentar simplificar
     if (nome.includes('_')) {
       const chave = nome.toLowerCase();
-      return nomesLimpos[chave] || nome.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+      const resultado = nomesLimpos[chave] || nome.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+      
+      // Aplicar correções de acentos para casos com underscore
+      return resultado
+        .replace(/\bElfico\b/g, 'Élfico')
+        .replace(/\bGibao\b/g, 'Gibão')
+        .replace(/\bCamisao\b/g, 'Camisão')
+        .replace(/\bMagicas\b/g, 'Mágicas')
+        .replace(/\bTunica\b/g, 'Túnica')
+        .replace(/\bAbsorcao\b/g, 'Absorção')
+        .replace(/\bMissois\b/g, 'Mísseis')
+        .replace(/\bLampiao\b/g, 'Lampião')
+        .replace(/\bMedico\b/g, 'Médico')
+        .replace(/\bPocao\b/g, 'Poção')
+        .replace(/\bForca\b/g, 'Força')
+        .replace(/\bAgilidade\b/g, 'Agilidade')
+        .replace(/\bInteligencia\b/g, 'Inteligência')
+        .replace(/\bEssencia\b/g, 'Essência')
+        .replace(/\bMagica\b/g, 'Mágica')
+        .replace(/\bNectar\b/g, 'Néctar')
+        .replace(/\bConcentracao\b/g, 'Concentração')
+        .replace(/\bResistencia\b/g, 'Resistência')
+        .replace(/\bAntidoto\b/g, 'Antídoto')
+        .replace(/\bOleo\b/g, 'Óleo')
+        .replace(/\bMagico\b/g, 'Mágico')
+        .replace(/\bProtecao\b/g, 'Proteção')
+        .replace(/\bRegeneracao\b/g, 'Regeneração')
+        .replace(/\bInvisibilidade\b/g, 'Invisibilidade')
+        .replace(/\bLanca\b/g, 'Lança')
+        .replace(/\bBordao\b/g, 'Bordão')
+        .replace(/\bConjurador\b/g, 'Conjurador')
+        .replace(/\bSombras\b/g, 'Sombras')
+        .replace(/\bArcanista\b/g, 'Arcanista')
+        .replace(/\bMedio\b/g, 'Médio')
+        .replace(/\bMedia\b/g, 'Média')
+        .replace(/\bDos\b/g, 'dos')
+        .replace(/\bMagos\b/g, 'Magos')
+        .replace(/\bArcano\b/g, 'Arcano')
+        .replace(/\bFoco\b/g, 'Foco')
+        .replace(/\bMental\b/g, 'Mental')
+        .replace(/\bCura\b/g, 'Cura')
+        .replace(/\bFogo\b/g, 'Fogo')
+        .replace(/\bGelo\b/g, 'Gelo')
+        .replace(/\bRaio\b/g, 'Raio')
+        .replace(/\bCorda\b/g, 'Corda')
+        .replace(/\bVida\b/g, 'Vida')
+        .replace(/\bMana\b/g, 'Mana')
+        .replace(/\bMenor\b/g, 'Menor')
+        .replace(/\bCompleta\b/g, 'Completa')
+        .replace(/\bMaior\b/g, 'Maior')
+        .replace(/\bSuperior\b/g, 'Superior')
+        .replace(/\bVoo\b/g, 'Voo');
     }
-    // Se o nome está em caixa alta e sem espaços, tenta separar por palavras conhecidas
-    if (/^[A-Z]+$/.test(nome)) {
-      // Lista de palavras conhecidas para armaduras, armas, etc
-      const palavras = [
-        "ROUPAS", "ACOLCHADAS", "ESPADA", "CURTA", "LONGA", "MACHADO", "ARCO", "CURTO", "ARMADURA", "COURO", "MALHA", "PLACAS", "VESTES", "MAGICAS", "ESCUDO", "PEQUENO", "GRANDE", "MOCHILA", "CORDA", "LAMPIAO", "KIT", "MEDICO", "POCAO", "VIDA", "MANA", "ANTIDOTO"
-      ];
-      let resultado = nome;
-      palavras.forEach(palavra => {
-        resultado = resultado.replace(palavra, palavra.charAt(0) + palavra.slice(1).toLowerCase() + ' ');
-      });
-      resultado = resultado.replace(/\s+/g, ' ').trim();
-      // Capitaliza cada palavra
-      resultado = resultado.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      return resultado;
+    
+      // Se o nome está em caixa alta e sem espaços, tentar mapear diretamente
+  if (/^[A-Z]+$/.test(nome)) {
+    const chave = nome.toLowerCase();
+    // Tentar mapear diretamente primeiro
+    if (nomesLimpos[chave]) {
+      return nomesLimpos[chave];
     }
+    
+    // Se não encontrar, tentar separar por palavras conhecidas
+    const palavras = [
+      "CAJADO", "SIMPLES", "ELFICO", "CARVALHO", "CRISTAL", "RUNICO",
+      "ROUPAS", "ACOLCHADAS", "COMUNS", "COURO", "MACIO", "CRAVEJADO", "ELFICO", "GIBAO", "PELES",
+      "CAMISAO", "MALHA", "BRIGANTINA", "COTA", "COMPLETA", "PLACAS", "PARCIAIS",
+      "VESTES", "MAGICAS", "ARCANAS", "MANTO", "CONJURADOR", "TUNICA", "SOMBRAS", "ABSORCAO", "ARCANISTA",
+      "BROQUEL", "ESCUDO", "PEQUENO", "MEDIO", "GRANDE", "TORRE",
+      "VARINHA", "MISSOIS", "CURA", "FOGO", "GELO", "RAIO",
+      "MOCHILA", "CORDA", "LAMPIAO", "KIT", "MEDICO",
+      "POCAO", "VIDA", "MANA", "MENOR", "CURA", "COMPLETA", "FORCA", "AGILIDADE", "INTELIGENCIA", "CARISMA",
+      "PM", "MEDIA", "MAIOR", "SUPERIOR",
+      "ELIXIR", "ARCANO", "FOCO", "MENTAL", "ESSENCIA", "MAGICA", "NECTAR", "DOS", "MAGOS", "CONCENTRACAO", "RESISTENCIA",
+      "ANTIDOTO", "OLEO", "MAGICO",
+      "ANEL", "PROTECAO", "REGENERACAO", "INVISIBILIDADE", "VOO",
+      "ESPADA", "CURTA", "LONGA", "MACHADO", "MAO", "CIMITARRA", "RAPIERA", "LANCA", "MARTELO", "GUERRA", "BORDAO", "LONGA", "GRANDE", "MONTANTE",
+      "PEDRA", "DARDO", "AZAGAIA", "ARCO", "LONGO", "BESTA", "LEVE"
+    ];
+    
+    let resultado = nome;
+    palavras.forEach(palavra => {
+      const regex = new RegExp(palavra, 'g');
+      resultado = resultado.replace(regex, palavra.charAt(0) + palavra.slice(1).toLowerCase() + ' ');
+    });
+    resultado = resultado.replace(/\s+/g, ' ').trim();
+    
+    // Capitaliza cada palavra
+    resultado = resultado.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    
+    // Aplicar correções de acentos
+    resultado = resultado
+      .replace(/\bElfico\b/g, 'Élfico')
+      .replace(/\bGibao\b/g, 'Gibão')
+      .replace(/\bCamisao\b/g, 'Camisão')
+      .replace(/\bMagicas\b/g, 'Mágicas')
+      .replace(/\bTunica\b/g, 'Túnica')
+      .replace(/\bAbsorcao\b/g, 'Absorção')
+      .replace(/\bMissois\b/g, 'Mísseis')
+      .replace(/\bLampiao\b/g, 'Lampião')
+      .replace(/\bMedico\b/g, 'Médico')
+      .replace(/\bPocao\b/g, 'Poção')
+      .replace(/\bForca\b/g, 'Força')
+      .replace(/\bAgilidade\b/g, 'Agilidade')
+      .replace(/\bInteligencia\b/g, 'Inteligência')
+      .replace(/\bEssencia\b/g, 'Essência')
+      .replace(/\bMagica\b/g, 'Mágica')
+      .replace(/\bNectar\b/g, 'Néctar')
+      .replace(/\bConcentracao\b/g, 'Concentração')
+      .replace(/\bResistencia\b/g, 'Resistência')
+      .replace(/\bAntidoto\b/g, 'Antídoto')
+      .replace(/\bOleo\b/g, 'Óleo')
+      .replace(/\bMagico\b/g, 'Mágico')
+      .replace(/\bProtecao\b/g, 'Proteção')
+      .replace(/\bRegeneracao\b/g, 'Regeneração')
+      .replace(/\bInvisibilidade\b/g, 'Invisibilidade')
+      .replace(/\bLanca\b/g, 'Lança')
+      .replace(/\bBordao\b/g, 'Bordão')
+      .replace(/\bConjurador\b/g, 'Conjurador')
+      .replace(/\bSombras\b/g, 'Sombras')
+      .replace(/\bArcanista\b/g, 'Arcanista')
+      .replace(/\bMedio\b/g, 'Médio')
+      .replace(/\bMedia\b/g, 'Média')
+      .replace(/\bDos\b/g, 'dos')
+      .replace(/\bMagos\b/g, 'Magos')
+      .replace(/\bArcano\b/g, 'Arcano')
+      .replace(/\bFoco\b/g, 'Foco')
+      .replace(/\bMental\b/g, 'Mental')
+      .replace(/\bCura\b/g, 'Cura')
+      .replace(/\bFogo\b/g, 'Fogo')
+      .replace(/\bGelo\b/g, 'Gelo')
+      .replace(/\bRaio\b/g, 'Raio')
+      .replace(/\bCorda\b/g, 'Corda')
+      .replace(/\bVida\b/g, 'Vida')
+      .replace(/\bMana\b/g, 'Mana')
+      .replace(/\bMenor\b/g, 'Menor')
+      .replace(/\bCompleta\b/g, 'Completa')
+      .replace(/\bMaior\b/g, 'Maior')
+      .replace(/\bSuperior\b/g, 'Superior')
+      .replace(/\bVoo\b/g, 'Voo');
+    
+    return resultado;
+  }
+    
     // Fallback: só capitaliza a primeira letra
     return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
   }
