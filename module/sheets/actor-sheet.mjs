@@ -3422,6 +3422,34 @@ export class ClubeActorSheet extends ActorSheet {
         `;
         break;
     }
+
+    // Adicionar informações de bônus se existirem
+    let bonusInfo = "";
+    if (equipamentoData.bonus) {
+      const bonusList = [];
+      if (equipamentoData.bonus.pm_maximo) {
+        bonusList.push(`+${equipamentoData.bonus.pm_maximo} PM máximo`);
+      }
+      if (equipamentoData.bonus.pv_maximo) {
+        bonusList.push(`+${equipamentoData.bonus.pv_maximo} PV máximo`);
+      }
+      if (equipamentoData.bonus.conjuracao) {
+        bonusList.push(`+${equipamentoData.bonus.conjuracao} conjuração`);
+      }
+      if (equipamentoData.bonus.dano_magico) {
+        bonusList.push(`+${equipamentoData.bonus.dano_magico} dano mágico`);
+      }
+      if (equipamentoData.bonus.ataque) {
+        bonusList.push(`+${equipamentoData.bonus.ataque} ataque`);
+      }
+      if (equipamentoData.bonus.iniciativa) {
+        bonusList.push(`+${equipamentoData.bonus.iniciativa} iniciativa`);
+      }
+      
+      if (bonusList.length > 0) {
+        bonusInfo = `<p><strong>Bônus Especiais:</strong> ${bonusList.join(', ')}</p>`;
+      }
+    }
     
     // Mostrar dialog com detalhes
     new Dialog({
@@ -3435,6 +3463,7 @@ export class ClubeActorSheet extends ActorSheet {
           ${preReqText ? `<p><strong>Pré-requisitos:</strong> ${preReqText}</p>` : ''}
           ${classesText ? `<p><strong>Classes Sugeridas:</strong> ${classesText}</p>` : ''}
           ${infoEspecifica}
+          ${bonusInfo}
           <div class="status-compra">
             <p><strong>Status:</strong> 
               ${!atendeRequisitos ? '<span style="color: red;">Não atende pré-requisitos</span>' : 
