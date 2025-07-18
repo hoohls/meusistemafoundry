@@ -884,6 +884,7 @@ export class ClubeActorSheet extends ActorSheet {
     // Gerenciar XP
     html.find(".adicionar-xp").click(this._onAdicionarXP.bind(this));
     html.find(".ajustar-xp").click(this._onAjustarXP.bind(this));
+    html.find(".corrigir-dados").click(this._onCorrigirDados.bind(this));
 
     // Gerenciar habilidades
     html.find(".adicionar-habilidade").click(this._onAdicionarHabilidade.bind(this));
@@ -1945,6 +1946,33 @@ export class ClubeActorSheet extends ActorSheet {
     event.preventDefault();
     await this.actor.corrigirInicializacao();
     this.render(true);
+  }
+
+  /**
+   * Corrige dados do personagem (Debug)
+   * @param {Event} event - Evento de clique
+   */
+  async _onCorrigirDados(event) {
+    event.preventDefault();
+    
+    try {
+      console.log("=== INICIANDO CORREÇÃO DE DADOS ===");
+      
+      // Executar correção de inicialização
+      const sucesso = await this.actor.corrigirInicializacao();
+      
+      if (sucesso) {
+        ui.notifications.info("Dados do personagem corrigidos com sucesso!");
+        
+        // Recarregar a ficha
+        this.render(true);
+      } else {
+        ui.notifications.error("Erro ao corrigir dados do personagem");
+      }
+    } catch (error) {
+      console.error("Erro ao corrigir dados:", error);
+      ui.notifications.error("Erro ao corrigir dados: " + error.message);
+    }
   }
 
   /**

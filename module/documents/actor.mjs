@@ -1709,10 +1709,13 @@ export class ClubeActor extends Actor {
    */
   async corrigirInicializacao() {
     try {
+      console.log("=== CORRIGINDO INICIALIZAÇÃO DO PERSONAGEM ===");
+      console.log("Dados atuais:", this.system);
+      
       const updateData = {};
       let precisaAtualizar = false;
 
-      // Garantir que atributos existam
+      // Garantir que atributos existam e tenham valores válidos
       if (!this.system.atributos) {
         this.system.atributos = {
           fisico: { valor: 0 },
@@ -1722,6 +1725,22 @@ export class ClubeActor extends Actor {
         };
         updateData["system.atributos"] = this.system.atributos;
         precisaAtualizar = true;
+        console.log("Criando estrutura de atributos");
+      } else {
+        // Verificar se cada atributo tem valor válido
+        const atributos = ['fisico', 'acao', 'mental', 'social'];
+        atributos.forEach(atributo => {
+          if (!this.system.atributos[atributo] || this.system.atributos[atributo].valor === undefined) {
+            if (!this.system.atributos[atributo]) {
+              this.system.atributos[atributo] = { valor: 0 };
+            } else {
+              this.system.atributos[atributo].valor = 0;
+            }
+            updateData[`system.atributos.${atributo}`] = this.system.atributos[atributo];
+            precisaAtualizar = true;
+            console.log(`Corrigindo atributo ${atributo}: valor = 0`);
+          }
+        });
       }
 
       // Garantir que experiência exista
@@ -1732,6 +1751,7 @@ export class ClubeActor extends Actor {
         };
         updateData["system.experiencia"] = this.system.experiencia;
         precisaAtualizar = true;
+        console.log("Criando estrutura de experiência");
       }
 
       // Garantir que nível exista
@@ -1739,6 +1759,7 @@ export class ClubeActor extends Actor {
         this.system.nivel = 1;
         updateData["system.nivel"] = 1;
         precisaAtualizar = true;
+        console.log("Definindo nível = 1");
       }
 
       // Garantir que progressão exista
@@ -1752,6 +1773,7 @@ export class ClubeActor extends Actor {
         };
         updateData["system.progressao"] = this.system.progressao;
         precisaAtualizar = true;
+        console.log("Criando estrutura de progressão");
       }
 
       // Garantir que recursos existam
@@ -1763,6 +1785,7 @@ export class ClubeActor extends Actor {
         };
         updateData["system.recursos"] = this.system.recursos;
         precisaAtualizar = true;
+        console.log("Criando estrutura de recursos");
       }
 
       // Garantir que condições existam
@@ -1950,15 +1973,25 @@ export class ClubeActor extends Actor {
    * @returns {boolean} Se atende aos pré-requisitos
    */
   _verificarPreRequisitosEquipamento(equipamentoData) {
+    // Debug: Log dos dados do personagem
+    console.log("Verificando pré-requisitos para:", equipamentoData.nome);
+    console.log("Nível do personagem:", this.system.nivel);
+    console.log("Atributos do personagem:", this.system.atributos);
+    console.log("Classe do personagem:", this.system.classe?.nome);
+    
     // Verificar nível mínimo
     if (equipamentoData.nivelMin && this.system.nivel < equipamentoData.nivelMin) {
+      console.log("Falhou no nível mínimo:", this.system.nivel, "<", equipamentoData.nivelMin);
       return false;
     }
 
     // Verificar pré-requisitos de atributos
     if (equipamentoData.preRequisito) {
       for (const [atributo, valorMinimo] of Object.entries(equipamentoData.preRequisito)) {
-        if (this.system.atributos[atributo].valor < valorMinimo) {
+        const valorAtual = this.system.atributos[atributo]?.valor || 0;
+        console.log(`Verificando ${atributo}: ${valorAtual} >= ${valorMinimo}?`);
+        if (valorAtual < valorMinimo) {
+          console.log(`Falhou no atributo ${atributo}: ${valorAtual} < ${valorMinimo}`);
           return false;
         }
       }
@@ -1966,12 +1999,15 @@ export class ClubeActor extends Actor {
 
     // Verificar classe (se especificada)
     if (equipamentoData.classesSugeridas && !equipamentoData.classesSugeridas.includes("todas")) {
-      const classeAtual = this.system.classe;
+      const classeAtual = this.system.classe?.nome;
+      console.log("Verificando classe:", classeAtual, "em", equipamentoData.classesSugeridas);
       if (!equipamentoData.classesSugeridas.includes(classeAtual)) {
+        console.log("Falhou na classe:", classeAtual, "não está em", equipamentoData.classesSugeridas);
         return false;
       }
     }
 
+    console.log("Pré-requisitos atendidos!");
     return true;
   }
 
