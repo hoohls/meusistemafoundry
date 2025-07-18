@@ -1971,6 +1971,56 @@ export class ClubeActorSheet extends ActorSheet {
   }
 
   /**
+   * Formata pré-requisitos de atributos para exibição
+   * @param {Object} preRequisitos - Objeto com pré-requisitos
+   * @returns {string} Texto formatado
+   */
+  _formatarPreRequisitos(preRequisitos) {
+    if (!preRequisitos || Object.keys(preRequisitos).length === 0) {
+      return "";
+    }
+    
+    const nomesAtributos = {
+      fisico: "Físico",
+      acao: "Ação",
+      mental: "Mental",
+      social: "Social"
+    };
+    
+    const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => {
+      const nomeAtributo = nomesAtributos[attr] || attr.charAt(0).toUpperCase() + attr.slice(1);
+      return `${nomeAtributo} ${valor}`;
+    });
+    
+    return preReqList.join(", ");
+  }
+
+  /**
+   * Formata classes sugeridas para exibição
+   * @param {Array} classesSugeridas - Array com classes sugeridas
+   * @returns {string} Texto formatado
+   */
+  _formatarClassesSugeridas(classesSugeridas) {
+    if (!classesSugeridas || classesSugeridas.length === 0 || classesSugeridas.includes("todas")) {
+      return "";
+    }
+    
+    const nomesClasses = {
+      guerreiro: "Guerreiro",
+      mago: "Mago",
+      ladino: "Ladino",
+      diplomata: "Diplomata"
+    };
+    
+    const classesList = classesSugeridas.map(classe => {
+      const nomeClasse = nomesClasses[classe] || classe.charAt(0).toUpperCase() + classe.slice(1);
+      return nomeClasse;
+    });
+    
+    return classesList.join(", ");
+  }
+
+  /**
    * Prepara dados dos equipamentos para exibição
    * @param {Object} context - Contexto da planilha
    */
@@ -2058,7 +2108,8 @@ export class ClubeActorSheet extends ActorSheet {
         nome: nomeLocalizado,
         descricao: descricaoLocalizada,
         atendeRequisitos: atendeRequisitos,
-        podeComprar: atendeRequisitos && (this.actor._verificarDinheiroSuficiente ? this.actor._verificarDinheiroSuficiente(equipamento.preco) : true)
+        podeComprar: atendeRequisitos && (this.actor._verificarDinheiroSuficiente ? this.actor._verificarDinheiroSuficiente(equipamento.preco) : true),
+        preRequisitoFormatado: this._formatarPreRequisitos(equipamento.preRequisito || {})
       };
     }
     
@@ -2904,22 +2955,10 @@ export class ClubeActorSheet extends ActorSheet {
     const atendeRequisitos = this.actor._verificarPreRequisitosHabilidade ? this.actor._verificarPreRequisitosHabilidade(habilidadeData) : true;
     
     // Montar lista de pré-requisitos
-    let preReqText = "";
-    if (Object.keys(preRequisitos).length > 0) {
-      const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => 
-        `${game.i18n.localize(`ATRIBUTOS.${attr.toUpperCase()}`)} ${valor}`
-      );
-      preReqText = preReqList.join(", ");
-    }
+    let preReqText = this._formatarPreRequisitos(preRequisitos);
     
     // Montar lista de classes sugeridas
-    let classesText = "";
-    if (classesSugeridas.length > 0 && !classesSugeridas.includes("todas")) {
-      const classesList = classesSugeridas.map(classe => 
-        game.i18n.localize(`CLASSES.${classe.toUpperCase()}`)
-      );
-      classesText = classesList.join(", ");
-    }
+    let classesText = this._formatarClassesSugeridas(classesSugeridas);
     
     // Mostrar dialog com detalhes
     new Dialog({
@@ -3052,22 +3091,10 @@ export class ClubeActorSheet extends ActorSheet {
     const podeComprar = atendeRequisitos && (this.actor._verificarDinheiroSuficiente ? this.actor._verificarDinheiroSuficiente(preco) : true);
     
     // Montar lista de pré-requisitos
-    let preReqText = "";
-    if (Object.keys(preRequisitos).length > 0) {
-      const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => 
-        `${game.i18n.localize(`ATRIBUTOS.${attr.toUpperCase()}`)} ${valor}`
-      );
-      preReqText = preReqList.join(", ");
-    }
+    let preReqText = this._formatarPreRequisitos(preRequisitos);
     
     // Montar lista de classes sugeridas
-    let classesText = "";
-    if (classesSugeridas.length > 0 && !classesSugeridas.includes("todas")) {
-      const classesList = classesSugeridas.map(classe => 
-        game.i18n.localize(`CLASSES.${classe.toUpperCase()}`)
-      );
-      classesText = classesList.join(", ");
-    }
+    let classesText = this._formatarClassesSugeridas(classesSugeridas);
     
     // Informações específicas por tipo
     let infoEspecifica = "";

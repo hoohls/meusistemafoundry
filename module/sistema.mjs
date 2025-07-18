@@ -511,6 +511,48 @@ function registerHandlebarsHelpers() {
     return result;
   });
 
+  // Helper para formatar pré-requisitos de atributos
+  Handlebars.registerHelper('formatarPreRequisitos', function(preRequisitos) {
+    if (!preRequisitos || Object.keys(preRequisitos).length === 0) {
+      return "";
+    }
+    
+    const nomesAtributos = {
+      fisico: "Físico",
+      acao: "Ação",
+      mental: "Mental",
+      social: "Social"
+    };
+    
+    const preReqList = Object.entries(preRequisitos).map(([attr, valor]) => {
+      const nomeAtributo = nomesAtributos[attr] || attr.charAt(0).toUpperCase() + attr.slice(1);
+      return `${nomeAtributo} ${valor}`;
+    });
+    
+    return preReqList.join(", ");
+  });
+
+  // Helper para formatar classes sugeridas
+  Handlebars.registerHelper('formatarClassesSugeridas', function(classesSugeridas) {
+    if (!classesSugeridas || classesSugeridas.length === 0 || classesSugeridas.includes("todas")) {
+      return "";
+    }
+    
+    const nomesClasses = {
+      guerreiro: "Guerreiro",
+      mago: "Mago",
+      ladino: "Ladino",
+      diplomata: "Diplomata"
+    };
+    
+    const classesList = classesSugeridas.map(classe => {
+      const nomeClasse = nomesClasses[classe] || classe.charAt(0).toUpperCase() + classe.slice(1);
+      return nomeClasse;
+    });
+    
+    return classesList.join(", ");
+  });
+
   console.log("Helpers Handlebars registrados com sucesso!");
 }
 

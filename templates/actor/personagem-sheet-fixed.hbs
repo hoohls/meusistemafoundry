@@ -411,7 +411,7 @@
                   {{#if descricao}}
                   <p class="magia-descricao">{{descricao}}</p>
                   {{/if}}
-                  <p><strong>Pré-requisitos:</strong> {{prerequisitos}}</p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos prerequisitos}}</p>
                 </div>
               </div>
               {{/each}}
@@ -469,11 +469,7 @@
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Dano:</strong> {{equipamento.dano}}</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -506,11 +502,7 @@
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -543,11 +535,7 @@
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Proteção:</strong> {{equipamento.protecao}}</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -581,11 +569,7 @@
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Efeito:</strong> {{equipamento.efeito}}</p>
                   <p><strong>Cargas:</strong> {{equipamento.cargas}}/dia</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -618,11 +602,7 @@
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}}</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -655,11 +635,7 @@
                   <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
                   <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Efeito:</strong> {{equipamento.efeito}}</p>
                   {{#if equipamento.preRequisito}}
-                  <p><strong>Pré-requisitos:</strong> 
-                    {{#each equipamento.preRequisito as |valor atributo|}}
-                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                    {{/each}}
-                  </p>
+                  <p><strong>Pré-requisitos:</strong> {{formatarPreRequisitos equipamento.preRequisito}}</p>
                   {{/if}}
                 </div>
               </div>
@@ -1075,11 +1051,7 @@
                   <div class="habilidade-requisitos">
                     <p>Nível Mín: {{habilidade.nivelMin}}</p>
                     {{#if habilidade.preRequisito}}
-                    <p>Pré-requisitos: 
-                      {{#each habilidade.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
+                    <p>Pré-requisitos: {{formatarPreRequisitos habilidade.preRequisito}}</p>
                     {{/if}}
                   </div>
                 </div>
@@ -1107,11 +1079,7 @@
                   <div class="habilidade-requisitos">
                     <p>Nível Mín: {{habilidade.nivelMin}}</p>
                     {{#if habilidade.preRequisito}}
-                    <p>Pré-requisitos: 
-                      {{#each habilidade.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
+                    <p>Pré-requisitos: {{formatarPreRequisitos habilidade.preRequisito}}</p>
                     {{/if}}
                   </div>
                 </div>
@@ -1139,11 +1107,7 @@
                   <div class="habilidade-requisitos">
                     <p>Nível Mín: {{habilidade.nivelMin}}</p>
                     {{#if habilidade.preRequisito}}
-                    <p>Pré-requisitos: 
-                      {{#each habilidade.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
+                    <p>Pré-requisitos: {{formatarPreRequisitos habilidade.preRequisito}}</p>
                     {{/if}}
                   </div>
                 </div>
@@ -1171,11 +1135,7 @@
                   <div class="habilidade-requisitos">
                     <p>Nível Mín: {{habilidade.nivelMin}}</p>
                     {{#if habilidade.preRequisito}}
-                    <p>Pré-requisitos: 
-                      {{#each habilidade.preRequisito as |valor atributo|}}
-                      {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
-                      {{/each}}
-                    </p>
+                    <p>Pré-requisitos: {{formatarPreRequisitos habilidade.preRequisito}}</p>
                     {{/if}}
                   </div>
                 </div>
