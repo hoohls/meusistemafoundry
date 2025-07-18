@@ -1008,8 +1008,26 @@ export class ClubeActorSheet extends ActorSheet {
   async _onAtacar(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const arma = this.actor.items.get(itemId);
+    
+    if (!arma) {
+      console.error(`Arma com ID ${itemId} não encontrada`);
+      return;
+    }
 
     await this.actor.atacar(arma);
   }
@@ -1021,8 +1039,26 @@ export class ClubeActorSheet extends ActorSheet {
   async _onConjurarMagia(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".magia-item").dataset.itemId;
+    const itemElement = element.closest(".magia-item");
+    
+    if (!itemElement) {
+      console.error("Elemento .magia-item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const magia = this.actor.items.get(itemId);
+    
+    if (!magia) {
+      console.error(`Magia com ID ${itemId} não encontrada`);
+      return;
+    }
 
     await this.actor.conjurarMagia(magia);
   }
@@ -1034,8 +1070,26 @@ export class ClubeActorSheet extends ActorSheet {
   async _onUsarHabilidade(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".habilidade-item").dataset.itemId;
+    const itemElement = element.closest(".habilidade-item");
+    
+    if (!itemElement) {
+      console.error("Elemento .habilidade-item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const habilidade = this.actor.items.get(itemId);
+    
+    if (!habilidade) {
+      console.error(`Habilidade com ID ${itemId} não encontrada`);
+      return;
+    }
 
     await habilidade.usar(this.actor);
   }
@@ -1047,8 +1101,26 @@ export class ClubeActorSheet extends ActorSheet {
   async _onUsarItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item-inventario").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const item = this.actor.items.get(itemId);
+    
+    if (!item) {
+      console.error(`Item com ID ${itemId} não encontrado`);
+      return;
+    }
 
     await item.usar(this.actor);
   }
@@ -1060,7 +1132,19 @@ export class ClubeActorSheet extends ActorSheet {
   async _onEquiparItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item-inventario").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
     
     // Verificar se é um item simples
     if (itemId.startsWith('simple-')) {
@@ -1070,7 +1154,12 @@ export class ClubeActorSheet extends ActorSheet {
     
     // Item do Foundry
     const item = this.actor.items.get(itemId);
-    if (item && this.actor.equiparItem) {
+    if (!item) {
+      console.error(`Item com ID ${itemId} não encontrado`);
+      return;
+    }
+    
+    if (this.actor.equiparItem) {
       await this.actor.equiparItem(item);
     } else {
       // Fallback para equipar manualmente
@@ -1085,7 +1174,19 @@ export class ClubeActorSheet extends ActorSheet {
   async _onDesequiparItem(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item-inventario").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
     
     // Verificar se é um item simples
     if (itemId.startsWith('simple-')) {
@@ -1095,7 +1196,12 @@ export class ClubeActorSheet extends ActorSheet {
     
     // Item do Foundry
     const item = this.actor.items.get(itemId);
-    if (item && this.actor.desequiparItem) {
+    if (!item) {
+      console.error(`Item com ID ${itemId} não encontrado`);
+      return;
+    }
+    
+    if (this.actor.desequiparItem) {
       await this.actor.desequiparItem(item);
     } else {
       // Fallback para desequipar manualmente
@@ -1459,8 +1565,26 @@ export class ClubeActorSheet extends ActorSheet {
   _onItemEdit(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const item = this.actor.items.get(itemId);
+    
+    if (!item) {
+      console.error(`Item com ID ${itemId} não encontrado`);
+      return;
+    }
     
     item.sheet.render(true);
   }
@@ -1472,8 +1596,26 @@ export class ClubeActorSheet extends ActorSheet {
   async _onItemDelete(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
+    const itemElement = element.closest(".item");
+    
+    if (!itemElement) {
+      console.error("Elemento .item não encontrado");
+      return;
+    }
+    
+    const itemId = itemElement.dataset.itemId;
+    
+    if (!itemId) {
+      console.error("data-item-id não encontrado no elemento");
+      return;
+    }
+    
     const item = this.actor.items.get(itemId);
+    
+    if (!item) {
+      console.error(`Item com ID ${itemId} não encontrado`);
+      return;
+    }
     
     const confirm = await Dialog.confirm({
       title: "Excluir Item",
