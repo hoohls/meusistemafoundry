@@ -2046,6 +2046,15 @@ export class ClubeActor extends Actor {
           usos: equipamentoData.usos
         };
         break;
+      
+      case 'varinha':
+        systemData = {
+          ...systemData,
+          efeito: equipamentoData.efeito,
+          cargas: equipamentoData.cargas,
+          cargas_maximas: equipamentoData.cargas
+        };
+        break;
     }
 
     return {

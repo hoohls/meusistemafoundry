@@ -1979,6 +1979,7 @@ export class ClubeActorSheet extends ActorSheet {
     context.equipamentosArmasDisponiveis = this._prepararEquipamentosCategoria('armas', SISTEMA.equipamentos.armas);
     context.equipamentosArmadurasDisponiveis = this._prepararEquipamentosCategoria('armaduras', SISTEMA.equipamentos.armaduras);
     context.equipamentosEscudosDisponiveis = this._prepararEquipamentosCategoria('escudos', SISTEMA.equipamentos.escudos);
+    context.equipamentosVarinhasDisponiveis = this._prepararEquipamentosCategoria('varinhas', SISTEMA.equipamentos.varinhas);
     context.equipamentosEquipamentosDisponiveis = this._prepararEquipamentosCategoria('equipamentos', SISTEMA.equipamentos.equipamentos);
     context.equipamentosConsumiveisDisponiveis = this._prepararEquipamentosCategoria('consumiveis', SISTEMA.equipamentos.consumiveis);
   }
@@ -3093,6 +3094,12 @@ export class ClubeActorSheet extends ActorSheet {
         infoEspecifica = `
           <p><strong>Efeito:</strong> ${equipamentoData.efeito}</p>
           <p><strong>Usos:</strong> ${equipamentoData.usos}</p>
+        `;
+        break;
+      case 'varinha':
+        infoEspecifica = `
+          <p><strong>Efeito:</strong> ${equipamentoData.efeito}</p>
+          <p><strong>Cargas:</strong> ${equipamentoData.cargas}/dia</p>
         `;
         break;
     }

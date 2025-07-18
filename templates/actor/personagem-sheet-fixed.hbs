@@ -556,6 +556,44 @@
           </div>
           {{/if}}
 
+          {{!-- Varinhas --}}
+          {{#if equipamentosVarinhasDisponiveis}}
+          <div class="equipamentos-escola">
+            <h4>Varinhas</h4>
+            <div class="equipamentos-grid">
+              {{#each equipamentosVarinhasDisponiveis as |equipamento key|}}
+              <div class="equipamento-item disponivel" data-equipamento="{{key}}">
+                <div class="equipamento-header">
+                  <h5>{{equipamento.nome}}</h5>
+                  <div class="equipamento-botoes">
+                    <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Ver detalhes">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Comprar equipamento">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="equipamento-requisitos">
+                  <p><strong>Preço:</strong> {{equipamento.preco}} ouro • <strong>Peso:</strong> {{equipamento.peso}} kg</p>
+                  <p><strong>Nível Mín:</strong> {{equipamento.nivelMin}} • <strong>Efeito:</strong> {{equipamento.efeito}}</p>
+                  <p><strong>Cargas:</strong> {{equipamento.cargas}}/dia</p>
+                  {{#if equipamento.preRequisito}}
+                  <p><strong>Pré-requisitos:</strong> 
+                    {{#each equipamento.preRequisito as |valor atributo|}}
+                    {{atributo}} {{valor}}{{#unless @last}}, {{/unless}}
+                    {{/each}}
+                  </p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
           {{!-- Equipamentos Gerais --}}
           {{#if equipamentosEquipamentosDisponiveis}}
           <div class="equipamentos-escola">
@@ -633,6 +671,7 @@
           {{#unless equipamentosArmasDisponiveis}}
           {{#unless equipamentosArmadurasDisponiveis}}
           {{#unless equipamentosEscudosDisponiveis}}
+          {{#unless equipamentosVarinhasDisponiveis}}
           {{#unless equipamentosEquipamentosDisponiveis}}
           {{#unless equipamentosConsumiveisDisponiveis}}
           <div class="empty-section">
