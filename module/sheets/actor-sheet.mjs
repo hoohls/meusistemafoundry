@@ -2412,24 +2412,132 @@ export class ClubeActorSheet extends ActorSheet {
       // Fallback para nomes
       if (nomeLocalizado === equipamento.nome || nomeLocalizado.startsWith("EQUIPAMENTOS.")) {
         const nomesLimpos = {
+          // Armas Simples
+          punhal: "Punhal",
+          adaga: "Adaga",
+          adagaElfica: "Adaga Élfica",
+          clava: "Clava",
+          machadoMao: "Machado de Mão",
+          cimitarra: "Cimitarra",
+          rapiera: "Rapiera",
           espadaCurta: "Espada Curta",
+          espadaElfica: "Espada Élfica",
+          lanca: "Lança",
           espadaLonga: "Espada Longa",
-          machaxo: "Machado",
+          machado: "Machado",
+          marteloGuerra: "Martelo de Guerra",
+          bordao: "Bordão",
+          lancaLonga: "Lança Longa",
+          machadoGrande: "Machado Grande",
+          montante: "Montante",
+          
+          // Armas de Arremesso
+          pedra: "Pedra",
+          dardo: "Dardo",
+          azagaia: "Azagaia",
+          
+          // Armas de Distância
+          arcoSimples: "Arco Simples",
           arcoCurto: "Arco Curto",
+          arcoLongo: "Arco Longo",
+          bestaMao: "Besta de Mão",
+          bestaLeve: "Besta Leve",
+          
+          // Cajados
           cajado: "Cajado",
+          cajadoSimples: "Cajado Simples",
+          cajadoCarvalho: "Cajado de Carvalho",
+          cajadoElfico: "Cajado Élfico",
+          cajadoCristal: "Cajado de Cristal",
+          cajadoRunico: "Cajado Rúnico",
+          
+          // Roupas e Armaduras Leves
+          roupasComuns: "Roupas Comuns",
+          roupasAcolchoadas: "Roupas Acolchoadas",
+          couroMacio: "Couro Macio",
           couro: "Armadura de Couro",
+          couroCravejado: "Couro Cravejado",
+          couroElfico: "Couro Élfico",
+          gibaoPeles: "Gibão de Peles",
+          
+          // Armaduras de Malha
+          camisaoMalha: "Camisão de Malha",
           malha: "Armadura de Malha",
+          brigantina: "Brigantina",
+          cotaCompleta: "Cota Completa",
+          
+          // Armaduras Pesadas
+          placasParciais: "Placas Parciais",
           placa: "Armadura de Placas",
+          
+          // Vestes Mágicas
           vestes: "Vestes Mágicas",
+          vestes_arcanas: "Vestes Arcanas",
+          manto_conjurador: "Manto do Conjurador",
+          tunica_sombras: "Túnica das Sombras",
+          manto_absorcao: "Manto de Absorção",
+          vestes_arcanista: "Vestes do Arcanista",
+          
+          // Escudos
+          broquel: "Broquel",
           escudoPequeno: "Escudo Pequeno",
+          escudoMedio: "Escudo Médio",
           escudoGrande: "Escudo Grande",
+          escudoTorre: "Escudo Torre",
+          
+          // Varinhas
+          varinhaMissois: "Varinha de Mísseis",
+          varinhaCura: "Varinha de Cura",
+          varinhaFogo: "Varinha de Fogo",
+          varinhaGelo: "Varinha de Gelo",
+          varinhaRaio: "Varinha de Raio",
+          
+          // Equipamentos
           mochila: "Mochila",
           corda: "Corda",
           lampiao: "Lampião",
           kitMedico: "Kit Médico",
+          
+          // Poções de Cura
           pocaoVida: "Poção de Vida",
+          pocao_menor: "Poção Menor",
+          pocao_cura: "Poção de Cura",
+          pocao_completa: "Poção Completa",
+          
+          // Poções de Atributos
+          pocao_forca: "Poção de Força",
+          pocao_agilidade: "Poção de Agilidade",
+          pocao_inteligencia: "Poção de Inteligência",
+          pocao_carisma: "Poção de Carisma",
+          
+          // Poções de Mana
           pocaoMana: "Poção de Mana",
-          antidoto: "Antídoto"
+          pocao_pm_menor: "Poção de PM Menor",
+          pocao_pm_media: "Poção de PM Média",
+          pocao_pm_maior: "Poção de PM Maior",
+          pocao_pm_superior: "Poção de PM Superior",
+          
+          // Elixires Mágicos
+          elixir_arcano: "Elixir Arcano",
+          pocao_foco_mental: "Poção de Foco Mental",
+          essencia_magica: "Essência Mágica",
+          nectar_dos_magos: "Néctar dos Magos",
+          pocao_concentracao: "Poção de Concentração",
+          elixir_resistencia: "Elixir de Resistência",
+          
+          // Outros
+          antidoto: "Antídoto",
+          oleo_magico: "Óleo Mágico",
+          
+          // Anéis
+          anel_protecao_1: "Anel de Proteção +1",
+          anel_forca_1: "Anel de Força +1",
+          anel_agilidade_1: "Anel de Agilidade +1",
+          anel_inteligencia_1: "Anel de Inteligência +1",
+          anel_carisma_1: "Anel de Carisma +1",
+          anel_regeneracao: "Anel de Regeneração",
+          anel_invisibilidade: "Anel de Invisibilidade",
+          anel_voo: "Anel de Voo"
         };
         nomeLocalizado = nomesLimpos[id] || id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
       }
@@ -2437,24 +2545,132 @@ export class ClubeActorSheet extends ActorSheet {
       // Fallback para descrições
       if (descricaoLocalizada === equipamento.descricao || descricaoLocalizada.startsWith("EQUIPAMENTOS.")) {
         const descricoesBasicas = {
+          // Armas Simples
+          punhal: "Uma lâmina pequena e discreta, ideal para ataques furtivos",
+          adaga: "Uma adaga afiada e versátil para combate corpo a corpo",
+          adagaElfica: "Uma adaga élfica de design elegante e precisão excepcional",
+          clava: "Uma clava pesada que causa dano contundente",
+          machadoMao: "Um machado de uma mão, equilibrado entre dano e velocidade",
+          cimitarra: "Uma espada curva de origem exótica, perfeita para ataques rápidos",
+          rapiera: "Uma espada fina e elegante, especializada em ataques precisos",
           espadaCurta: "Uma espada curta e ágil, ideal para combate corpo a corpo",
+          espadaElfica: "Uma espada élfica de qualidade superior, leve e letal",
+          lanca: "Uma lança versátil para combate a distância média",
           espadaLonga: "Uma espada longa e versátil, arma clássica dos guerreiros",
-          machaxo: "Um machado pesado e poderoso para causar dano devastador",
+          machado: "Um machado pesado e poderoso para causar dano devastador",
+          marteloGuerra: "Um martelo de guerra que esmaga armaduras",
+          bordao: "Um bordão resistente, arma de impacto confiável",
+          lancaLonga: "Uma lança longa para manter inimigos à distância",
+          machadoGrande: "Um machado enorme que causa dano massivo",
+          montante: "Uma espada gigante que requer força excepcional",
+          
+          // Armas de Arremesso
+          pedra: "Uma pedra simples para arremesso",
+          dardo: "Um dardo afiado para ataques à distância",
+          azagaia: "Uma lança de arremesso leve e precisa",
+          
+          // Armas de Distância
+          arcoSimples: "Um arco básico para caça e combate",
           arcoCurto: "Um arco curto para ataques à distância",
+          arcoLongo: "Um arco longo com alcance superior",
+          bestaMao: "Uma besta compacta para uso com uma mão",
+          bestaLeve: "Uma besta leve e rápida de recarregar",
+          
+          // Cajados
           cajado: "Um cajado simples, arma básica para magos",
+          cajadoSimples: "Um cajado básico de madeira comum",
+          cajadoCarvalho: "Um cajado de carvalho robusto e confiável",
+          cajadoElfico: "Um cajado élfico de design elegante e poder mágico",
+          cajadoCristal: "Um cajado com cristal que amplifica magias",
+          cajadoRunico: "Um cajado com runas antigas de poder imenso",
+          
+          // Roupas e Armaduras Leves
+          roupasComuns: "Roupas simples e confortáveis para uso diário",
+          roupasAcolchoadas: "Roupas com acolchoamento que oferecem proteção básica",
+          couroMacio: "Couro macio e flexível para máxima mobilidade",
           couro: "Armadura leve feita de couro tratado",
+          couroCravejado: "Couro com rebites metálicos para proteção adicional",
+          couroElfico: "Couro élfico de qualidade superior, leve e resistente",
+          gibaoPeles: "Um gibão feito de peles de animais selvagens",
+          
+          // Armaduras de Malha
+          camisaoMalha: "Uma camisa de malha que protege o torso",
           malha: "Armadura de malha metálica, oferece boa proteção",
+          brigantina: "Uma armadura de malha reforçada com placas",
+          cotaCompleta: "Uma cota de malha que cobre todo o corpo",
+          
+          // Armaduras Pesadas
+          placasParciais: "Placas metálicas que protegem áreas vitais",
           placa: "Armadura pesada de placas metálicas, máxima proteção",
+          
+          // Vestes Mágicas
           vestes: "Vestes encantadas que protegem magos",
+          vestes_arcanas: "Vestes tecidas com fios de prata e runas arcanas, oferecem proteção mágica básica",
+          manto_conjurador: "Um manto encantado que protege contra ataques mágicos e melhora a concentração",
+          tunica_sombras: "Uma túnica que permite se mover silenciosamente, mas pode afetar interações sociais",
+          manto_absorcao: "Um manto que absorve e dissipa energia mágica, oferecendo excelente proteção arcana",
+          vestes_arcanista: "Vestes de poder supremo, tecidas com os mais raros materiais mágicos",
+          
+          // Escudos
+          broquel: "Um escudo pequeno e ágil para defesa rápida",
           escudoPequeno: "Um escudo pequeno e ágil",
+          escudoMedio: "Um escudo de tamanho médio, equilibrado",
           escudoGrande: "Um escudo grande que oferece excelente proteção",
+          escudoTorre: "Um escudo enorme que cobre todo o corpo",
+          
+          // Varinhas
+          varinhaMissois: "Uma varinha especializada em projéteis mágicos",
+          varinhaCura: "Uma varinha que canaliza magias de cura",
+          varinhaFogo: "Uma varinha que amplifica magias de fogo",
+          varinhaGelo: "Uma varinha que amplifica magias de gelo",
+          varinhaRaio: "Uma varinha que amplifica magias elétricas",
+          
+          // Equipamentos
           mochila: "Uma mochila para carregar equipamentos",
           corda: "Uma corda resistente para escaladas e amarrações",
           lampiao: "Um lampião para iluminar áreas escuras",
           kitMedico: "Kit com bandagens e medicamentos básicos",
+          
+          // Poções de Cura
           pocaoVida: "Poção que restaura pontos de vida",
+          pocao_menor: "Uma poção básica que cura ferimentos leves",
+          pocao_cura: "Uma poção eficaz que restaura uma quantidade significativa de pontos de vida",
+          pocao_completa: "Uma poção poderosa que restaura todos os pontos de vida instantaneamente",
+          
+          // Poções de Atributos
+          pocao_forca: "Uma poção que aumenta temporariamente a força física",
+          pocao_agilidade: "Uma poção que aumenta temporariamente a agilidade e reflexos",
+          pocao_inteligencia: "Uma poção que aumenta temporariamente a inteligência e concentração",
+          pocao_carisma: "Uma poção que aumenta temporariamente o carisma e presença",
+          
+          // Poções de Mana
           pocaoMana: "Poção que restaura pontos de magia",
-          antidoto: "Remédio que remove efeitos de veneno"
+          pocao_pm_menor: "Uma poção que restaura uma pequena quantidade de pontos de magia",
+          pocao_pm_media: "Uma poção que restaura uma quantidade moderada de pontos de magia",
+          pocao_pm_maior: "Uma poção que restaura uma grande quantidade de pontos de magia",
+          pocao_pm_superior: "Uma poção excepcional que restaura uma quantidade máxima de pontos de magia",
+          
+          // Elixires Mágicos
+          elixir_arcano: "Um elixir mágico que aumenta temporariamente a capacidade máxima de pontos de magia",
+          pocao_foco_mental: "Uma poção que permite conjurar magias sem gastar pontos de magia por um curto período",
+          essencia_magica: "Uma essência pura que restaura completamente todos os pontos de magia",
+          nectar_dos_magos: "Um líquido sagrado que concede poder mágico ilimitado por um breve período",
+          pocao_concentracao: "Uma poção que melhora a concentração para conjuração de magias",
+          elixir_resistencia: "Um elixir que protege contra interrupções durante a conjuração de magias",
+          
+          // Outros
+          antidoto: "Remédio que remove efeitos de veneno",
+          oleo_magico: "Um óleo encantado que melhora temporariamente a eficácia de armas",
+          
+          // Anéis
+          anel_protecao_1: "Um anel mágico que concede +1 bônus permanente à Defesa",
+          anel_forca_1: "Um anel mágico que aumenta permanentemente o atributo Físico em +1",
+          anel_agilidade_1: "Um anel mágico que aumenta permanentemente o atributo Ação em +1",
+          anel_inteligencia_1: "Um anel mágico que aumenta permanentemente o atributo Mental em +1",
+          anel_carisma_1: "Um anel mágico que aumenta permanentemente o atributo Social em +1",
+          anel_regeneracao: "Um anel mágico que regenera 1 PV por turno automaticamente",
+          anel_invisibilidade: "Um anel mágico que permite se tornar invisível 3 vezes por dia",
+          anel_voo: "Um anel mágico que concede a capacidade de voar 1 vez por dia por 1 hora"
         };
         descricaoLocalizada = descricoesBasicas[id] || `Equipamento ${nomeLocalizado}`;
       }
@@ -3389,24 +3605,132 @@ export class ClubeActorSheet extends ActorSheet {
     // Fallback para nomes
     if (nome === equipamentoData.nome || nome.startsWith("EQUIPAMENTOS.")) {
       const nomesLimpos = {
+        // Armas Simples
+        punhal: "Punhal",
+        adaga: "Adaga",
+        adagaElfica: "Adaga Élfica",
+        clava: "Clava",
+        machadoMao: "Machado de Mão",
+        cimitarra: "Cimitarra",
+        rapiera: "Rapiera",
         espadaCurta: "Espada Curta",
+        espadaElfica: "Espada Élfica",
+        lanca: "Lança",
         espadaLonga: "Espada Longa",
-        machaxo: "Machado",
+        machado: "Machado",
+        marteloGuerra: "Martelo de Guerra",
+        bordao: "Bordão",
+        lancaLonga: "Lança Longa",
+        machadoGrande: "Machado Grande",
+        montante: "Montante",
+        
+        // Armas de Arremesso
+        pedra: "Pedra",
+        dardo: "Dardo",
+        azagaia: "Azagaia",
+        
+        // Armas de Distância
+        arcoSimples: "Arco Simples",
         arcoCurto: "Arco Curto",
+        arcoLongo: "Arco Longo",
+        bestaMao: "Besta de Mão",
+        bestaLeve: "Besta Leve",
+        
+        // Cajados
         cajado: "Cajado",
+        cajadoSimples: "Cajado Simples",
+        cajadoCarvalho: "Cajado de Carvalho",
+        cajadoElfico: "Cajado Élfico",
+        cajadoCristal: "Cajado de Cristal",
+        cajadoRunico: "Cajado Rúnico",
+        
+        // Roupas e Armaduras Leves
+        roupasComuns: "Roupas Comuns",
+        roupasAcolchoadas: "Roupas Acolchoadas",
+        couroMacio: "Couro Macio",
         couro: "Armadura de Couro",
+        couroCravejado: "Couro Cravejado",
+        couroElfico: "Couro Élfico",
+        gibaoPeles: "Gibão de Peles",
+        
+        // Armaduras de Malha
+        camisaoMalha: "Camisão de Malha",
         malha: "Armadura de Malha",
+        brigantina: "Brigantina",
+        cotaCompleta: "Cota Completa",
+        
+        // Armaduras Pesadas
+        placasParciais: "Placas Parciais",
         placa: "Armadura de Placas",
+        
+        // Vestes Mágicas
         vestes: "Vestes Mágicas",
+        vestes_arcanas: "Vestes Arcanas",
+        manto_conjurador: "Manto do Conjurador",
+        tunica_sombras: "Túnica das Sombras",
+        manto_absorcao: "Manto de Absorção",
+        vestes_arcanista: "Vestes do Arcanista",
+        
+        // Escudos
+        broquel: "Broquel",
         escudoPequeno: "Escudo Pequeno",
+        escudoMedio: "Escudo Médio",
         escudoGrande: "Escudo Grande",
+        escudoTorre: "Escudo Torre",
+        
+        // Varinhas
+        varinhaMissois: "Varinha de Mísseis",
+        varinhaCura: "Varinha de Cura",
+        varinhaFogo: "Varinha de Fogo",
+        varinhaGelo: "Varinha de Gelo",
+        varinhaRaio: "Varinha de Raio",
+        
+        // Equipamentos
         mochila: "Mochila",
         corda: "Corda",
         lampiao: "Lampião",
         kitMedico: "Kit Médico",
+        
+        // Poções de Cura
         pocaoVida: "Poção de Vida",
+        pocao_menor: "Poção Menor",
+        pocao_cura: "Poção de Cura",
+        pocao_completa: "Poção Completa",
+        
+        // Poções de Atributos
+        pocao_forca: "Poção de Força",
+        pocao_agilidade: "Poção de Agilidade",
+        pocao_inteligencia: "Poção de Inteligência",
+        pocao_carisma: "Poção de Carisma",
+        
+        // Poções de Mana
         pocaoMana: "Poção de Mana",
-        antidoto: "Antídoto"
+        pocao_pm_menor: "Poção de PM Menor",
+        pocao_pm_media: "Poção de PM Média",
+        pocao_pm_maior: "Poção de PM Maior",
+        pocao_pm_superior: "Poção de PM Superior",
+        
+        // Elixires Mágicos
+        elixir_arcano: "Elixir Arcano",
+        pocao_foco_mental: "Poção de Foco Mental",
+        essencia_magica: "Essência Mágica",
+        nectar_dos_magos: "Néctar dos Magos",
+        pocao_concentracao: "Poção de Concentração",
+        elixir_resistencia: "Elixir de Resistência",
+        
+        // Outros
+        antidoto: "Antídoto",
+        oleo_magico: "Óleo Mágico",
+        
+        // Anéis
+        anel_protecao_1: "Anel de Proteção +1",
+        anel_forca_1: "Anel de Força +1",
+        anel_agilidade_1: "Anel de Agilidade +1",
+        anel_inteligencia_1: "Anel de Inteligência +1",
+        anel_carisma_1: "Anel de Carisma +1",
+        anel_regeneracao: "Anel de Regeneração",
+        anel_invisibilidade: "Anel de Invisibilidade",
+        anel_voo: "Anel de Voo"
       };
       nome = nomesLimpos[equipamentoId] || equipamentoId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
     }
