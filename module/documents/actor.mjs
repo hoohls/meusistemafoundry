@@ -506,6 +506,8 @@ export class ClubeActor extends Actor {
       return;
     }
 
+
+    
     await item.update({"system.equipado": true});
     
     // Aplicar modificadores do item se necessário
@@ -544,10 +546,14 @@ export class ClubeActor extends Actor {
     // NOVO: Aplicar/remover bônus de PM/PV máximo
     if (item.system.bonus) {
       if (item.system.bonus.pm_maximo) {
-        updateData["system.recursos.pm.max"] = (this.system.recursos.pm.max || 0) + (item.system.bonus.pm_maximo * fator);
+        const pmAtual = this.system.recursos.pm.max || 0;
+        const novoPmMax = pmAtual + (item.system.bonus.pm_maximo * fator);
+        updateData["system.recursos.pm.max"] = novoPmMax;
       }
       if (item.system.bonus.pv_maximo) {
-        updateData["system.recursos.pv.max"] = (this.system.recursos.pv.max || 0) + (item.system.bonus.pv_maximo * fator);
+        const pvAtual = this.system.recursos.pv.max || 0;
+        const novoPvMax = pvAtual + (item.system.bonus.pv_maximo * fator);
+        updateData["system.recursos.pv.max"] = novoPvMax;
       }
     }
     
@@ -2104,6 +2110,11 @@ export class ClubeActor extends Actor {
       raridade: "comum",
       equipado: false
     };
+
+    // Transferir bônus do equipamento para o item
+    if (equipamentoData.bonus) {
+      systemData.bonus = equipamentoData.bonus;
+    }
 
     // Propriedades específicas por tipo
     switch (equipamentoData.tipo) {

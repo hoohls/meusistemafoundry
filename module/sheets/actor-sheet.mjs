@@ -1795,10 +1795,27 @@ export class ClubeActorSheet extends ActorSheet {
       };
     }
     
-    await this.actor.update({
+    // Preparar dados de atualização
+    const updateData = {
       "system.equipamentos.itens": itens,
       "system.equipamentos.equipados": equipados
-    });
+    };
+
+    // Aplicar bônus de PM/PV máximo se o item tiver
+    if (item.bonus) {
+      if (item.bonus.pm_maximo) {
+        const pmAtual = this.actor.system.recursos.pm.max || 0;
+        const novoPmMax = pmAtual + item.bonus.pm_maximo;
+        updateData["system.recursos.pm.max"] = novoPmMax;
+      }
+      if (item.bonus.pv_maximo) {
+        const pvAtual = this.actor.system.recursos.pv.max || 0;
+        const novoPvMax = pvAtual + item.bonus.pv_maximo;
+        updateData["system.recursos.pv.max"] = novoPvMax;
+      }
+    }
+    
+    await this.actor.update(updateData);
   }
 
   /**
@@ -1831,10 +1848,27 @@ export class ClubeActorSheet extends ActorSheet {
       equipados.escudo = null;
     }
     
-    await this.actor.update({
+    // Preparar dados de atualização
+    const updateData = {
       "system.equipamentos.itens": itens,
       "system.equipamentos.equipados": equipados
-    });
+    };
+
+    // Remover bônus de PM/PV máximo se o item tiver
+    if (item.bonus) {
+      if (item.bonus.pm_maximo) {
+        const pmAtual = this.actor.system.recursos.pm.max || 0;
+        const novoPmMax = pmAtual - item.bonus.pm_maximo;
+        updateData["system.recursos.pm.max"] = Math.max(0, novoPmMax);
+      }
+      if (item.bonus.pv_maximo) {
+        const pvAtual = this.actor.system.recursos.pv.max || 0;
+        const novoPvMax = pvAtual - item.bonus.pv_maximo;
+        updateData["system.recursos.pv.max"] = Math.max(0, novoPvMax);
+      }
+    }
+    
+    await this.actor.update(updateData);
   }
 
   /**
