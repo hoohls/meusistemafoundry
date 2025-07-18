@@ -453,17 +453,16 @@
               {{#each equipamentosArmasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armas" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
@@ -487,17 +486,16 @@
               {{#each equipamentosArmadurasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="armaduras" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
@@ -521,17 +519,16 @@
               {{#each equipamentosEscudosDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="escudos" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
@@ -555,17 +552,16 @@
               {{#each equipamentosVarinhasDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="varinhas" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
@@ -590,17 +586,16 @@
               {{#each equipamentosEquipamentosDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="equipamentos" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
@@ -624,17 +619,16 @@
               {{#each equipamentosConsumiveisDisponiveis as |equipamento key|}}
               <div class="equipamento-item disponivel" data-equipamento="{{key}}">
                 <div class="equipamento-header">
-                  <h5>{{equipamento.nome}} <span style="color:blue;font-size:10px;">[{{equipamento.podeComprar}}]</span></h5>
+                  <h5>{{equipamento.nome}}</h5>
                   <div class="equipamento-botoes">
                     <button type="button" class="detalhes-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Ver detalhes">
                       <i class="fas fa-info-circle"></i>
                     </button>
-                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: red !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
+                    {{#if equipamento.podeComprar}}
+                    <button type="button" class="comprar-equipamento" data-equipamento="{{key}}" data-categoria="consumiveis" title="Comprar equipamento" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; background: green !important; color: white !important; padding: 2px 5px !important; border: 1px solid black !important;">
                       <i class="fas fa-plus"></i> COMPRAR
                     </button>
-                    {{#unless equipamento.podeComprar}}
-                    <span style="color:red;font-size:10px;">[NÃO PODE]</span>
-                    {{/unless}}
+                    {{/if}}
                   </div>
                 </div>
                 <div class="equipamento-requisitos">
