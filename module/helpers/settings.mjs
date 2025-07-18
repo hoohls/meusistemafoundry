@@ -1433,7 +1433,112 @@ SISTEMA.equipamentos = {
       descricao: "EQUIPAMENTOS.KIT_MEDICO_DESC"
     }
   },
+  aneis: {
+    anel_protecao_1: {
+      nome: "EQUIPAMENTOS.ANEL_PROTECAO_1",
+      tipo: "item_magico",
+      nivelMin: 3,
+      preco: 500,
+      peso: 0.1,
+      efeito: "+1 Defesa permanente",
+      descricao: "EQUIPAMENTOS.ANEL_PROTECAO_1_DESC"
+    },
+    anel_forca_1: {
+      nome: "EQUIPAMENTOS.ANEL_FORCA_1",
+      tipo: "item_magico",
+      nivelMin: 3,
+      preco: 600,
+      peso: 0.1,
+      efeito: "+1 Físico permanente",
+      descricao: "EQUIPAMENTOS.ANEL_FORCA_1_DESC"
+    },
+    anel_agilidade_1: {
+      nome: "EQUIPAMENTOS.ANEL_AGILIDADE_1",
+      tipo: "item_magico",
+      nivelMin: 3,
+      preco: 600,
+      peso: 0.1,
+      efeito: "+1 Ação permanente",
+      descricao: "EQUIPAMENTOS.ANEL_AGILIDADE_1_DESC"
+    },
+    anel_inteligencia_1: {
+      nome: "EQUIPAMENTOS.ANEL_INTELIGENCIA_1",
+      tipo: "item_magico",
+      nivelMin: 3,
+      preco: 600,
+      peso: 0.1,
+      efeito: "+1 Mental permanente",
+      descricao: "EQUIPAMENTOS.ANEL_INTELIGENCIA_1_DESC"
+    },
+    anel_carisma_1: {
+      nome: "EQUIPAMENTOS.ANEL_CARISMA_1",
+      tipo: "item_magico",
+      nivelMin: 3,
+      preco: 600,
+      peso: 0.1,
+      efeito: "+1 Social permanente",
+      descricao: "EQUIPAMENTOS.ANEL_CARISMA_1_DESC"
+    },
+    anel_regeneracao: {
+      nome: "EQUIPAMENTOS.ANEL_REGENERACAO",
+      tipo: "item_magico",
+      nivelMin: 5,
+      preco: 1200,
+      peso: 0.1,
+      efeito: "Recupera 1 PV por turno",
+      descricao: "EQUIPAMENTOS.ANEL_REGENERACAO_DESC"
+    },
+    anel_invisibilidade: {
+      nome: "EQUIPAMENTOS.ANEL_INVISIBILIDADE",
+      tipo: "item_magico",
+      nivelMin: 6,
+      preco: 2000,
+      peso: 0.1,
+      efeito: "Invisibilidade 3×/dia",
+      descricao: "EQUIPAMENTOS.ANEL_INVISIBILIDADE_DESC"
+    },
+    anel_voo: {
+      nome: "EQUIPAMENTOS.ANEL_VOO",
+      tipo: "item_magico",
+      nivelMin: 7,
+      preco: 3000,
+      peso: 0.1,
+      efeito: "Voo 1×/dia por 1 hora",
+      descricao: "EQUIPAMENTOS.ANEL_VOO_DESC"
+    }
+  },
   consumiveis: {
+    // POÇÕES DE CURA
+    pocao_menor: {
+      nome: "EQUIPAMENTOS.POCAO_MENOR",
+      tipo: "consumivel",
+      nivelMin: 1,
+      preco: 50,
+      peso: 0.2,
+      efeito: "Cura 2d6+2 PV",
+      duracao: "Instantâneo",
+      descricao: "EQUIPAMENTOS.POCAO_MENOR_DESC"
+    },
+    pocao_cura: {
+      nome: "EQUIPAMENTOS.POCAO_CURA",
+      tipo: "consumivel",
+      nivelMin: 3,
+      preco: 200,
+      peso: 0.2,
+      efeito: "Cura 4d6+4 PV",
+      duracao: "Instantâneo",
+      descricao: "EQUIPAMENTOS.POCAO_CURA_DESC"
+    },
+    pocao_completa: {
+      nome: "EQUIPAMENTOS.POCAO_COMPLETA",
+      tipo: "consumivel",
+      nivelMin: 3,
+      preco: 500,
+      peso: 0.2,
+      efeito: "Cura todos os PV",
+      duracao: "Instantâneo",
+      descricao: "EQUIPAMENTOS.POCAO_COMPLETA_DESC"
+    },
     pocaoVida: {
       nome: "EQUIPAMENTOS.POCAO_VIDA",
       tipo: "consumivel",
@@ -1444,6 +1549,94 @@ SISTEMA.equipamentos = {
       peso: 0.2,
       efeito: "Restaura 2d6 + Mental PV",
       descricao: "EQUIPAMENTOS.POCAO_VIDA_DESC"
+    },
+    
+    // POÇÕES DE ATRIBUTOS
+    pocao_forca: {
+      nome: "EQUIPAMENTOS.POCAO_FORCA",
+      tipo: "consumivel",
+      nivelMin: 2,
+      preco: 100,
+      peso: 0.2,
+      efeito: "+2 Físico",
+      duracao: "1 hora",
+      descricao: "EQUIPAMENTOS.POCAO_FORCA_DESC"
+    },
+    pocao_agilidade: {
+      nome: "EQUIPAMENTOS.POCAO_AGILIDADE",
+      tipo: "consumivel",
+      nivelMin: 2,
+      preco: 100,
+      peso: 0.2,
+      efeito: "+2 Ação",
+      duracao: "1 hora",
+      descricao: "EQUIPAMENTOS.POCAO_AGILIDADE_DESC"
+    },
+    pocao_inteligencia: {
+      nome: "EQUIPAMENTOS.POCAO_INTELIGENCIA",
+      tipo: "consumivel",
+      nivelMin: 2,
+      preco: 100,
+      peso: 0.2,
+      efeito: "+2 Mental",
+      duracao: "1 hora",
+      descricao: "EQUIPAMENTOS.POCAO_INTELIGENCIA_DESC"
+    },
+    pocao_carisma: {
+      nome: "EQUIPAMENTOS.POCAO_CARISMA",
+      tipo: "consumivel",
+      nivelMin: 2,
+      preco: 100,
+      peso: 0.2,
+      efeito: "+2 Social",
+      duracao: "1 hora",
+      descricao: "EQUIPAMENTOS.POCAO_CARISMA_DESC"
+    },
+    
+    // POÇÕES DE MANA
+    pocao_pm_menor: {
+      nome: "EQUIPAMENTOS.POCAO_PM_MENOR",
+      tipo: "consumivel",
+      nivelMin: 1,
+      preco: 30,
+      peso: 0.2,
+      efeito: "Recupera 1d4 PM",
+      duracao: "Ação",
+      limitacao: "3x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_PM_MENOR_DESC"
+    },
+    pocao_pm_media: {
+      nome: "EQUIPAMENTOS.POCAO_PM_MEDIA",
+      tipo: "consumivel",
+      nivelMin: 3,
+      preco: 80,
+      peso: 0.2,
+      efeito: "Recupera 2d4 PM",
+      duracao: "Ação",
+      limitacao: "3x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_PM_MEDIA_DESC"
+    },
+    pocao_pm_maior: {
+      nome: "EQUIPAMENTOS.POCAO_PM_MAIOR",
+      tipo: "consumivel",
+      nivelMin: 5,
+      preco: 150,
+      peso: 0.2,
+      efeito: "Recupera 3d4 PM",
+      duracao: "Ação",
+      limitacao: "3x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_PM_MAIOR_DESC"
+    },
+    pocao_pm_superior: {
+      nome: "EQUIPAMENTOS.POCAO_PM_SUPERIOR",
+      tipo: "consumivel",
+      nivelMin: 7,
+      preco: 300,
+      peso: 0.2,
+      efeito: "Recupera 4d4 PM",
+      duracao: "Ação",
+      limitacao: "1x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_PM_SUPERIOR_DESC"
     },
     pocaoMana: {
       nome: "EQUIPAMENTOS.POCAO_MANA",
@@ -1456,16 +1649,95 @@ SISTEMA.equipamentos = {
       efeito: "Restaura 1d6 + Mental PM",
       descricao: "EQUIPAMENTOS.POCAO_MANA_DESC"
     },
+    
+    // ELIXIRES MÁGICOS
+    elixir_arcano: {
+      nome: "EQUIPAMENTOS.ELIXIR_ARCANO",
+      tipo: "consumivel",
+      nivelMin: 4,
+      preco: 200,
+      peso: 0.2,
+      efeito: "+50% PM máximo",
+      duracao: "1 hora",
+      limitacao: "1x/dia",
+      descricao: "EQUIPAMENTOS.ELIXIR_ARCANO_DESC"
+    },
+    pocao_foco_mental: {
+      nome: "EQUIPAMENTOS.POCAO_FOCO_MENTAL",
+      tipo: "consumivel",
+      nivelMin: 3,
+      preco: 120,
+      peso: 0.2,
+      efeito: "+1 turno sem gastar magia",
+      duracao: "30 min",
+      limitacao: "1x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_FOCO_MENTAL_DESC"
+    },
+    essencia_magica: {
+      nome: "EQUIPAMENTOS.ESSENCIA_MAGICA",
+      tipo: "consumivel",
+      nivelMin: 6,
+      preco: 400,
+      peso: 0.2,
+      efeito: "Recupera todos os PM",
+      duracao: "Instantâneo",
+      limitacao: "1x/semana",
+      descricao: "EQUIPAMENTOS.ESSENCIA_MAGICA_DESC"
+    },
+    nectar_dos_magos: {
+      nome: "EQUIPAMENTOS.NECTAR_DOS_MAGOS",
+      tipo: "consumivel",
+      nivelMin: 8,
+      preco: 800,
+      peso: 0.2,
+      efeito: "PM infinito por 3 turnos",
+      duracao: "3 turnos",
+      limitacao: "1x/mês",
+      descricao: "EQUIPAMENTOS.NECTAR_DOS_MAGOS_DESC"
+    },
+    pocao_concentracao: {
+      nome: "EQUIPAMENTOS.POCAO_CONCENTRACAO",
+      tipo: "consumivel",
+      nivelMin: 5,
+      preco: 180,
+      peso: 0.2,
+      efeito: "+2 testes de conjuração",
+      duracao: "1 hora",
+      limitacao: "1x/dia",
+      descricao: "EQUIPAMENTOS.POCAO_CONCENTRACAO_DESC"
+    },
+    elixir_resistencia: {
+      nome: "EQUIPAMENTOS.ELIXIR_RESISTENCIA",
+      tipo: "consumivel",
+      nivelMin: 5,
+      preco: 250,
+      peso: 0.2,
+      efeito: "+3 contra interrupção mágica",
+      duracao: "1 hora",
+      limitacao: "1x/dia",
+      descricao: "EQUIPAMENTOS.ELIXIR_RESISTENCIA_DESC"
+    },
+    
+    // OUTROS CONSUMÍVEIS
     antidoto: {
       nome: "EQUIPAMENTOS.ANTIDOTO",
       tipo: "consumivel",
       nivelMin: 1,
-      preRequisito: { mental: 4 },
-      classesSugeridas: ["todas"],
-      preco: 20,
+      preco: 50,
       peso: 0.1,
-      efeito: "Remove efeitos de veneno",
+      efeito: "Remove venenos",
+      duracao: "Instantâneo",
       descricao: "EQUIPAMENTOS.ANTIDOTO_DESC"
+    },
+    oleo_magico: {
+      nome: "EQUIPAMENTOS.OLEO_MAGICO",
+      tipo: "consumivel",
+      nivelMin: 3,
+      preco: 150,
+      peso: 0.1,
+      efeito: "Arma +1 por 1 combate",
+      duracao: "1 combate",
+      descricao: "EQUIPAMENTOS.OLEO_MAGICO_DESC"
     }
   }
 }; 
