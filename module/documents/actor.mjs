@@ -540,6 +540,16 @@ export class ClubeActor extends Actor {
       updateData["system.recursos.defesa.escudo"] = 
         (this.system.recursos.defesa.escudo || 0) + (item.system.mod_defesa * fator);
     }
+
+    // NOVO: Aplicar/remover bônus de PM/PV máximo
+    if (item.system.bonus) {
+      if (item.system.bonus.pm_maximo) {
+        updateData["system.recursos.pm.max"] = (this.system.recursos.pm.max || 0) + (item.system.bonus.pm_maximo * fator);
+      }
+      if (item.system.bonus.pv_maximo) {
+        updateData["system.recursos.pv.max"] = (this.system.recursos.pv.max || 0) + (item.system.bonus.pv_maximo * fator);
+      }
+    }
     
     // Recalcular defesa total
     if (updateData["system.recursos.defesa.armadura"] !== undefined || 
@@ -548,7 +558,6 @@ export class ClubeActor extends Actor {
       const armadura = updateData["system.recursos.defesa.armadura"] || this.system.recursos.defesa.armadura || 0;
       const escudo = updateData["system.recursos.defesa.escudo"] || this.system.recursos.defesa.escudo || 0;
       const outros = this.system.recursos.defesa.outros || 0;
-      
       updateData["system.recursos.defesa.valor"] = defesaBase + armadura + escudo + outros;
     }
     
