@@ -1955,7 +1955,9 @@ export class ClubeActorSheet extends ActorSheet {
     const { SISTEMA } = await import("../helpers/settings.mjs");
     
     // Informações gerais sobre habilidades
-    context.habilidadesTotal = Object.keys(this.actor.system.habilidades || {}).length;
+    const habilidadesConhecidas = Object.keys(this.actor.system.habilidades || {}).length;
+    const magiasConhecidas = this.actor.items.filter(item => item.type === 'magia').length;
+    context.habilidadesTotal = habilidadesConhecidas + magiasConhecidas;
     context.pontosHabilidadeDisponiveis = this.actor._calcularPontosHabilidadeDisponiveis();
     
     // Preparar habilidades conhecidas processadas
@@ -3296,13 +3298,25 @@ export class ClubeActorSheet extends ActorSheet {
     }
 
     if (magia) {
+      // Verificar se pode adicionar a magia
+      const pontosDisponiveis = this.actor._calcularPontosHabilidadeDisponiveis();
+      const podeAdicionar = pontosDisponiveis > 0;
+      
       const content = `
         <div class="magia-detalhes-popup">
           <h3>${magia.nome}</h3>
           <p><strong>Escola:</strong> ${escola}</p>
           <p><strong>Nível:</strong> ${magia.nivel}</p>
           <p><strong>Custo PM:</strong> ${magia.custo_pm}</p>
+          <p><strong>Alcance:</strong> ${magia.alcance}</p>
+          <p><strong>Duração:</strong> ${magia.duracao}</p>
           <p><strong>Pré-requisitos:</strong> ${magia.prerequisitos}</p>
+          ${magia.descricao ? `<p><strong>Descrição:</strong> ${magia.descricao}</p>` : ''}
+          
+          <div class="status-aprendizado">
+            <p><strong>Pontos de Habilidade Disponíveis:</strong> ${pontosDisponiveis}</p>
+            ${!podeAdicionar ? '<p style="color: #d32f2f;"><strong>⚠️ Não há pontos de habilidade suficientes!</strong></p>' : ''}
+          </div>
         </div>
       `;
       
@@ -3310,11 +3324,21 @@ export class ClubeActorSheet extends ActorSheet {
         title: `Detalhes da Magia: ${magia.nome}`,
         content: content,
         buttons: {
-          close: {
-            label: "Fechar",
-            callback: () => {}
+          adicionar: {
+            icon: '<i class="fas fa-plus"></i>',
+            label: "Adicionar Magia",
+            condition: podeAdicionar,
+            callback: async () => {
+              await this.actor._adicionarMagia(magiaId);
+              this.render(true);
+            }
+          },
+          fechar: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Fechar"
           }
-        }
+        },
+        default: "fechar"
       }).render(true);
     }
   }

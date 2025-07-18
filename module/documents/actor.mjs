@@ -962,6 +962,9 @@ export class ClubeActor extends Actor {
     const nivel = this.system.nivel || 1;
     const habilidadesConhecidas = Object.keys(this.system.habilidades || {}).length;
     
+    // Contar magias conhecidas (que também consomem pontos de habilidade)
+    const magiasConhecidas = this.items.filter(item => item.type === 'magia').length;
+    
     // Segundo o livro, personagens começam com 4 habilidades e ganham mais conforme o nível
     let pontosTotal = 4; // Habilidades iniciais
     
@@ -970,7 +973,9 @@ export class ClubeActor extends Actor {
       pontosTotal++;
     }
     
-    const pontosDisponiveis = pontosTotal - habilidadesConhecidas;
+    // Calcular pontos disponíveis considerando tanto habilidades quanto magias
+    const totalConsumido = habilidadesConhecidas + magiasConhecidas;
+    const pontosDisponiveis = pontosTotal - totalConsumido;
     return Math.max(0, pontosDisponiveis);
   }
 
@@ -1279,6 +1284,12 @@ export class ClubeActor extends Actor {
       throw new Error("Você não atende aos pré-requisitos para esta magia");
     }
 
+    // Verificar pontos de habilidade disponíveis
+    const pontosDisponiveis = this._calcularPontosHabilidadeDisponiveis();
+    if (pontosDisponiveis <= 0) {
+      throw new Error("Você não possui pontos de habilidade disponíveis para aprender esta magia");
+    }
+
     // Criar o item de magia
     const magiaItem = await Item.create({
       name: magiaData.name,
@@ -1287,7 +1298,12 @@ export class ClubeActor extends Actor {
       system: magiaData.system
     }, { parent: this });
 
-    ui.notifications.info(`Magia ${magiaData.name} aprendida!`);
+    // Consumir um ponto de habilidade
+    // Como as magias são tratadas como habilidades especiais, não precisamos adicionar uma entrada específica
+    // O sistema de pontos de habilidade já considera que aprender uma magia consome um ponto
+    // A magia será contabilizada automaticamente na próxima verificação de pontos disponíveis
+
+    ui.notifications.info(`Magia ${magiaData.name} aprendida! (Consumiu 1 ponto de habilidade)`);
     return magiaItem;
   }
 
