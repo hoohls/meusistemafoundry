@@ -2050,8 +2050,41 @@ export class ClubeActor extends Actor {
    * @returns {Object} Dados do item
    */
   _criarDadosItem(equipamentoData) {
-    const nome = game.i18n.localize(equipamentoData.nome);
-    const descricao = game.i18n.localize(equipamentoData.descricao);
+    // Simplificar o nome do item
+    let nome = equipamentoData.nome;
+    let descricao = equipamentoData.descricao;
+    
+    // Se o nome for uma chave de localização, extrair um nome simples
+    if (nome.startsWith("EQUIPAMENTOS.")) {
+      const chave = nome.replace("EQUIPAMENTOS.", "");
+      const nomesLimpos = {
+        cajado: "Cajado",
+        roupas_acol: "Roupas Acolchoadas",
+        espadaCurta: "Espada Curta",
+        espadaLonga: "Espada Longa",
+        machado: "Machado",
+        arcoCurto: "Arco Curto",
+        couro: "Armadura de Couro",
+        malha: "Armadura de Malha",
+        placa: "Armadura de Placas",
+        vestes: "Vestes Mágicas",
+        escudoPequeno: "Escudo Pequeno",
+        escudoGrande: "Escudo Grande",
+        mochila: "Mochila",
+        corda: "Corda",
+        lampiao: "Lampião",
+        kitMedico: "Kit Médico",
+        pocaoVida: "Poção de Vida",
+        pocaoMana: "Poção de Mana",
+        antidoto: "Antídoto"
+      };
+      nome = nomesLimpos[chave.toLowerCase()] || chave.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+    }
+    
+    // Se a descrição for uma chave de localização, usar uma descrição simples
+    if (descricao && descricao.startsWith("EQUIPAMENTOS.")) {
+      descricao = "Um item útil para aventuras.";
+    }
     
     let systemData = {
       descricao: descricao,

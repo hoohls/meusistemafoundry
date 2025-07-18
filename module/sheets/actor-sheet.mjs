@@ -406,7 +406,7 @@ export class ClubeActorSheet extends ActorSheet {
     itensSimples.forEach((item, index) => {
       const itemObj = {
         _id: `simple-${index}`,
-        name: item.nome || "Item sem nome",
+        name: this._simplificarNome(item.nome) || "Item sem nome",
         img: "icons/svg/item-bag.svg",
         system: {
           quantidade: item.quantidade || 1,
@@ -457,24 +457,62 @@ export class ClubeActorSheet extends ActorSheet {
     const equipadosSimples = this.actor.system.equipamentos?.equipados || {};
     if (equipadosSimples.arma_principal && !equipados.arma_principal) {
       equipados.arma_principal = {
-        name: equipadosSimples.arma_principal.nome,
+        name: this._simplificarNome(equipadosSimples.arma_principal.nome),
         img: "icons/svg/sword.svg"
       };
     }
     if (equipadosSimples.armadura && !equipados.armadura) {
       equipados.armadura = {
-        name: equipadosSimples.armadura.nome,
+        name: this._simplificarNome(equipadosSimples.armadura.nome),
         img: "icons/svg/armor.svg"
       };
     }
     if (equipadosSimples.escudo && !equipados.escudo) {
       equipados.escudo = {
-        name: equipadosSimples.escudo.nome,
+        name: this._simplificarNome(equipadosSimples.escudo.nome),
         img: "icons/svg/shield.svg"
       };
     }
 
     return equipados;
+  }
+
+  /**
+   * Simplifica nomes de itens que são chaves de localização
+   * @param {string} nome - Nome do item
+   * @returns {string} Nome simplificado
+   */
+  _simplificarNome(nome) {
+    if (!nome) return "Item sem nome";
+    
+    // Se o nome for uma chave de localização, extrair um nome simples
+    if (nome.startsWith("EQUIPAMENTOS.")) {
+      const chave = nome.replace("EQUIPAMENTOS.", "");
+      const nomesLimpos = {
+        cajado: "Cajado",
+        roupas_acol: "Roupas Acolchoadas",
+        espadaCurta: "Espada Curta",
+        espadaLonga: "Espada Longa",
+        machado: "Machado",
+        arcoCurto: "Arco Curto",
+        couro: "Armadura de Couro",
+        malha: "Armadura de Malha",
+        placa: "Armadura de Placas",
+        vestes: "Vestes Mágicas",
+        escudoPequeno: "Escudo Pequeno",
+        escudoGrande: "Escudo Grande",
+        mochila: "Mochila",
+        corda: "Corda",
+        lampiao: "Lampião",
+        kitMedico: "Kit Médico",
+        pocaoVida: "Poção de Vida",
+        pocaoMana: "Poção de Mana",
+        antidoto: "Antídoto"
+      };
+      return nomesLimpos[chave.toLowerCase()] || chave.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+    }
+    
+    return nome;
   }
 
   /**
