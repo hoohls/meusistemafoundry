@@ -2188,7 +2188,10 @@ export class ClubeActor extends Actor {
       const chave = nome.replace("EQUIPAMENTOS.", "");
       const nomesLimpos = {
         cajado: "Cajado",
-        roupas_acol: "Roupas Acolchoadas",
+        cajado_carvalho: "Cajado de Carvalho",
+        cajado_runico: "Cajado Rúnico",
+        roupas_acolchadas: "Roupas Acolchadas",
+        armadura_manto_conjurador: "Armadura Manto do Conjurador",
         espadaCurta: "Espada Curta",
         espadaLonga: "Espada Longa",
         machado: "Machado",

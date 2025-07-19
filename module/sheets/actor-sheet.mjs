@@ -393,7 +393,9 @@ export class ClubeActorSheet extends ActorSheet {
     for (let item of this.actor.items) {
       // Aplicar simplificação de nome se necessário
       if (item.name && (item.name.includes('_') || /^[A-Z]+$/.test(item.name))) {
+        console.log(`[DEBUG] Processando item: "${item.name}"`);
         item.name = this._simplificarNome(item.name);
+        console.log(`[DEBUG] Resultado: "${item.name}"`);
       }
       
       const tipo = item.type || 'equipamentos';
@@ -409,9 +411,11 @@ export class ClubeActorSheet extends ActorSheet {
     // Adicionar itens simples do sistema (fallback)
     const itensSimples = this.actor.system.equipamentos?.itens || [];
     itensSimples.forEach((item, index) => {
+      // Sempre aplicar a simplificação, seja nome ou name
+      const nomeFormatado = this._simplificarNome(item.nome || item.name) || "Item sem nome";
       const itemObj = {
         _id: `simple-${index}`,
-        name: this._simplificarNome(item.nome || item.name) || "Item sem nome",
+        name: nomeFormatado,
         img: "icons/svg/item-bag.svg",
         system: {
           quantidade: item.quantidade || 1,
@@ -494,6 +498,8 @@ export class ClubeActorSheet extends ActorSheet {
    */
   _simplificarNome(nome) {
     if (!nome) return "Item sem nome";
+    
+    console.log(`[DEBUG] Simplificando nome: "${nome}"`);
     
     // Mapeamento completo de nomes para simplificação
     const nomesLimpos = {
@@ -718,9 +724,12 @@ export class ClubeActorSheet extends ActorSheet {
     
       // Se o nome está em caixa alta e sem espaços, tentar mapear diretamente
   if (/^[A-Z]+$/.test(nome)) {
+    console.log(`[DEBUG] Nome em CAPSLOCK detectado: "${nome}"`);
     const chave = nome.toLowerCase();
+    console.log(`[DEBUG] Chave em lowercase: "${chave}"`);
     // Tentar mapear diretamente primeiro
     if (nomesLimpos[chave]) {
+      console.log(`[DEBUG] Mapeamento direto encontrado: "${nomesLimpos[chave]}"`);
       return nomesLimpos[chave];
     }
     
@@ -746,6 +755,7 @@ export class ClubeActorSheet extends ActorSheet {
         .replace(/\bMagico\b/g, 'Mágico')
         .replace(/\bConjurador\b/g, 'Conjurador');
       
+      console.log(`[DEBUG] Nome processado com separação: "${nome}" -> "${nomeProcessado}"`);
       return nomeProcessado;
     }
     
@@ -833,7 +843,9 @@ export class ClubeActorSheet extends ActorSheet {
   }
     
     // Fallback: só capitaliza a primeira letra
-    return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
+    const resultado = nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
+    console.log(`[DEBUG] Fallback aplicado: "${nome}" -> "${resultado}"`);
+    return resultado;
   }
 
   /**
