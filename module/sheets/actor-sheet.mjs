@@ -392,7 +392,7 @@ export class ClubeActorSheet extends ActorSheet {
     // Organizar itens do Foundry
     for (let item of this.actor.items) {
       // Aplicar simplificação de nome se necessário
-      if (item.name && item.name.includes('_')) {
+      if (item.name && (item.name.includes('_') || /^[A-Z]+$/.test(item.name))) {
         item.name = this._simplificarNome(item.name);
       }
       
@@ -411,7 +411,7 @@ export class ClubeActorSheet extends ActorSheet {
     itensSimples.forEach((item, index) => {
       const itemObj = {
         _id: `simple-${index}`,
-        name: this._simplificarNome(item.nome) || "Item sem nome",
+        name: this._simplificarNome(item.nome || item.name) || "Item sem nome",
         img: "icons/svg/item-bag.svg",
         system: {
           quantidade: item.quantidade || 1,
@@ -449,7 +449,7 @@ export class ClubeActorSheet extends ActorSheet {
     for (let item of this.actor.items) {
       if (item.system.equipado) {
         // Aplicar simplificação de nome se necessário
-        if (item.name && item.name.includes('_')) {
+        if (item.name && (item.name.includes('_') || /^[A-Z]+$/.test(item.name))) {
           item.name = this._simplificarNome(item.name);
         }
         
@@ -497,6 +497,13 @@ export class ClubeActorSheet extends ActorSheet {
     
     // Mapeamento completo de nomes para simplificação
     const nomesLimpos = {
+      // Nomes específicos em CAPSLOCK
+      cajadocarvalho: "Cajado de Carvalho",
+      cajadorunico: "Cajado Rúnico",
+      roupasacolchadas: "Roupas Acolchadas",
+      armaduramantoconjurador: "Armadura Manto do Conjurador",
+      
+      // Armas Simples
       // Armas Simples
       punhal: "Punhal",
       adaga: "Adaga",
@@ -717,6 +724,31 @@ export class ClubeActorSheet extends ActorSheet {
       return nomesLimpos[chave];
     }
     
+    // Tentar separar palavras comuns em CAPSLOCK
+    const palavrasComuns = [
+      "CAJADO", "CARVALHO", "RUNICO", "ROUPAS", "ACOLCHADAS", "ARMADURA", "MANTO", "CONJURADOR", "MAGICO"
+    ];
+    
+    let nomeProcessado = nome;
+    palavrasComuns.forEach(palavra => {
+      const regex = new RegExp(palavra, 'g');
+      nomeProcessado = nomeProcessado.replace(regex, palavra.charAt(0) + palavra.slice(1).toLowerCase() + ' ');
+    });
+    
+    // Se conseguiu separar, processar o resultado
+    if (nomeProcessado !== nome) {
+      nomeProcessado = nomeProcessado.replace(/\s+/g, ' ').trim();
+      nomeProcessado = nomeProcessado.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      
+      // Aplicar correções de acentos
+      nomeProcessado = nomeProcessado
+        .replace(/\bElfico\b/g, 'Élfico')
+        .replace(/\bMagico\b/g, 'Mágico')
+        .replace(/\bConjurador\b/g, 'Conjurador');
+      
+      return nomeProcessado;
+    }
+    
     // Se não encontrar, tentar separar por palavras conhecidas
     const palavras = [
       "CAJADO", "SIMPLES", "ELFICO", "CARVALHO", "CRISTAL", "RUNICO",
@@ -732,7 +764,8 @@ export class ClubeActorSheet extends ActorSheet {
       "ANTIDOTO", "OLEO", "MAGICO",
       "ANEL", "PROTECAO", "REGENERACAO", "INVISIBILIDADE", "VOO",
       "ESPADA", "CURTA", "LONGA", "MACHADO", "MAO", "CIMITARRA", "RAPIERA", "LANCA", "MARTELO", "GUERRA", "BORDAO", "LONGA", "GRANDE", "MONTANTE",
-      "PEDRA", "DARDO", "AZAGAIA", "ARCO", "LONGO", "BESTA", "LEVE"
+      "PEDRA", "DARDO", "AZAGAIA", "ARCO", "LONGO", "BESTA", "LEVE",
+      "ARMADURA", "MAGICO", "MANTOCONJURADOR"
     ];
     
     let resultado = nome;
