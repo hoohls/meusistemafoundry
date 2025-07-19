@@ -229,74 +229,104 @@ SISTEMA.habilidades = {
   },
   magicas: {
     rajadaArcana: {
-      nome: "HABILIDADES.RAJADA_ARCANA",
+      nome: "HABILIDADES.rajada_arcana",
+      tipo: "habilidade_magica",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "HABILIDADES.RAJADA_ARCANA_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Ataque mágico (2d6 + Mental dano)",
+      custo_pm: null,
+      descricao: "HABILIDADES.rajada_arcana_DESC"
     },
     escudoMagico: {
-      nome: "HABILIDADES.ESCUDO_MAGICO",
+      nome: "HABILIDADES.escudo_magico",
+      tipo: "habilidade_magica",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "HABILIDADES.ESCUDO_MAGICO_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "+2 Defesa por uma cena",
+      custo_pm: 2,
+      descricao: "HABILIDADES.escudo_magico_DESC"
     },
     misseisMagicos: {
-      nome: "HABILIDADES.MISSEIS_MAGICOS",
+      nome: "HABILIDADES.misseis_magicos",
+      tipo: "habilidade_magica",
       nivelMin: 2,
       preRequisito: { mental: 6 },
-      efeito: "HABILIDADES.MISSEIS_MAGICOS_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "3 projéteis automáticos",
+      custo_pm: 3,
+      descricao: "HABILIDADES.misseis_magicos_DESC"
     },
     detectarMagia: {
-      nome: "HABILIDADES.DETECTAR_MAGIA",
+      nome: "HABILIDADES.detectar_magia",
+      tipo: "habilidade_magica",
       nivelMin: 1,
       preRequisito: { mental: 5 },
-      efeito: "HABILIDADES.DETECTAR_MAGIA_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Percebe auras mágicas",
+      custo_pm: 1,
+      descricao: "HABILIDADES.detectar_magia_DESC"
     },
     contraMagia: {
-      nome: "HABILIDADES.CONTRA_MAGIA",
+      nome: "HABILIDADES.contra_magia",
+      tipo: "habilidade_magica",
       nivelMin: 3,
       preRequisito: { mental: 7 },
-      efeito: "HABILIDADES.CONTRA_MAGIA_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Cancela magias inimigas",
+      custo_pm: 5,
+      descricao: "HABILIDADES.contra_magia_DESC"
     },
     bolaFogo: {
-      nome: "HABILIDADES.BOLA_FOGO",
+      nome: "HABILIDADES.bola_de_fogo",
+      tipo: "habilidade_magica",
       nivelMin: 4,
       preRequisito: { mental: 8 },
-      efeito: "HABILIDADES.BOLA_FOGO_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Área de efeito",
+      custo_pm: 6,
+      descricao: "HABILIDADES.bola_de_fogo_DESC"
     },
     invisibilidade: {
-      nome: "HABILIDADES.INVISIBILIDADE",
+      nome: "HABILIDADES.invisibilidade",
+      tipo: "habilidade_magica",
       nivelMin: 3,
       preRequisito: { mental: 7 },
-      efeito: "HABILIDADES.INVISIBILIDADE_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Torna-se invisível",
+      custo_pm: 4,
+      descricao: "HABILIDADES.invisibilidade_DESC"
     },
     voo: {
-      nome: "HABILIDADES.VOO",
+      nome: "HABILIDADES.voo",
+      tipo: "habilidade_magica",
       nivelMin: 5,
       preRequisito: { mental: 8 },
-      efeito: "HABILIDADES.VOO_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Capacidade de voar",
+      custo_pm: 6,
+      descricao: "HABILIDADES.voo_DESC"
     },
     teletransporte: {
-      nome: "HABILIDADES.TELETRANSPORTE",
+      nome: "HABILIDADES.teletransporte",
+      tipo: "habilidade_magica",
       nivelMin: 6,
       preRequisito: { mental: 9 },
-      efeito: "HABILIDADES.TELETRANSPORTE_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Movimento instantâneo",
+      custo_pm: 8,
+      descricao: "HABILIDADES.teletransporte_DESC"
     },
     curaCompleta: {
-      nome: "HABILIDADES.CURA_COMPLETA",
+      nome: "HABILIDADES.cura_completa",
+      tipo: "habilidade_magica",
       nivelMin: 7,
       preRequisito: { mental: 9 },
-      efeito: "HABILIDADES.CURA_COMPLETA_EFEITO",
-      classesSugeridas: ["mago"]
+      classesSugeridas: ["mago"],
+      efeito: "Restaura todos os PV",
+      custo_pm: 10,
+      descricao: "HABILIDADES.cura_completa_DESC"
     }
   },
   furtividade: {

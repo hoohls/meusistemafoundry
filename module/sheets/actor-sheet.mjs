@@ -911,24 +911,34 @@ export class ClubeActorSheet extends ActorSheet {
     const magiasBasicas = {
       'evocacao': [
         { 
-          id: 'bola_fogo', 
+          id: 'bola_de_fogo', 
           nome: 'Bola de Fogo', 
-          nivel: 3, 
+          nivel: 4, 
           custo_pm: 6, 
           prerequisitos: 'Mental 8',
           alcance: '30m',
           duracao: 'Instantânea',
-          descricao: 'Lança uma bola de fogo que causa 3d6 de dano de fogo em uma área de 3m de raio.'
+          descricao: 'Lança uma bola de fogo que explode em uma área de 6 metros de raio, causando 3d6 de dano de fogo a todas as criaturas na área.'
         },
         { 
           id: 'rajada_arcana', 
           nome: 'Rajada Arcana', 
           nivel: 1, 
-          custo_pm: 2, 
-          prerequisitos: 'Mental 6',
+          custo_pm: null, 
+          prerequisitos: 'Mental 5',
           alcance: '15m',
           duracao: 'Instantânea',
-          descricao: 'Dispara uma rajada de energia mágica que causa 1d6 + Mental de dano.'
+          descricao: 'Dispara uma rajada de energia mágica que causa 2d6 + Mental de dano. Esta magia não possui custo de PM.'
+        },
+        { 
+          id: 'misseis_magicos', 
+          nome: 'Mísseis Mágicos', 
+          nivel: 2, 
+          custo_pm: 3, 
+          prerequisitos: 'Mental 6',
+          alcance: '30m',
+          duracao: 'Instantânea',
+          descricao: 'Lança três projéteis mágicos que automaticamente acertam seus alvos. Cada projétil causa 1d4+1 de dano mágico.'
         },
         { 
           id: 'raio_eletrico', 
@@ -939,6 +949,16 @@ export class ClubeActorSheet extends ActorSheet {
           alcance: '20m',
           duracao: 'Instantânea',
           descricao: 'Lança um raio elétrico que causa 2d6 de dano elétrico.'
+        },
+        { 
+          id: 'cura_completa', 
+          nome: 'Cura Completa', 
+          nivel: 7, 
+          custo_pm: 10, 
+          prerequisitos: 'Mental 9',
+          alcance: 'Toque',
+          duracao: 'Instantânea',
+          descricao: 'Restaura todos os Pontos de Vida do alvo ao máximo. Uma das magias de cura mais poderosas disponíveis.'
         }
       ],
       'abjuracao': [
@@ -947,10 +967,20 @@ export class ClubeActorSheet extends ActorSheet {
           nome: 'Escudo Mágico', 
           nivel: 1, 
           custo_pm: 2, 
-          prerequisitos: 'Mental 6',
+          prerequisitos: 'Mental 5',
           alcance: 'Pessoal',
           duracao: '1 cena',
-          descricao: 'Cria um escudo mágico que concede +2 à Defesa.'
+          descricao: 'Cria um escudo mágico que concede +2 à Defesa por uma cena completa. Ideal para proteger o conjurador em situações de perigo.'
+        },
+        { 
+          id: 'contra_magia', 
+          nome: 'Contra-Magia', 
+          nivel: 3, 
+          custo_pm: 5, 
+          prerequisitos: 'Mental 7',
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Permite cancelar magias inimigas ativas ou dissipar efeitos mágicos. Requer um teste de Mental contra a ND da magia original.'
         },
         { 
           id: 'protecao_elemental', 
@@ -995,26 +1025,36 @@ export class ClubeActorSheet extends ActorSheet {
           descricao: 'Transforma uma criatura em outra forma.'
         },
         { 
-          id: 'voar', 
+          id: 'voo', 
           nome: 'Voo', 
-          nivel: 3, 
+          nivel: 5, 
           custo_pm: 6, 
           prerequisitos: 'Mental 8',
           alcance: 'Pessoal',
           duracao: '10 minutos',
-          descricao: 'Concede a capacidade de voar a uma velocidade de 18m.'
+          descricao: 'Concede ao conjurador a capacidade de voar a uma velocidade de 18 metros por rodada. Permite manobras aéreas complexas e evasão de obstáculos.'
+        },
+        { 
+          id: 'teletransporte', 
+          nome: 'Teletransporte', 
+          nivel: 6, 
+          custo_pm: 8, 
+          prerequisitos: 'Mental 9',
+          alcance: '60m',
+          duracao: 'Instantânea',
+          descricao: 'Permite ao conjurador se mover instantaneamente para qualquer local visível dentro de 60 metros. Útil para evasão rápida ou posicionamento tático.'
         }
       ],
       'ilusao': [
         { 
           id: 'invisibilidade', 
           nome: 'Invisibilidade', 
-          nivel: 2, 
+          nivel: 3, 
           custo_pm: 4, 
           prerequisitos: 'Mental 7',
           alcance: 'Pessoal',
           duracao: '5 minutos',
-          descricao: 'Torna o conjurador invisível até que ele ataque ou use uma magia.'
+          descricao: 'Torna o conjurador completamente invisível até que ele realize uma ação ofensiva ou use outra magia. Ideal para infiltração e furtividade.'
         },
         { 
           id: 'imagem_espelhada', 
@@ -1043,10 +1083,10 @@ export class ClubeActorSheet extends ActorSheet {
           nome: 'Detectar Magia', 
           nivel: 1, 
           custo_pm: 1, 
-          prerequisitos: 'Mental 6',
-          alcance: '15m',
+          prerequisitos: 'Mental 5',
+          alcance: '30m',
           duracao: '1 minuto',
-          descricao: 'Detecta a presença de magia em uma área.'
+          descricao: 'Permite ao conjurador perceber auras mágicas em uma área de 30 metros. Útil para identificar objetos encantados ou criaturas sob efeitos mágicos.'
         },
         { 
           id: 'adivinhar', 

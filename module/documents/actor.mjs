@@ -1085,16 +1085,16 @@ export class ClubeActor extends Actor {
   async _adicionarMagia(magiaId) {
     // Mapeamento de magias básicas
     const magiasBasicas = {
-      'bola_fogo': {
+      'bola_de_fogo': {
         name: 'Bola de Fogo',
         img: 'icons/svg/fire.svg',
         system: {
           escola: 'evocacao',
-          nivel: 3,
+          nivel: 4,
           custo_pm: 6,
           alcance: '30m',
           duracao: 'Instantânea',
-          descricao: 'Lança uma bola de fogo que causa 3d6 de dano de fogo em uma área de 3m de raio.'
+          descricao: 'Lança uma bola de fogo que explode em uma área de 6 metros de raio, causando 3d6 de dano de fogo a todas as criaturas na área.'
         }
       },
       'rajada_arcana': {
@@ -1121,6 +1121,18 @@ export class ClubeActor extends Actor {
           descricao: 'Lança um raio elétrico que causa 2d6 de dano elétrico.'
         }
       },
+      'misseis_magicos': {
+        name: 'Mísseis Mágicos',
+        img: 'icons/svg/magic-missile.svg',
+        system: {
+          escola: 'evocacao',
+          nivel: 2,
+          custo_pm: 3,
+          alcance: '30m',
+          duracao: 'Instantânea',
+          descricao: 'Lança três projéteis mágicos que automaticamente acertam seus alvos. Cada projétil causa 1d4+1 de dano mágico.'
+        }
+      },
       'escudo_magico': {
         name: 'Escudo Mágico',
         img: 'icons/svg/shield.svg',
@@ -1130,7 +1142,7 @@ export class ClubeActor extends Actor {
           custo_pm: 2,
           alcance: 'Pessoal',
           duracao: '1 cena',
-          descricao: 'Cria um escudo mágico que concede +2 à Defesa.'
+          descricao: 'Cria um escudo mágico que concede +2 à Defesa por uma cena completa. Ideal para proteger o conjurador em situações de perigo.'
         }
       },
       'protecao_elemental': {
@@ -1157,6 +1169,18 @@ export class ClubeActor extends Actor {
           descricao: 'Cancela uma magia ativa ou reduz seus efeitos.'
         }
       },
+      'contra_magia': {
+        name: 'Contra-Magia',
+        img: 'icons/svg/magic-swirl.svg',
+        system: {
+          escola: 'abjuracao',
+          nivel: 3,
+          custo_pm: 5,
+          alcance: '15m',
+          duracao: 'Instantânea',
+          descricao: 'Permite cancelar magias inimigas ativas ou dissipar efeitos mágicos. Requer um teste de Mental contra a ND da magia original.'
+        }
+      },
       'transformar_objeto': {
         name: 'Transformar Objeto',
         img: 'icons/svg/transmutation.svg',
@@ -1181,16 +1205,28 @@ export class ClubeActor extends Actor {
           descricao: 'Transforma uma criatura em outra forma.'
         }
       },
-      'voar': {
+      'teletransporte': {
+        name: 'Teletransporte',
+        img: 'icons/svg/teleport.svg',
+        system: {
+          escola: 'transmutacao',
+          nivel: 6,
+          custo_pm: 8,
+          alcance: '60m',
+          duracao: 'Instantânea',
+          descricao: 'Permite ao conjurador se mover instantaneamente para qualquer local visível dentro de 60 metros. Útil para evasão rápida ou posicionamento tático.'
+        }
+      },
+      'voo': {
         name: 'Voo',
         img: 'icons/svg/wings.svg',
         system: {
           escola: 'transmutacao',
-          nivel: 3,
+          nivel: 5,
           custo_pm: 6,
           alcance: 'Pessoal',
           duracao: '10 minutos',
-          descricao: 'Concede a capacidade de voar a uma velocidade de 18m.'
+          descricao: 'Concede ao conjurador a capacidade de voar a uma velocidade de 18 metros por rodada. Permite manobras aéreas complexas e evasão de obstáculos.'
         }
       },
       'invisibilidade': {
@@ -1198,11 +1234,11 @@ export class ClubeActor extends Actor {
         img: 'icons/svg/illusion.svg',
         system: {
           escola: 'ilusao',
-          nivel: 2,
+          nivel: 3,
           custo_pm: 4,
           alcance: 'Pessoal',
           duracao: '5 minutos',
-          descricao: 'Torna o conjurador invisível até que ele ataque ou use uma magia.'
+          descricao: 'Torna o conjurador completamente invisível até que ele realize uma ação ofensiva ou use outra magia. Ideal para infiltração e furtividade.'
         }
       },
       'imagem_espelhada': {
@@ -1299,6 +1335,18 @@ export class ClubeActor extends Actor {
           alcance: '15m',
           duracao: '1 minuto',
           descricao: 'Infunde medo em uma criatura, forçando-a a fugir.'
+        }
+      },
+      'cura_completa': {
+        name: 'Cura Completa',
+        img: 'icons/svg/heal.svg',
+        system: {
+          escola: 'evocacao',
+          nivel: 7,
+          custo_pm: 10,
+          alcance: 'Toque',
+          duracao: 'Instantânea',
+          descricao: 'Restaura todos os Pontos de Vida do alvo ao máximo. Uma das magias de cura mais poderosas disponíveis, capaz de salvar vidas em situações críticas.'
         }
       }
     };
