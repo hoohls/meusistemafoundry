@@ -2568,11 +2568,21 @@ export class ClubeActorSheet extends ActorSheet {
 
   /**
    * Formata pré-requisitos de atributos para exibição
-   * @param {Object} preRequisitos - Objeto com pré-requisitos
+   * @param {Object|string} preRequisitos - Objeto com pré-requisitos ou string
    * @returns {string} Texto formatado
    */
   _formatarPreRequisitos(preRequisitos) {
-    if (!preRequisitos || Object.keys(preRequisitos).length === 0) {
+    if (!preRequisitos) {
+      return "";
+    }
+    
+    // Se for uma string, retornar diretamente (para magias)
+    if (typeof preRequisitos === 'string') {
+      return preRequisitos;
+    }
+    
+    // Se for um objeto vazio, retornar string vazia
+    if (Object.keys(preRequisitos).length === 0) {
       return "";
     }
     

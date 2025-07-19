@@ -513,7 +513,17 @@ function registerHandlebarsHelpers() {
 
   // Helper para formatar pré-requisitos de atributos
   Handlebars.registerHelper('formatarPreRequisitos', function(preRequisitos) {
-    if (!preRequisitos || Object.keys(preRequisitos).length === 0) {
+    if (!preRequisitos) {
+      return "";
+    }
+    
+    // Se for uma string, retornar diretamente (para magias)
+    if (typeof preRequisitos === 'string') {
+      return preRequisitos;
+    }
+    
+    // Se for um objeto vazio, retornar string vazia
+    if (Object.keys(preRequisitos).length === 0) {
       return "";
     }
     
