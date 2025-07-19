@@ -1530,9 +1530,34 @@ export class ClubeActorSheet extends ActorSheet {
     if (this.actor.equiparItem) {
       await this.actor.equiparItem(item);
     } else {
-      // Fallback para equipar manualmente
-      await item.update({ "system.equipado": true });
+      // Fallback para equipar manualmente com desequipamento automático
+      await this._equiparItemFoundryComDesequipamento(item);
     }
+  }
+
+  /**
+   * Equipa um item do Foundry com desequipamento automático
+   * @param {Item} novoItem - Item a ser equipado
+   */
+  async _equiparItemFoundryComDesequipamento(novoItem) {
+    const tipo = novoItem.type;
+    
+    // Encontrar item do mesmo tipo que já está equipado
+    const itemEquipado = this.actor.items.find(item => 
+      item.type === tipo && 
+      item.system.equipado && 
+      item.id !== novoItem.id
+    );
+    
+    if (itemEquipado) {
+      console.log(`Desequipando ${itemEquipado.name} para equipar ${novoItem.name}`);
+      ui.notifications.info(`${itemEquipado.name} foi desequipado automaticamente para equipar ${novoItem.name}`);
+      await itemEquipado.update({"system.equipado": false});
+    }
+    
+    await novoItem.update({ "system.equipado": true });
+    
+    ui.notifications.success(`${novoItem.name} foi equipado com sucesso!`);
   }
 
   /**
@@ -2118,23 +2143,26 @@ export class ClubeActorSheet extends ActorSheet {
     
     if (!item) return;
     
+    // Desequipar item do mesmo tipo que já está equipado
+    await this._desequiparItemSimplesMesmoTipo(item, itens, equipamentos);
+    
     // Marcar como equipado
     item.equipado = true;
     
     // Se for arma, armadura ou escudo, equipar no slot apropriado
     const equipados = equipamentos.equipados || {};
     
-    if (item.tipo === "arma" && !equipados.arma_principal) {
+    if (item.tipo === "arma") {
       equipados.arma_principal = {
         nome: item.nome,
         index: index
       };
-    } else if (item.tipo === "armadura" && !equipados.armadura) {
+    } else if (item.tipo === "armadura") {
       equipados.armadura = {
         nome: item.nome,
         index: index
       };
-    } else if (item.tipo === "escudo" && !equipados.escudo) {
+    } else if (item.tipo === "escudo") {
       equipados.escudo = {
         nome: item.nome,
         index: index
@@ -2162,6 +2190,58 @@ export class ClubeActorSheet extends ActorSheet {
     }
     
     await this.actor.update(updateData);
+    
+    ui.notifications.success(`${item.nome} foi equipado com sucesso!`);
+  }
+
+  /**
+   * Desequipa automaticamente um item simples do mesmo tipo
+   * @param {Object} novoItem - Novo item sendo equipado
+   * @param {Array} itens - Lista de itens
+   * @param {Object} equipamentos - Dados de equipamentos
+   */
+  async _desequiparItemSimplesMesmoTipo(novoItem, itens, equipamentos) {
+    const tipo = novoItem.tipo;
+    const equipados = equipamentos.equipados || {};
+    
+    // Encontrar item do mesmo tipo que já está equipado
+    const itemEquipadoIndex = itens.findIndex(item => 
+      item.tipo === tipo && 
+      item.equipado && 
+      itens.indexOf(item) !== itens.indexOf(novoItem)
+    );
+    
+    if (itemEquipadoIndex !== -1) {
+      const itemEquipado = itens[itemEquipadoIndex];
+      console.log(`Desequipando ${itemEquipado.nome} para equipar ${novoItem.nome}`);
+      ui.notifications.info(`${itemEquipado.nome} foi desequipado automaticamente para equipar ${novoItem.nome}`);
+      
+      // Marcar como não equipado
+      itemEquipado.equipado = false;
+      
+      // Remover dos slots equipados
+      if (tipo === "arma" && equipados.arma_principal && equipados.arma_principal.index === itemEquipadoIndex) {
+        equipados.arma_principal = null;
+      } else if (tipo === "armadura" && equipados.armadura && equipados.armadura.index === itemEquipadoIndex) {
+        equipados.armadura = null;
+      } else if (tipo === "escudo" && equipados.escudo && equipados.escudo.index === itemEquipadoIndex) {
+        equipados.escudo = null;
+      }
+      
+      // Remover bônus de PM/PV máximo se o item tiver
+      if (itemEquipado.bonus) {
+        if (itemEquipado.bonus.pm_maximo) {
+          const pmAtual = this.actor.system.recursos.pm.max || 0;
+          const novoPmMax = pmAtual - itemEquipado.bonus.pm_maximo;
+          this.actor.system.recursos.pm.max = Math.max(0, novoPmMax);
+        }
+        if (itemEquipado.bonus.pv_maximo) {
+          const pvAtual = this.actor.system.recursos.pv.max || 0;
+          const novoPvMax = pvAtual - itemEquipado.bonus.pv_maximo;
+          this.actor.system.recursos.pv.max = Math.max(0, novoPvMax);
+        }
+      }
+    }
   }
 
   /**

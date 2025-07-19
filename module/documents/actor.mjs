@@ -531,12 +531,39 @@ export class ClubeActor extends Actor {
       return;
     }
 
-
+    // Desequipar item do mesmo tipo que já está equipado
+    await this._desequiparItemMesmoTipo(item);
     
     await item.update({"system.equipado": true});
     
     // Aplicar modificadores do item se necessário
     await this._aplicarModificadoresItem(item, true);
+    
+    ui.notifications.success(`${item.name} foi equipado com sucesso!`);
+  }
+
+  /**
+   * Desequipa automaticamente um item do mesmo tipo
+   * @param {Item} novoItem - Novo item sendo equipado
+   */
+  async _desequiparItemMesmoTipo(novoItem) {
+    const tipo = novoItem.type;
+    
+    // Encontrar item do mesmo tipo que já está equipado
+    const itemEquipado = this.items.find(item => 
+      item.type === tipo && 
+      item.system.equipado && 
+      item.id !== novoItem.id
+    );
+    
+    if (itemEquipado) {
+      console.log(`Desequipando ${itemEquipado.name} para equipar ${novoItem.name}`);
+      ui.notifications.info(`${itemEquipado.name} foi desequipado automaticamente para equipar ${novoItem.name}`);
+      await itemEquipado.update({"system.equipado": false});
+      
+      // Remover modificadores do item desequipado
+      await this._aplicarModificadoresItem(itemEquipado, false);
+    }
   }
 
   /**
