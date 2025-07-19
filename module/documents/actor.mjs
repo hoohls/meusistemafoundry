@@ -1103,10 +1103,10 @@ export class ClubeActor extends Actor {
         system: {
           escola: 'evocacao',
           nivel: 1,
-          custo_pm: 2,
+          custo_pm: null,
           alcance: '15m',
           duracao: 'Instantânea',
-          descricao: 'Dispara uma rajada de energia mágica que causa 1d6 + Mental de dano.'
+          descricao: 'Dispara uma rajada de energia mágica que causa 2d6 + Mental de dano. Esta magia não possui custo de PM, sendo uma habilidade mágica inata do conjurador.'
         }
       },
       'raio_eletrico': {
@@ -1272,9 +1272,9 @@ export class ClubeActor extends Actor {
           escola: 'divinacao',
           nivel: 1,
           custo_pm: 1,
-          alcance: '15m',
+          alcance: '30m',
           duracao: '1 minuto',
-          descricao: 'Detecta a presença de magia em uma área.'
+          descricao: 'Permite ao conjurador perceber auras mágicas em uma área de 30 metros. Útil para identificar objetos encantados ou criaturas sob efeitos mágicos.'
         }
       },
       'adivinhar': {
@@ -1364,12 +1364,25 @@ export class ClubeActor extends Actor {
       throw new Error("Você já possui esta magia");
     }
 
-    // Verificar pré-requisitos (Mental 6+ para magias nível 1, Mental 7+ para nível 2, etc.)
+    // Verificar pré-requisitos baseados no nível da magia
     const mental = this.system.atributos?.mental?.valor || 0;
     const nivel = this.system.nivel || 1;
     const nivelMagia = magiaData.system.nivel;
     
-    if (mental < (nivelMagia + 5) || nivel < nivelMagia) {
+    // Mapeamento de pré-requisitos por nível de magia
+    const prerequisitosPorNivel = {
+      1: { mental: 5, nivel: 1 },
+      2: { mental: 6, nivel: 2 },
+      3: { mental: 7, nivel: 3 },
+      4: { mental: 8, nivel: 4 },
+      5: { mental: 8, nivel: 5 },
+      6: { mental: 9, nivel: 6 },
+      7: { mental: 9, nivel: 7 }
+    };
+    
+    const prerequisitos = prerequisitosPorNivel[nivelMagia] || { mental: nivelMagia + 4, nivel: nivelMagia };
+    
+    if (mental < prerequisitos.mental || nivel < prerequisitos.nivel) {
       throw new Error("Você não atende aos pré-requisitos para esta magia");
     }
 
