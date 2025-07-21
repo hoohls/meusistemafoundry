@@ -150,6 +150,16 @@ export const registerSystemSettings = function() {
     type: String,
     default: "1.0.0"
   });
+
+  // Flag para controlar se os itens expandidos foram adicionados
+  game.settings.register("clube-dos-taberneiros-foundry", "itens-expandidos-adicionados", {
+    name: "Itens Expandidos Adicionados",
+    hint: "Flag interno para controlar se os itens expandidos do Livro do Jogador foram adicionados ao mundo.",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
 };
 
 // Configurações e constantes do sistema

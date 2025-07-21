@@ -11,6 +11,9 @@ import { ClubeItemSheet } from "./sheets/item-sheet.mjs";
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 import { registerSystemSettings } from "./helpers/settings.mjs";
 import { ClubeRollerDialog } from "./apps/roller-dialog.mjs";
+import { MAGIAS_EXPANDIDAS } from "./data/magias-expandidas.mjs";
+import { EQUIPAMENTOS_EXPANDIDOS, CAJADOS_EXPANDIDOS, VARINHAS_EXPANDIDAS, ITENS_MAGICOS_EXPANDIDOS, INSTRUMENTOS_MAGICOS, FERRAMENTAS_MAGICAS, MONTARIAS_EXPANDIDAS } from "./data/equipamentos-expandidos.mjs";
+import { POCOES_EXPANDIDAS, PERGAMINHOS_MAGICOS, COMPONENTES_MAGICOS } from "./data/pocoes-expandidas.mjs";
 
 /* -------------------------------------------- */
 /*  Inicialização do Sistema                    */
@@ -92,6 +95,22 @@ Hooks.once('init', function() {
       11: "TESTES.DIFICULDADES.DIFICIL",
       13: "TESTES.DIFICULDADES.MUITO_DIFICIL",
       15: "TESTES.DIFICULDADES.HEROICA"
+    },
+    // Dados expandidos
+    magias: MAGIAS_EXPANDIDAS,
+    equipamentos: {
+      ...EQUIPAMENTOS_EXPANDIDOS,
+      ...CAJADOS_EXPANDIDOS,
+      ...VARINHAS_EXPANDIDAS,
+      ...ITENS_MAGICOS_EXPANDIDOS,
+      ...INSTRUMENTOS_MAGICOS,
+      ...FERRAMENTAS_MAGICAS,
+      ...MONTARIAS_EXPANDIDAS
+    },
+    consumiveis: {
+      ...POCOES_EXPANDIDAS,
+      ...PERGAMINHOS_MAGICOS,
+      ...COMPONENTES_MAGICOS
     }
   };
 });
@@ -998,3 +1017,146 @@ window.clube = {
   conjurarMagia,
   ClubeRollerDialog
 }; 
+/* -
+------------------------------------------- */
+/*  Funções para Adicionar Itens Expandidos    */
+/* -------------------------------------------- */
+
+/**
+ * Adiciona automaticamente magias e equipamentos expandidos ao mundo
+ */
+async function adicionarItensExpandidos() {
+  if (!game.user.isGM) return;
+  
+  console.log("Sistema Clube dos Taberneiros | Verificando itens expandidos...");
+  
+  // Verificar se já foram adicionados
+  const flagKey = "itens-expandidos-adicionados";
+  const jaAdicionados = game.settings.get("clube-dos-taberneiros-foundry", flagKey);
+  
+  if (jaAdicionados) {
+    console.log("Sistema Clube dos Taberneiros | Itens expandidos já foram adicionados.");
+    return;
+  }
+  
+  try {
+    let itensAdicionados = 0;
+    
+    // Adicionar magias expandidas
+    console.log("Sistema Clube dos Taberneiros | Adicionando magias expandidas...");
+    for (const [key, magiaData] of Object.entries(CONFIG.clube.magias)) {
+      const existente = game.items.find(i => i.name === magiaData.name && i.type === "magia");
+      if (!existente) {
+        await Item.create(magiaData);
+        itensAdicionados++;
+      }
+    }
+    
+    // Adicionar equipamentos expandidos
+    console.log("Sistema Clube dos Taberneiros | Adicionando equipamentos expandidos...");
+    for (const [key, equipData] of Object.entries(CONFIG.clube.equipamentos)) {
+      const existente = game.items.find(i => i.name === equipData.name && i.type === equipData.type);
+      if (!existente) {
+        await Item.create(equipData);
+        itensAdicionados++;
+      }
+    }
+    
+    // Adicionar consumíveis expandidos
+    console.log("Sistema Clube dos Taberneiros | Adicionando consumíveis expandidos...");
+    for (const [key, consumivelData] of Object.entries(CONFIG.clube.consumiveis)) {
+      const existente = game.items.find(i => i.name === consumivelData.name && i.type === "consumivel");
+      if (!existente) {
+        await Item.create(consumivelData);
+        itensAdicionados++;
+      }
+    }
+    
+    // Marcar como adicionados
+    await game.settings.set("clube-dos-taberneiros-foundry", flagKey, true);
+    
+    console.log(`Sistema Clube dos Taberneiros | ${itensAdicionados} itens expandidos adicionados com sucesso!`);
+    
+    if (itensAdicionados > 0) {
+      ui.notifications.info(`${itensAdicionados} novos itens do Livro do Jogador foram adicionados ao mundo!`);
+    }
+    
+  } catch (error) {
+    console.error("Sistema Clube dos Taberneiros | Erro ao adicionar itens expandidos:", error);
+    ui.notifications.error("Erro ao adicionar itens expandidos. Verifique o console para detalhes.");
+  }
+}
+
+/**
+ * Função para forçar a readição dos itens (para desenvolvimento/atualização)
+ */
+window.clube = window.clube || {};
+window.clube.recriarItensExpandidos = async function() {
+  if (!game.user.isGM) {
+    ui.notifications.warn("Apenas o GM pode executar esta função.");
+    return;
+  }
+  
+  const confirmar = await Dialog.confirm({
+    title: "Recriar Itens Expandidos",
+    content: "<p>Isso irá remover todos os itens expandidos existentes e recriá-los. Tem certeza?</p>",
+    yes: () => true,
+    no: () => false
+  });
+  
+  if (!confirmar) return;
+  
+  try {
+    // Remover itens existentes
+    const itensParaRemover = [];
+    
+    // Magias expandidas
+    for (const [key, magiaData] of Object.entries(CONFIG.clube.magias)) {
+      const existente = game.items.find(i => i.name === magiaData.name && i.type === "magia");
+      if (existente) itensParaRemover.push(existente.id);
+    }
+    
+    // Equipamentos expandidos
+    for (const [key, equipData] of Object.entries(CONFIG.clube.equipamentos)) {
+      const existente = game.items.find(i => i.name === equipData.name && i.type === equipData.type);
+      if (existente) itensParaRemover.push(existente.id);
+    }
+    
+    // Consumíveis expandidos
+    for (const [key, consumivelData] of Object.entries(CONFIG.clube.consumiveis)) {
+      const existente = game.items.find(i => i.name === consumivelData.name && i.type === "consumivel");
+      if (existente) itensParaRemover.push(existente.id);
+    }
+    
+    if (itensParaRemover.length > 0) {
+      await Item.deleteDocuments(itensParaRemover);
+      console.log(`${itensParaRemover.length} itens removidos.`);
+    }
+    
+    // Resetar flag
+    await game.settings.set("clube-dos-taberneiros-foundry", "itens-expandidos-adicionados", false);
+    
+    // Readicionar
+    await adicionarItensExpandidos();
+    
+    ui.notifications.info("Itens expandidos recriados com sucesso!");
+    
+  } catch (error) {
+    console.error("Erro ao recriar itens expandidos:", error);
+    ui.notifications.error("Erro ao recriar itens expandidos. Verifique o console.");
+  }
+};
+
+// Hook para adicionar itens quando o mundo estiver pronto
+Hooks.once('ready', async function() {
+  // Aguardar um pouco para garantir que tudo esteja carregado
+  setTimeout(async () => {
+    await adicionarItensExpandidos();
+  }, 2000);
+});
+
+// Exportar funções globais para uso no sistema
+window.clube = window.clube || {};
+window.clube.executarTeste = executarTeste;
+window.clube.executarAtaque = executarAtaque;
+window.clube.conjurarMagia = conjurarMagia;

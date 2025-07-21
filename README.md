@@ -80,19 +80,34 @@ Um sistema completo de RPG para FoundryVTT baseado no **Livro do Jogador** do Si
 - [x] Condições de status com efeitos mecânicos
 - [x] Manobras especiais de combate
 
-### ✅ Magia
+### ✅ Magia Expandida
 - [x] 6 escolas de magia implementadas
 - [x] Sistema de Pontos de Magia
-- [x] Magias de nível 1-6
+- [x] **NOVO**: Magias de nível 1-6 completas do Livro do Jogador
+- [x] **NOVO**: Magias superiores (níveis 4-6) épicas
+- [x] **NOVO**: 50+ magias adicionais implementadas
 - [x] Verificação automática de PM
 - [x] Efeitos de magias básicas
 
-### ✅ Equipamentos
+### ✅ Equipamentos Expandidos
 - [x] Sistema completo de armas, armaduras e equipamentos
+- [x] **NOVO**: 100+ equipamentos do Livro do Jogador
+- [x] **NOVO**: Armas avançadas (Lâmina Sombria, Espada do Destino, etc.)
+- [x] **NOVO**: Armaduras especiais (Placas Dracônicas, Armadura Celestial, etc.)
+- [x] **NOVO**: Cajados e varinhas mágicas especializados
+- [x] **NOVO**: Itens mágicos (anéis, amuletos, botas, capas)
+- [x] **NOVO**: Instrumentos musicais mágicos
+- [x] **NOVO**: Ferramentas mágicas e montarias
 - [x] Equipar/desequipar com modificadores automáticos
 - [x] Inventário com controle de peso
-- [x] Itens mágicos e consumíveis
 - [x] Sistema monetário (Ouro, Prata, Cobre)
+
+### ✅ Consumíveis Expandidos
+- [x] **NOVO**: Poções avançadas (Força Superior, Invisibilidade, Voo, etc.)
+- [x] **NOVO**: Pergaminhos mágicos de uso único
+- [x] **NOVO**: Componentes mágicos para conjuração
+- [x] **NOVO**: Sistema de limitações diárias para itens poderosos
+- [x] Poções básicas de cura e PM
 
 ### ✅ Interface
 - [x] Ficha de personagem moderna e responsiva
